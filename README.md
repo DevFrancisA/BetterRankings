@@ -35,6 +35,9 @@ betterrankings evaluate --log log.csv --policy relevance --clip 20 --json result
 # Simulate, estimate every candidate and compare with the simulated online test
 betterrankings compare --queries 5000 --exploration 0.2 --seed 7
 
+# Check the estimators on real logs (see "Real data" below)
+betterrankings obd --data open_bandit_dataset --campaign every
+
 pytest
 ```
 
@@ -159,6 +162,27 @@ The tests check four of these claims directly:
 - `extreme_weight`: one query carries more than 10% of the total weight.
 - `weights_off`: the mean weight is far from 1, which points to poor coverage or wrong propensities.
 
+## Real data: Open Bandit Dataset
+
+The simulator grades the estimators against an answer of its own making. `betterrankings obd` checks them on real logs instead. The [Open Bandit Dataset](https://research.zozo.com/data.html) holds a week of live traffic from the ZOZOTOWN fashion site, where a uniform random policy and Bernoulli Thompson sampling (BTS) ran side by side, so each policy's real click rate is known.
+
+The command runs two experiments for each campaign (all, men, women):
+
+- **BTS from random logs:** estimate BTS's click rate from the random policy's logs, and compare with BTS's measured click rate. BTS's target probabilities come from its own logged behaviour; with `--prior`, its published production prior is evaluated too.
+- **Random from BTS logs:** estimate the random policy's click rate from BTS's logs. Its weights are heavy, so this one exercises the overlap diagnostics.
+
+How it adapts the estimators:
+
+- The dataset logs one item per position, so the weights are per position: `target(item | position) / logging(item | position)`.
+- The reward model is an additive logistic model over item, position, time and user features, cross-fitted.
+- Bootstrap intervals resample whole recommendations, grouping rows logged within 20 ms of each other.
+
+```bash
+betterrankings obd --data open_bandit_dataset --campaign every --prior prior_bts.yaml --cache obd_cache
+```
+
+The download steps, the method's assumptions and the measured results are in [`results/OBD.md`](results/OBD.md). The tests run on a 3,000-row public sample in `tests/data/obd/`. The data is CC BY 4.0, from Saito et al., "Open Bandit Dataset and Pipeline" (NeurIPS Datasets and Benchmarks, 2021).
+
 ## Python and browser parity
 
 `scripts/make_fixtures.py` writes the shared fixture files:
@@ -189,8 +213,10 @@ src/betterrankings/     Python package
   reward_model.py       cross-fitted logistic click model
   estimators.py         estimators, bootstrap, diagnostics
   evaluate.py           evaluation pipeline and simulated online test
-  cli.py                betterrankings simulate | evaluate | compare
-tests/                  pytest suite
+  obd.py                real-data checks on the Open Bandit Dataset
+  cli.py                betterrankings simulate | evaluate | compare | obd
+tests/                  pytest suite (tests/data/obd: public dataset sample)
+results/                measured results on real data (OBD.md)
 scripts/make_fixtures.py  writes the shared fixtures
 fixtures/               logs and expected results shared with the web app
 web/                    static web app (Vite + TypeScript)

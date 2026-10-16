@@ -1,0 +1,872 @@
+[
+ {
+  "name": "bts_hourly_from_random",
+  "campaign": "men",
+  "logging_policy": "random",
+  "target_policy": "bts (hourly behaviour)",
+  "n_rows": 452949,
+  "truth": 0.006742727014339116,
+  "truth_se": 4.6545095502264573e-05,
+  "logged_ctr": 0.005124197205424894,
+  "estimates": {
+   "naive": {
+    "estimate": 0.00677905365212226,
+    "ci_low": 0.006195420991144031,
+    "ci_high": 0.007393731214367564,
+    "ess": 82793.78921348116,
+    "n": 452949,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.006663187761706411,
+    "ci_low": 0.006063318693121745,
+    "ci_high": 0.007262524083048589,
+    "ess": 82793.78921348114,
+    "n": 452949,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.006779053652122259,
+    "ci_low": 0.00619542099114403,
+    "ci_high": 0.007393731214367567,
+    "ess": 82793.78921348114,
+    "n": 452949,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.006663187761706411,
+    "ci_low": 0.006063318693121745,
+    "ci_high": 0.007262524083048589,
+    "ess": 82793.78921348114,
+    "n": 452949,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006319484947684539,
+    "ci_low": 0.006305109216788061,
+    "ci_high": 0.006334498645985293,
+    "ess": null,
+    "n": 452949,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.0067361660920526685,
+    "ci_low": 0.006172118615557629,
+    "ci_high": 0.007361034471454629,
+    "ess": 82793.78921348114,
+    "n": 452949,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 452949,
+   "ess": 82793.78921348114,
+   "ess_fraction": 0.18278832542622048,
+   "max_weight": 21.622761232217826,
+   "max_weight_share": 4.8567848728117115e-05,
+   "mean_weight": 0.9829082499768127,
+   "fraction_nonzero": 0.8838390194039506,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "bts_weekly_from_random",
+  "campaign": "men",
+  "logging_policy": "random",
+  "target_policy": "bts (weekly average)",
+  "n_rows": 452949,
+  "truth": 0.006742727014339116,
+  "truth_se": 4.6545095502264573e-05,
+  "logged_ctr": 0.005124197205424894,
+  "estimates": {
+   "naive": {
+    "estimate": 0.0062769867067546245,
+    "ci_low": 0.005842089342966084,
+    "ci_high": 0.006755086446564431,
+    "ess": 126479.24908391008,
+    "n": 452949,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.006182640204241619,
+    "ci_low": 0.005736184964231997,
+    "ci_high": 0.006637613488826751,
+    "ess": 126479.2490839099,
+    "n": 452949,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.006276986706754625,
+    "ci_low": 0.0058420893429660834,
+    "ci_high": 0.006755086446564432,
+    "ess": 126479.2490839099,
+    "n": 452949,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.006182640204241619,
+    "ci_low": 0.005736184964231997,
+    "ci_high": 0.006637613488826751,
+    "ess": 126479.2490839099,
+    "n": 452949,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006301603877600645,
+    "ci_low": 0.006288227890928421,
+    "ci_high": 0.006315237599474885,
+    "ess": null,
+    "n": 452949,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.006257760411701387,
+    "ci_low": 0.005828178298805654,
+    "ci_high": 0.006732036362531315,
+    "ess": 126479.2490839099,
+    "n": 452949,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 452949,
+   "ess": 126479.2490839099,
+   "ess_fraction": 0.2792350774235287,
+   "max_weight": 8.063827657817715,
+   "max_weight_share": 1.80746196641677e-05,
+   "mean_weight": 0.9849694595638572,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "bts_prior_from_random",
+  "campaign": "men",
+  "logging_policy": "random",
+  "target_policy": "bts (published prior)",
+  "n_rows": 452949,
+  "truth": 0.006742727014339116,
+  "truth_se": 4.6545095502264573e-05,
+  "logged_ctr": 0.005124197205424894,
+  "estimates": {
+   "naive": {
+    "estimate": 0.006123177263722837,
+    "ci_low": 0.005644748992535746,
+    "ci_high": 0.006657547466566106,
+    "ess": 112213.08957107818,
+    "n": 452949,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.006007306509121347,
+    "ci_low": 0.005543085073075025,
+    "ci_high": 0.006509926847398719,
+    "ess": 112213.089571078,
+    "n": 452949,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.006123177263722837,
+    "ci_low": 0.005644748992535746,
+    "ci_high": 0.006657547466566108,
+    "ess": 112213.089571078,
+    "n": 452949,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.006007306509121347,
+    "ci_low": 0.005543085073075025,
+    "ci_high": 0.006509926847398719,
+    "ess": 112213.089571078,
+    "n": 452949,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006204797254104816,
+    "ci_low": 0.00619205320199355,
+    "ci_high": 0.006217955188407655,
+    "ess": null,
+    "n": 452949,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.006147233232108336,
+    "ci_low": 0.005680411446412135,
+    "ci_high": 0.006674175556452812,
+    "ess": 112213.089571078,
+    "n": 452949,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 452949,
+   "ess": 112213.089571078,
+   "ess_fraction": 0.2477389056407631,
+   "max_weight": 10.65475000000002,
+   "max_weight_share": 2.3976787801299705e-05,
+   "mean_weight": 0.9810766944004752,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "random_from_bts",
+  "campaign": "men",
+  "logging_policy": "bts",
+  "target_policy": "random (uniform)",
+  "n_rows": 4077727,
+  "truth": 0.005124197205424894,
+  "truth_se": 0.00011659854050207854,
+  "logged_ctr": 0.006742727014339116,
+  "estimates": {
+   "naive": {
+    "estimate": 0.006742727014339114,
+    "ci_low": 0.0066621317222223765,
+    "ci_high": 0.006826251780969961,
+    "ess": 4077727.000000318,
+    "n": 4077727,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.005252532625637081,
+    "ci_low": 0.005009629733255236,
+    "ci_high": 0.005515526381776791,
+    "ess": 1513.0915423716554,
+    "n": 4077727,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.004767924230302476,
+    "ci_low": 0.004471602346525887,
+    "ci_high": 0.005097356083924075,
+    "ess": 1513.0915423716554,
+    "n": 4077727,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.005252532625637081,
+    "ci_low": 0.005009629733255236,
+    "ci_high": 0.005515526381776791,
+    "ess": 1513.0915423716554,
+    "n": 4077727,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.005382616477235728,
+    "ci_low": 0.005379793122441172,
+    "ci_high": 0.005385923901646208,
+    "ess": null,
+    "n": 4077727,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.004772967728462957,
+    "ci_low": 0.0044115573838451935,
+    "ci_high": 0.005126783483083021,
+    "ess": 1513.0915423716554,
+    "n": 4077727,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 4077727,
+   "ess": 1513.0915423716554,
+   "ess_fraction": 0.0003710624920137261,
+   "max_weight": 29411.764705882353,
+   "max_weight_share": 0.006547319322984752,
+   "mean_weight": 1.1016392819866312,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": [
+    {
+     "code": "poor_overlap",
+     "level": "warn",
+     "message": "Poor overlap: the weights are worth about 1513 of 4077727 logged queries. The logging policy rarely showed the lists this policy would show, so estimates are unreliable."
+    }
+   ]
+  }
+ },
+ {
+  "name": "bts_hourly_from_random",
+  "campaign": "women",
+  "logging_policy": "random",
+  "target_policy": "bts (hourly behaviour)",
+  "n_rows": 864585,
+  "truth": 0.006379372756180319,
+  "truth_se": 3.0582870958024803e-05,
+  "logged_ctr": 0.004815026862598819,
+  "estimates": {
+   "naive": {
+    "estimate": 0.0071319037184771365,
+    "ci_low": 0.006656946287475402,
+    "ci_high": 0.00763092581505259,
+    "ess": 144254.428173517,
+    "n": 864585,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.007120055369033155,
+    "ci_low": 0.006650563165132513,
+    "ci_high": 0.007617843729459696,
+    "ess": 144254.42817351708,
+    "n": 864585,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.007131903718477137,
+    "ci_low": 0.006656946287475402,
+    "ci_high": 0.00763092581505259,
+    "ess": 144254.42817351708,
+    "n": 864585,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.007120055369033155,
+    "ci_low": 0.006650563165132513,
+    "ci_high": 0.007617843729459696,
+    "ess": 144254.42817351708,
+    "n": 864585,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006375921464814306,
+    "ci_low": 0.006363167303237428,
+    "ci_high": 0.006388447835942913,
+    "ess": null,
+    "n": 864585,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.0070426635243070355,
+    "ci_low": 0.006597752816785363,
+    "ci_high": 0.007559919757269325,
+    "ess": 144254.42817351708,
+    "n": 864585,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 864585,
+   "ess": 144254.42817351708,
+   "ess_fraction": 0.1668481736018056,
+   "max_weight": 38.58426685024095,
+   "max_weight_share": 4.4701763503620635e-05,
+   "mean_weight": 0.9983386834831651,
+   "fraction_nonzero": 0.8573396485018824,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "bts_weekly_from_random",
+  "campaign": "women",
+  "logging_policy": "random",
+  "target_policy": "bts (weekly average)",
+  "n_rows": 864585,
+  "truth": 0.006379372756180319,
+  "truth_se": 3.0582870958024803e-05,
+  "logged_ctr": 0.004815026862598819,
+  "estimates": {
+   "naive": {
+    "estimate": 0.0064333949775466776,
+    "ci_low": 0.006149554134938358,
+    "ci_high": 0.006719429649279386,
+    "ess": 303457.0404228164,
+    "n": 864585,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.0064204526214958904,
+    "ci_low": 0.006125337947248611,
+    "ci_high": 0.006713882330270312,
+    "ess": 303457.040422817,
+    "n": 864585,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.0064333949775466776,
+    "ci_low": 0.006149554134938357,
+    "ci_high": 0.006719429649279381,
+    "ess": 303457.040422817,
+    "n": 864585,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.0064204526214958904,
+    "ci_low": 0.006125337947248611,
+    "ci_high": 0.006713882330270312,
+    "ess": 303457.040422817,
+    "n": 864585,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006372689803377229,
+    "ci_low": 0.006361818703559764,
+    "ci_high": 0.006384740679059299,
+    "ess": null,
+    "n": 864585,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.006364129870067305,
+    "ci_low": 0.006076234462978934,
+    "ci_high": 0.0066486724167038255,
+    "ess": 303457.040422817,
+    "n": 864585,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 864585,
+   "ess": 303457.040422817,
+   "ess_fraction": 0.3509857797935622,
+   "max_weight": 6.551866827210757,
+   "max_weight_share": 7.593324066661039e-06,
+   "mean_weight": 0.9979882540873121,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "bts_prior_from_random",
+  "campaign": "women",
+  "logging_policy": "random",
+  "target_policy": "bts (published prior)",
+  "n_rows": 864585,
+  "truth": 0.006379372756180319,
+  "truth_se": 3.0582870958024803e-05,
+  "logged_ctr": 0.004815026862598819,
+  "estimates": {
+   "naive": {
+    "estimate": 0.006403677075857636,
+    "ci_low": 0.0060154928995297995,
+    "ci_high": 0.00683481729577331,
+    "ess": 172373.95517599946,
+    "n": 864585,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.0064064433063261575,
+    "ci_low": 0.00600111605038529,
+    "ci_high": 0.0068323344065227415,
+    "ess": 172373.9551759998,
+    "n": 864585,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.006403677075857634,
+    "ci_low": 0.006015492899529797,
+    "ci_high": 0.0068348172957733095,
+    "ess": 172373.9551759998,
+    "n": 864585,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.0064064433063261575,
+    "ci_low": 0.00600111605038529,
+    "ci_high": 0.0068323344065227415,
+    "ess": 172373.9551759998,
+    "n": 864585,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006331629034676554,
+    "ci_low": 0.006324120085724608,
+    "ci_high": 0.00634066504701108,
+    "ess": null,
+    "n": 864585,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.006360342222057655,
+    "ci_low": 0.005977401001981418,
+    "ci_high": 0.006784495457461955,
+    "ess": 172373.9551759998,
+    "n": 864585,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 864585,
+   "ess": 172373.9551759998,
+   "ess_fraction": 0.19937190117339512,
+   "max_weight": 12.529986000000005,
+   "max_weight_share": 1.4486228297251351e-05,
+   "mean_weight": 1.0004319753222648,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "random_from_bts",
+  "campaign": "women",
+  "logging_policy": "bts",
+  "target_policy": "random (uniform)",
+  "n_rows": 7765497,
+  "truth": 0.004815026862598819,
+  "truth_se": 7.866062382388565e-05,
+  "logged_ctr": 0.006379372756180319,
+  "estimates": {
+   "naive": {
+    "estimate": 0.006379372756180322,
+    "ci_low": 0.006323774220841077,
+    "ci_high": 0.006434124781317153,
+    "ess": 7765496.999998612,
+    "n": 7765497,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.004603453534436981,
+    "ci_low": 0.004442546164213406,
+    "ci_high": 0.0047535526575058235,
+    "ess": 6008.6438251260415,
+    "n": 7765497,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.004427433925383012,
+    "ci_low": 0.004242045514202326,
+    "ci_high": 0.0046024974343723875,
+    "ess": 6008.6438251260415,
+    "n": 7765497,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.004603453534436981,
+    "ci_low": 0.004442546164213406,
+    "ci_high": 0.0047535526575058235,
+    "ess": 6008.6438251260415,
+    "n": 7765497,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.004899396331247086,
+    "ci_low": 0.004897048914786462,
+    "ci_high": 0.004900980742277867,
+    "ess": null,
+    "n": 7765497,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.004471345453246513,
+    "ci_low": 0.0042862040922734945,
+    "ci_high": 0.0046443361059728865,
+    "ess": 6008.6438251260415,
+    "n": 7765497,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 7765497,
+   "ess": 6008.6438251260415,
+   "ess_fraction": 0.0007737616568683295,
+   "max_weight": 21739.130434782608,
+   "max_weight_share": 0.0026924102589996426,
+   "mean_weight": 1.039756575032058,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": [
+    {
+     "code": "poor_overlap",
+     "level": "warn",
+     "message": "Poor overlap: the weights are worth about 6009 of 7765497 logged queries. The logging policy rarely showed the lists this policy would show, so estimates are unreliable."
+    }
+   ]
+  }
+ },
+ {
+  "name": "bts_hourly_from_random",
+  "campaign": "all",
+  "logging_policy": "random",
+  "target_policy": "bts (hourly behaviour)",
+  "n_rows": 1374327,
+  "truth": 0.004953225649823585,
+  "truth_se": 2.154694024976569e-05,
+  "logged_ctr": 0.0034693344451502445,
+  "estimates": {
+   "naive": {
+    "estimate": 0.005229711644848645,
+    "ci_low": 0.004882862885413483,
+    "ci_high": 0.005595568416465039,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.005239080044225425,
+    "ci_low": 0.004897259218586621,
+    "ci_high": 0.0056087509965657215,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.005229711644848646,
+    "ci_low": 0.004882862885413482,
+    "ci_high": 0.005595568416465039,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.005239080044225425,
+    "ci_low": 0.004897259218586621,
+    "ci_high": 0.0056087509965657215,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.004982004222565055,
+    "ci_low": 0.004978533249870326,
+    "ci_high": 0.004985368319691017,
+    "ess": null,
+    "n": 1374327,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.005218973477388079,
+    "ci_low": 0.004869118097321706,
+    "ci_high": 0.005585305482619811,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 1374327,
+   "ess": 162647.46251958117,
+   "ess_fraction": 0.1183469891223713,
+   "max_weight": 66.2568208153376,
+   "max_weight_share": 4.8124166905659624e-05,
+   "mean_weight": 1.001791379718996,
+   "fraction_nonzero": 0.8287867443483247,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "bts_weekly_from_random",
+  "campaign": "all",
+  "logging_policy": "random",
+  "target_policy": "bts (weekly average)",
+  "n_rows": 1374327,
+  "truth": 0.004953225649823585,
+  "truth_se": 2.154694024976569e-05,
+  "logged_ctr": 0.0034693344451502445,
+  "estimates": {
+   "naive": {
+    "estimate": 0.005030268465837179,
+    "ci_low": 0.004797140081480841,
+    "ci_high": 0.005297493625277385,
+    "ess": 367932.95878946705,
+    "n": 1374327,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.00503684446711766,
+    "ci_low": 0.004803375105137303,
+    "ci_high": 0.00530414897876891,
+    "ess": 367932.9587894691,
+    "n": 1374327,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.005030268465837179,
+    "ci_low": 0.004797140081480842,
+    "ci_high": 0.005297493625277387,
+    "ess": 367932.9587894691,
+    "n": 1374327,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.00503684446711766,
+    "ci_low": 0.004803375105137303,
+    "ci_high": 0.00530414897876891,
+    "ess": 367932.9587894691,
+    "n": 1374327,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.004984646192898964,
+    "ci_low": 0.004981190871529253,
+    "ci_high": 0.004988283002493321,
+    "ess": null,
+    "n": 1374327,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.005029683060195416,
+    "ci_low": 0.004797861816522359,
+    "ci_high": 0.005295314485410556,
+    "ess": 367932.9587894691,
+    "n": 1374327,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 1374327,
+   "ess": 367932.9587894691,
+   "ess_fraction": 0.2677186424988151,
+   "max_weight": 9.641884271794131,
+   "max_weight_share": 7.006553771105935e-06,
+   "mean_weight": 1.0013072863456776,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "bts_prior_from_random",
+  "campaign": "all",
+  "logging_policy": "random",
+  "target_policy": "bts (published prior)",
+  "n_rows": 1374327,
+  "truth": 0.004953225649823585,
+  "truth_se": 2.154694024976569e-05,
+  "logged_ctr": 0.0034693344451502445,
+  "estimates": {
+   "naive": {
+    "estimate": 0.004694882238608971,
+    "ci_low": 0.0044018886486626016,
+    "ci_high": 0.004995501466856016,
+    "ess": 222305.98610992255,
+    "n": 1374327,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.004695323660235155,
+    "ci_low": 0.004405939097291512,
+    "ci_high": 0.004997921450142484,
+    "ess": 222305.98610992162,
+    "n": 1374327,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.00469488223860897,
+    "ci_low": 0.0044018886486626016,
+    "ci_high": 0.004995501466856016,
+    "ess": 222305.98610992162,
+    "n": 1374327,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.004695323660235155,
+    "ci_low": 0.004405939097291512,
+    "ci_high": 0.004997921450142484,
+    "ess": 222305.98610992162,
+    "n": 1374327,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.004664820402268322,
+    "ci_low": 0.004661643719324557,
+    "ci_high": 0.004668305778134305,
+    "ess": null,
+    "n": 1374327,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.004699761031435462,
+    "ci_low": 0.004406283040310712,
+    "ci_high": 0.005001287850788253,
+    "ess": 222305.98610992162,
+    "n": 1374327,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 1374327,
+   "ess": 222305.98610992162,
+   "ess_fraction": 0.16175625314057107,
+   "max_weight": 19.6348,
+   "max_weight_share": 1.4285504157937904e-05,
+   "mean_weight": 1.0000940218739789,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "random_from_bts",
+  "campaign": "all",
+  "logging_policy": "bts",
+  "target_policy": "random (uniform)",
+  "n_rows": 12357200,
+  "truth": 0.0034693344451502445,
+  "truth_se": 5.291623545139145e-05,
+  "logged_ctr": 0.004953225649823585,
+  "estimates": {
+   "naive": {
+    "estimate": 0.004953225649823586,
+    "ci_low": 0.004908167990870289,
+    "ci_high": 0.0049900405852888715,
+    "ess": 12357200.000003817,
+    "n": 12357200,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.0034337571158817148,
+    "ci_low": 0.0032384317327241157,
+    "ci_high": 0.0035843444222841236,
+    "ess": 19909.59557403644,
+    "n": 12357200,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.003297371805859411,
+    "ci_low": 0.003117340828797234,
+    "ci_high": 0.0034547449725337758,
+    "ess": 19909.59557403644,
+    "n": 12357200,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.0034337571158817148,
+    "ci_low": 0.0032384317327241157,
+    "ci_high": 0.0035843444222841236,
+    "ess": 19909.59557403644,
+    "n": 12357200,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.0036449180960054224,
+    "ci_low": 0.003644070383155789,
+    "ci_high": 0.003645867438106102,
+    "ess": null,
+    "n": 12357200,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.0033497371591111715,
+    "ci_low": 0.0031539141799834256,
+    "ci_high": 0.0035031918196205655,
+    "ess": 19909.59557403644,
+    "n": 12357200,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 12357200,
+   "ess": 19909.59557403644,
+   "ess_fraction": 0.001611173694205519,
+   "max_weight": 12500.000000000002,
+   "max_weight_share": 0.0009713780487077879,
+   "mean_weight": 1.0413618233102946,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": [
+    {
+     "code": "poor_overlap",
+     "level": "warn",
+     "message": "Poor overlap: the weights are worth about 19910 of 12357200 logged queries. The logging policy rarely showed the lists this policy would show, so estimates are unreliable."
+    }
+   ]
+  }
+ }
+]

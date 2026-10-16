@@ -125,6 +125,47 @@ def cmd_compare(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_obd(args: argparse.Namespace) -> int:
+    from . import obd
+
+    campaigns = list(obd.CAMPAIGNS) if args.campaign == "every" else [args.campaign]
+    results = []
+    for camp in campaigns:
+        try:
+            checks = obd.run_checks(args.data, camp, clip=args.clip, n_boot=args.bootstrap, seed=args.seed,
+                                    cache_dir=args.cache, prior_path=args.prior)
+        except FileNotFoundError as err:
+            print(f"Could not find the Open Bandit Dataset files: {err}", file=sys.stderr)
+            return 2
+        for c in checks:
+            results.append(c.to_dict())
+            print(f"\n[{camp}] {c.name}: estimate the {c.target_policy} policy from {c.n_rows:,} rows "
+                  f"logged by the {c.logging_policy} policy")
+            print(f"  True click rate (on-policy log) {c.truth:.5f} ± {c.truth_se:.5f}")
+            rows = [{
+                "estimator": "Logged click rate, no correction",
+                "estimate": f"{c.logged_ctr:.5f}",
+                "95% interval": "",
+                "error vs truth": f"{abs(c.logged_ctr - c.truth) / c.truth:.1%}",
+                "covers truth": "",
+            }]
+            for est, e in c.estimates.items():
+                rows.append({
+                    "estimator": ESTIMATOR_NAMES[est],
+                    "estimate": f"{e.estimate:.5f}",
+                    "95% interval": f"[{e.ci_low:.5f}, {e.ci_high:.5f}]",
+                    "error vs truth": f"{abs(e.estimate - c.truth) / c.truth:.1%}",
+                    "covers truth": "yes" if e.ci_low <= c.truth <= e.ci_high else "no",
+                })
+            print(pd.DataFrame(rows).to_string(index=False))
+            _print_warnings(c.diagnostics)
+    if args.json:
+        with open(args.json, "w", encoding="utf-8") as fh:
+            json.dump(results, fh, indent=2, default=lambda x: None)
+        print(f"\nWrote results to {args.json}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="betterrankings",
@@ -164,6 +205,17 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--online", type=int, default=DEFAULTS["n_online"], help="queries in the simulated online test")
     c.add_argument("--json", help="also write results to this JSON file")
     c.set_defaults(func=cmd_compare)
+
+    o = sub.add_parser("obd", help="check the estimators on real logs from the Open Bandit Dataset")
+    o.add_argument("--data", required=True, help="folder holding the dataset's random/ and bts/ folders")
+    o.add_argument("--campaign", default="all", choices=["all", "men", "women", "every"])
+    o.add_argument("--clip", type=_clip, default=None, help="weight clip level, or 'none' (default)")
+    o.add_argument("--bootstrap", type=int, default=200, help="bootstrap resamples over recommendations")
+    o.add_argument("--seed", type=int, default=0, help="seed for cross-fitting folds and the bootstrap")
+    o.add_argument("--prior", help="obp's prior_bts.yaml, to also evaluate BTS under its published prior")
+    o.add_argument("--cache", help="folder for a parsed copy of the logs, which makes reruns fast")
+    o.add_argument("--json", help="also write results to this JSON file")
+    o.set_defaults(func=cmd_obd)
     return p
 
 
