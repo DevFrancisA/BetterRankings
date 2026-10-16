@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BetterRankings</title>
+    <meta
+      name="description"
+      content="Estimate how a new ranking policy would perform from logged clicks alone, and check the estimate against a simulated online test."
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200;9..144,300;9..144,600;9..144,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to results</a>
+    <div class="page">
+      <header class="masthead">
+        <h1>Better<span class="h1-heavy">Rankings</span></h1>
+        <p class="lede">
+          Estimate how a new ranking policy would do from logged clicks alone, then check each estimate against a
+          simulated online test where the true answer is known.
+        </p>
+        <p class="sim-note">
+          <span class="sim-note-mark" aria-hidden="true"></span>
+          Everything in the playground is simulated. No real users, no real clicks.
+        </p>
+      </header>
+
+      <div class="layout">
+        <aside class="rail" aria-label="Playground controls and explanation">
+          <form class="sheet controls" id="controls" novalidate>
+            <h2 class="rail-title">Playground</h2>
+            <p class="rail-intro">
+              Set up the old policy's log, pick a candidate, and run. Every candidate is evaluated on each run, so you
+              can switch candidates without running again.
+            </p>
+
+            <div class="field">
+              <div class="field-head">
+                <label for="exploration">Logging exploration</label>
+                <output id="exploration-out" for="exploration" class="num">0.20</output>
+              </div>
+              <input id="exploration" name="exploration" type="range" min="0" max="1" step="0.05" value="0.2"
+                aria-describedby="exploration-hint" />
+              <p class="hint" id="exploration-hint">
+                Share of lists the current policy shows at random. More exploration gives better overlap with other
+                policies.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="queries">Logged queries</label>
+              <select id="queries" name="queries" aria-describedby="queries-hint">
+                <option value="500">500</option>
+                <option value="1000">1,000</option>
+                <option value="2000">2,000</option>
+                <option value="5000" selected>5,000</option>
+                <option value="10000">10,000</option>
+                <option value="20000">20,000</option>
+              </select>
+              <p class="hint" id="queries-hint">Each query shows a list of 4 items.</p>
+            </div>
+
+            <div class="field">
+              <label for="seed">Seed</label>
+              <div class="seed-row">
+                <input id="seed" name="seed" type="number" min="0" max="4294967295" step="1" value="7"
+                  inputmode="numeric" aria-describedby="seed-hint" />
+                <button type="button" class="btn btn-quiet" id="new-seed">New seed</button>
+              </div>
+              <p class="hint" id="seed-hint">The same seed always gives the same log and the same answers.</p>
+            </div>
+
+            <div class="field">
+              <label for="policy">Candidate policy</label>
+              <select id="policy" name="policy" aria-describedby="policy-hint"></select>
+              <p class="hint" id="policy-hint"></p>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="run">Run evaluation</button>
+            <div class="run-status" id="run-status" aria-live="polite">
+              <progress id="run-progress" max="1" value="0" hidden></progress>
+              <p id="run-message" class="hint"></p>
+            </div>
+          </form>
+
+          <details class="sheet how" id="how">
+            <summary><span>How it works</span></summary>
+            <div class="how-body">
+              <h3>Evaluating from logs</h3>
+              <p>
+                A ranking system already shows lists and records clicks. If it shows lists with some randomness and
+                writes down how likely each list was, those old logs can answer a new question: how many clicks would a
+                different policy have earned?
+              </p>
+              <h3>Propensities</h3>
+              <p>
+                The propensity is the probability the old policy gave to the exact list it showed. When a new policy
+                would show a list more often than the old one did, the clicks on that list count for more. The ratio of
+                the two probabilities is the importance weight.
+              </p>
+              <h3>Why naive comparison misleads</h3>
+              <p>
+                Averaging clicks over the logged lists a new policy agrees with sounds fair, but the old policy chose
+                those lists for a reason. It showed its favourite lists most often and in the contexts it liked best, so
+                the matching rows are not a fair sample. Weighting by propensities undoes that choice.
+              </p>
+              <h3>The estimators</h3>
+              <dl class="how-list">
+                <dt>Inverse propensity (IPS)</dt>
+                <dd>Reweights every logged query by its importance weight. Unbiased, but noisy when weights are large.</dd>
+                <dt>Self-normalised IPS</dt>
+                <dd>Divides by the total weight instead of the row count. A little bias, much less noise.</dd>
+                <dt>Clipped IPS</dt>
+                <dd>Caps each weight at the clip level. Lower noise, but it pulls the estimate down.</dd>
+                <dt>Reward model</dt>
+                <dd>Learns a click model from the log and asks it about the new policy. Steady, but only as good as the model.</dd>
+                <dt>Doubly robust</dt>
+                <dd>Starts from the reward model and corrects it with weighted errors. Holds up if either part is right.</dd>
+              </dl>
+              <h3>The check</h3>
+              <p>
+                The simulator knows every true click probability, so it can run the online test that real teams cannot
+                run for free. The red line is that answer.
+              </p>
+            </div>
+          </details>
+        </aside>
+
+        <main id="main" class="main" tabindex="-1">
+          <div class="tabs" role="tablist" aria-label="Views">
+            <button role="tab" id="tab-results" aria-controls="panel-results" aria-selected="true">Results</button>
+            <button role="tab" id="tab-ranking" aria-controls="panel-ranking" aria-selected="false" tabindex="-1">Ranking</button>
+            <button role="tab" id="tab-diagnostics" aria-controls="panel-diagnostics" aria-selected="false" tabindex="-1">Diagnostics</button>
+            <button role="tab" id="tab-upload" aria-controls="panel-upload" aria-selected="false" tabindex="-1">Your log</button>
+          </div>
+
+          <section class="sheet panel" role="tabpanel" id="panel-results" aria-labelledby="tab-results" tabindex="0">
+            <div class="panel-head">
+              <h2 id="results-title">Estimates against the truth</h2>
+              <p class="run-tag num" id="results-tag"></p>
+            </div>
+            <p class="summary" id="results-summary">Running the first evaluation…</p>
+            <p class="stale" id="results-stale" hidden>
+              Settings changed. Press <strong>Run evaluation</strong> to update these results.
+            </p>
+            <div class="clip-control" id="clip-control">
+              <div class="field-head">
+                <label for="clip">Weight clip</label>
+                <output id="clip-out" for="clip" class="num">Clip at 20</output>
+              </div>
+              <input id="clip" type="range" min="0" max="16" step="1" value="8" aria-describedby="clip-hint" />
+              <p class="hint" id="clip-hint">
+                Applies to clipped IPS and doubly robust. Lower clips cut noise from rare, heavily weighted queries
+                but pull the estimate down.
+              </p>
+            </div>
+            <div class="key" aria-hidden="true">
+              <span class="key-item"><span class="key-truth"></span>True online value</span>
+              <span class="key-item"><span class="key-est"></span>Estimate with 95% interval</span>
+              <span class="key-item"><span class="key-ref"></span>Logged clicks, current policy</span>
+            </div>
+            <div class="chart forest-host" id="forest" style="min-height: 470px"></div>
+            <details class="table-toggle">
+              <summary>Show these numbers as a table</summary>
+              <div class="table-wrap"><table class="data" id="results-table"></table></div>
+            </details>
+            <div class="actions">
+              <button type="button" class="btn btn-quiet" id="download-results" disabled>Download results</button>
+              <button type="button" class="btn btn-quiet" id="download-log" disabled>Download this log</button>
+            </div>
+          </section>
+
+          <section class="sheet panel" role="tabpanel" id="panel-ranking" aria-labelledby="tab-ranking" tabindex="0" hidden>
+            <div class="panel-head">
+              <h2>Which candidates deserve live traffic</h2>
+            </div>
+            <p class="summary" id="ranking-summary"></p>
+            <fieldset class="segmented" id="rank-estimator">
+              <legend>Rank candidates by</legend>
+            </fieldset>
+            <div class="key" aria-hidden="true">
+              <span class="key-item"><span class="key-diamond"></span>True online value</span>
+              <span class="key-item"><span class="key-est"></span>Estimate with 95% interval</span>
+              <span class="key-item"><span class="key-ref"></span>Bar to beat: current policy, logged</span>
+            </div>
+            <div class="chart" id="ranking-forest" style="min-height: 470px"></div>
+            <details class="table-toggle">
+              <summary>Show these numbers as a table</summary>
+              <div class="table-wrap"><table class="data" id="ranking-table"></table></div>
+            </details>
+            <h3 class="sub">Rank order by estimator</h3>
+            <p class="hint-wide">
+              Each panel joins a policy's true rank (left) to the rank the estimator gives it (right). Flat lines are
+              correct; crossing lines are policies put in the wrong order.
+            </p>
+            <div class="rank-grid" id="rank-grid"></div>
+          </section>
+
+          <section class="sheet panel" role="tabpanel" id="panel-diagnostics" aria-labelledby="tab-diagnostics" tabindex="0" hidden>
+            <div class="panel-head">
+              <h2 id="diag-title">Overlap diagnostics</h2>
+            </div>
+            <p class="summary" id="diag-summary"></p>
+            <div id="diag-warnings"></div>
+            <dl class="stats" id="diag-stats"></dl>
+            <h3 class="sub">Weight distribution</h3>
+            <div class="chart" id="diag-hist" style="min-height: 230px"></div>
+            <p class="hint-wide" id="diag-zero"></p>
+            <details class="table-toggle">
+              <summary>Show the weight distribution as a table</summary>
+              <div class="table-wrap"><table class="data" id="diag-hist-table"></table></div>
+            </details>
+            <h3 class="sub">Clicks by position in the log</h3>
+            <p class="hint-wide">
+              Click rates fall down the list. Part of that is position bias: lower slots get less attention whatever
+              they show.
+            </p>
+            <div id="diag-positions" class="positions"></div>
+          </section>
+
+          <section class="sheet panel" role="tabpanel" id="panel-upload" aria-labelledby="tab-upload" tabindex="0" hidden>
+            <div class="panel-head">
+              <h2>Evaluate your own log</h2>
+            </div>
+            <p class="privacy">
+              <strong>Your file stays on your device.</strong> This page reads it in your browser and never uploads or
+              sends it anywhere. There is no server and no tracking.
+            </p>
+
+            <div class="upload-grid">
+              <form class="upload-form" id="upload-form" novalidate>
+                <div class="field">
+                  <span class="label" id="file-label">Log file (CSV)</span>
+                  <label class="drop" id="drop" for="file">
+                    <input id="file" type="file" accept=".csv,text/csv" aria-labelledby="file-label" aria-describedby="file-status" />
+                    <span class="drop-text" id="file-status">Choose a CSV file or drop it here</span>
+                  </label>
+                </div>
+                <div class="field">
+                  <label for="upload-target">Target policy to evaluate</label>
+                  <select id="upload-target"></select>
+                  <p class="hint" id="upload-target-hint"></p>
+                </div>
+                <button type="submit" class="btn btn-primary" id="upload-run" disabled>Evaluate my log</button>
+                <div class="run-status" aria-live="polite">
+                  <progress id="upload-progress" max="1" value="0" hidden></progress>
+                  <p id="upload-message" class="hint">Choose a file to start. Not sure of the format? Try the sample.</p>
+                </div>
+                <p><a class="link" id="sample-link" href="sample-log.csv" download="betterrankings-sample-log.csv">Download sample CSV</a></p>
+              </form>
+
+              <div class="format">
+                <h3 class="sub">Column format</h3>
+                <p class="hint-wide">One row per query. Positions count from 1 at the top of the list. Lists may hold 2 to 6 items.</p>
+                <table class="data format-table">
+                  <thead><tr><th scope="col">Column</th><th scope="col">Meaning</th></tr></thead>
+                  <tbody>
+                    <tr><td><code>query_id</code></td><td>Any identifier</td></tr>
+                    <tr><td><code>ctx_1</code> to <code>ctx_3</code></td><td>Query context features</td></tr>
+                    <tr><td><code>item_K</code></td><td>Item shown at position K</td></tr>
+                    <tr><td><code>click_K</code></td><td>1 if it was clicked, else 0</td></tr>
+                    <tr><td><code>item_K_pop</code></td><td>Popularity feature of that item</td></tr>
+                    <tr><td><code>item_K_f1</code> to <code>item_K_f3</code></td><td>Other item features</td></tr>
+                    <tr><td><code>propensity</code></td><td>Probability the logging policy gave the whole list it showed</td></tr>
+                    <tr><td><code>target_propensity</code></td><td>Optional. Probability your own policy gives that list</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="upload-results" hidden>
+              <h3 class="sub" id="upload-results-title">Estimates for your log</h3>
+              <p class="summary" id="upload-summary"></p>
+              <div id="upload-warnings"></div>
+              <div class="clip-control">
+                <div class="field-head">
+                  <label for="upload-clip">Weight clip</label>
+                  <output id="upload-clip-out" for="upload-clip" class="num">Clip at 20</output>
+                </div>
+                <input id="upload-clip" type="range" min="0" max="16" step="1" value="8" />
+              </div>
+              <div class="chart" id="upload-forest"></div>
+              <details class="table-toggle">
+                <summary>Show these numbers as a table</summary>
+                <div class="table-wrap"><table class="data" id="upload-table"></table></div>
+              </details>
+              <div class="actions">
+                <button type="button" class="btn btn-quiet" id="upload-download">Download results</button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <footer class="footer">
+        <p>
+          BetterRankings is open source. Built-in data is simulated, and nothing you do here is tracked.
+          <a class="link" href="https://github.com/DevFrancisA/BetterRankings">Source and Python package on GitHub</a>
+        </p>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

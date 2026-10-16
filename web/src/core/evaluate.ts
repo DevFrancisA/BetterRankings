@@ -150,30 +150,6 @@ export function reclip(ev: Evaluation, clip: number | null): void {
   }
 }
 
-/** Point estimates only, for a sweep of clip levels (keeps chart axes steady). */
-export function clipSweep(ev: Evaluation, clips: (number | null)[]): Partial<Record<TargetId, { clipped_ips: number[]; doubly_robust: number[] }>> {
-  const out: ReturnType<typeof clipSweep> = {};
-  const n = ev.n;
-  for (const p of Object.values(ev.policies)) {
-    if (!p) continue;
-    const c1: number[] = [];
-    const c2: number[] = [];
-    for (const c of clips) {
-      let s1 = 0;
-      let s2 = 0;
-      for (let i = 0; i < n; i++) {
-        const wc = c === null ? p.weights[i] : Math.min(p.weights[i], c);
-        s1 += wc * ev.rewards[i];
-        if (p.dm && ev.qLogged) s2 += p.dm[i] + wc * (ev.rewards[i] - ev.qLogged[i]);
-      }
-      c1.push(s1 / n);
-      c2.push(p.dm ? s2 / n : NaN);
-    }
-    out[p.id] = { clipped_ips: c1, doubly_robust: c2 };
-  }
-  return out;
-}
-
 export interface Truth {
   value: number;
   se: number;
