@@ -34,69 +34,119 @@ Both policies were logged on the same traffic, so each one's real click rate is 
 - **What is estimated:** BTS's click rate per impression slot, from the random logs alone. The truth is BTS's on-policy click rate.
 - **Target policy:** the importance weights need BTS's probability of showing each item at each position. Its logged propensities flip between a few values within minutes, so its per-impression policy can't be rebuilt exactly. The main results use BTS's **weekly average behaviour**: how often each item appeared at each position across BTS's own log.
 - **Context:** BTS's choices barely depend on the user features. The total variation between user segments is 0.02 to 0.09, so treating it as non-contextual is reasonable.
-- **Overlap:** the random logging policy gives good overlap. The effective sample size is 27–35% of rows, and the largest weight is about 8.
+- **Overlap:** the random logging policy gives good overlap.
 
 **2. The random policy from BTS's logs.**
 
 - **What is estimated:** the uniform random policy's click rate, from BTS's logs alone.
-- **Why it's clean:** every quantity is exact. The logged propensities are BTS's own, and the target policy is uniform.
-- **Overlap:** poor. BTS rarely showed some items, so single weights reach 12,500 to 29,412. The effective sample size falls to 0.04–0.16% of rows, and the poor-overlap warning fires in every campaign.
+- **Target policy:** uniform, so it is known exactly.
+- **Overlap:** poor. BTS rarely showed some items, so their weights are heavy.
 
 ## Method
 
 - **Estimand:** clicks per impression slot, estimated position by position. A row's weight is `target(item | position) / logging(item | position)`.
+- **Logging propensities:** each experiment runs twice.
+  - **Logged:** the propensities recorded in the data.
+  - **Estimated (daily):** re-estimated from the log itself, as how often each item appeared at each position on each day. Weighting with estimated propensities is never less efficient than with the true ones (Hirano, Imbens and Ridder, 2003). It also removes the miscalibration found in BTS's logged values (see below).
+
+  The daily bucket was chosen before seeing any results: it is the finest time bucket whose item-position cells are all filled.
 - **Reward model:** a ridge logistic regression with these features:
   - item, position, day and hour of day;
   - the 4 categorical user features;
   - the user's affinity for the shown item.
 
   It is cross-fitted over 2 folds of recommendations, and each fold's model is trained on up to 1M sampled rows.
-- **Weight clipping:** none. Clipping at 20 biased the random-from-BTS estimates.
+- **Weight clipping:** none.
 - **Intervals:** 95% percentile bootstrap with 200 resamples. Resampling is done over recommendations, not rows: rows logged within 20 ms of each other are grouped, which puts 94% of rows in groups of exactly 3. The truth's standard error is clustered the same way.
 
 ## Results
 
-"Error" is `|estimate − truth| / truth`. "✓" means the 95% interval contains the true click rate.
-
-### BTS from the random policy's logs (weekly-average target)
-
-| Campaign | True BTS click rate | Logged click rate, no correction | IPS | Self-normalised IPS | Reward model | Doubly robust |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| all | 0.00495 | 30.0% off | 1.7% ✓ | 1.6% ✓ | 0.6% | 1.5% ✓ |
-| men | 0.00674 | 24.0% off | 8.3% | 6.9% ✓ | 6.5% | 7.2% |
-| women | 0.00638 | 24.5% off | 0.6% ✓ | 0.8% ✓ | 0.1% ✓ | 0.2% ✓ |
-
-**Lift.** BTS's real click-rate lift over the random policy was 42.8% (all), 31.6% (men) and 32.5% (women). Doubly robust estimated it from the random policy's logs alone as 45.0%, 22.1% and 32.2%.
-
-Under uniform logging, the naive "matched replay" estimator is identical to self-normalised IPS. So the table's naive baseline is instead the logged click rate with no correction: assume the new policy will do as well as the old one.
+Errors are signed: `(estimate − truth) / truth`. "±" is the half-width of the 95% interval, relative to the truth. "✓" means the interval contains the true click rate.
 
 ### The random policy from BTS's logs
 
-| Campaign | True random-policy click rate | Logged click rate, no correction | IPS | Self-normalised IPS | Reward model | Doubly robust | Largest weight | Effective sample size |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| all | 0.00347 | 42.8% off | 1.0% ✓ | 5.0% | 5.1% | 3.4% ✓ | 12,500 | 19,910 (0.16%) |
-| men | 0.00512 | 31.6% off | 2.5% ✓ | 7.0% | 5.0% | 6.9% ✓ | 29,412 | 1,513 (0.04%) |
-| women | 0.00482 | 32.5% off | 4.4% | 8.0% | 1.8% | 7.1% | 21,739 | 6,009 (0.08%) |
+This is where estimated propensities matter.
+
+| Campaign | Propensities | IPS | Self-normalised IPS | Doubly robust | Effective sample size | Largest weight |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| all | logged | −1.0% ±5.0% ✓ | −5.0% ±4.9% | −3.4% ±5.0% ✓ | 0.16% | 12,500 |
+| all | estimated | −4.0% ±1.8% | −4.0% ±1.7% | −2.3% ±1.7% | 15.7% | 159 |
+| men | logged | +2.5% ±4.9% ✓ | −7.0% ±6.1% | −6.9% ±7.0% ✓ | 0.04% | 29,412 |
+| men | estimated | −4.0% ±2.8% | −4.0% ±2.8% | −1.5% ±2.8% ✓ | 19.3% | 69 |
+| women | logged | −4.4% ±3.2% | −8.0% ±3.7% | −7.1% ±3.7% | 0.08% | 21,739 |
+| women | estimated | −4.9% ±1.9% | −4.9% ±1.9% | −4.5% ±1.9% | 12.8% | 152 |
+
+Re-estimating the propensities has these effects in all three campaigns:
+
+- The effective sample size rises from 0.04–0.16% of rows to 13–19%.
+- The largest weight falls from 12,500–29,412 to 69–159.
+- Intervals become 2 to 3 times narrower.
+- Doubly robust error falls: from 3.4% to 2.3%, from 6.9% to 1.5%, and from 7.1% to 4.5%.
+- Self-normalised IPS error falls: from 5.0% to 4.0%, from 7.0% to 4.0%, and from 8.0% to 4.9%.
+
+Plain IPS does not improve: it goes from −1.0%, +2.5% and −4.4% to −4.0%, −4.0% and −4.9%. Its logged-propensity estimates had wide intervals that happened to land near the truth. The tighter estimates expose a consistent bias of about −4%, explained below.
+
+The uncorrected comparison, assuming the random policy would match BTS's logged click rate, is 31.6% to 42.8% off.
+
+### BTS from the random policy's logs (weekly-average target)
+
+| Campaign | Propensities | IPS | Self-normalised IPS | Reward model | Doubly robust |
+| --- | --- | ---: | ---: | ---: | ---: |
+| all | logged | +1.7% ±5.1% ✓ | +1.6% ±5.1% ✓ | +0.6% | +1.5% ±5.0% ✓ |
+| all | estimated | +1.8% ±5.2% ✓ | +1.8% ±5.2% ✓ | +0.6% | +1.8% ±5.2% ✓ |
+| men | logged | −8.3% ±6.7% | −6.9% ±6.8% ✓ | −6.5% | −7.2% ±6.7% |
+| men | estimated | −6.1% ±7.2% ✓ | −6.1% ±7.2% ✓ | −6.5% | −6.6% ±7.4% ✓ |
+| women | logged | +0.6% ±4.6% ✓ | +0.8% ±4.5% ✓ | −0.1% ✓ | −0.2% ±4.5% ✓ |
+| women | estimated | +0.3% ±4.5% ✓ | +0.3% ±4.4% ✓ | −0.1% ✓ | −0.8% ±4.3% ✓ |
+
+The random policy's logged propensities are exact (1 over the number of items), so re-estimating changes little here. With estimated propensities, every IPS, self-normalised and doubly robust interval covers the truth.
+
+The uncorrected comparison, assuming BTS would match the random policy's click rate, is 24.0% to 30.0% off.
+
+**Lift.** BTS's real click-rate lift over the random policy was 42.8% (all), 31.6% (men) and 32.5% (women). Doubly robust estimated it from the random policy's logs alone (logged propensities) as 45.0%, 22.1% and 32.2%.
 
 ### Sensitivity to how the BTS target is defined
 
-Doubly robust error under three definitions of BTS's choice probabilities:
+Doubly robust error (logged propensities) under three definitions of BTS's choice probabilities:
 
 | Campaign | Weekly average (main) | Hourly behaviour | Published production prior |
 | --- | ---: | ---: | ---: |
-| all | 1.5% | 5.4% | 5.1% |
-| men | 7.2% | 0.1% | 8.8% |
-| women | 0.2% | 10.4% | 0.3% |
+| all | +1.5% | +5.4% | −5.1% |
+| men | −7.2% | +0.1% | −8.8% |
+| women | −0.2% | +10.4% | −0.3% |
 
-## What this shows, and what it doesn't
+## What limits accuracy: three findings
 
-- **The weighting estimators beat the uncorrected comparison.** Assuming a new policy will match the old one's click rate misses by 24–43%. Across all 6 experiments IPS has a median error of 2.1%, and 5 of the 6 land within 0.6–4.4%; the exception is men, at 8.3%.
-- **Precision is limited by the data, not just the estimators.** At click rates near 0.5%, the intervals for BTS-from-random span roughly ±5–9%. Most differences between estimators in a single campaign are within that noise.
-- **The target definition matters as much as the estimator.** The hourly target looked like a fix for the men campaign, but it made the other two worse, so it isn't used for the headline numbers. BTS's published prior also differs from what BTS actually did: the item mix at each position differs by 31–52% (total variation distance). That gap is part of any benchmark built on the prior.
-- **Reward-model intervals are too narrow.** The bootstrap does not refit the model, so its intervals exclude fitting uncertainty, and they miss the truth even when the point estimate is close.
-- **Assumptions the position-wise estimators make:**
-  - A click at one position doesn't depend on which items fill the other two positions. Random and BTS slates differ in this respect, which is a likely source of the remaining error.
-  - BTS's weekly-average behaviour stands in for a policy that changed during the week.
+**1. BTS's logged propensities are miscalibrated.**
+
+- Under BTS's logs, the uniform policy's weights should average exactly 1. They average 1.04 to 1.10, between 3 and 6 standard errors too high, and individual day-and-position cells reach 3.2.
+- Rows logged with a propensity below 1e-4 have items that appear at that position about 3 times in 1,000 that day, 30 to 300 times more often than logged.
+- This is consistent with the propensities having been computed by Monte Carlo simulation, which is unreliable for rare items.
+- Re-estimating the propensities fixes it: the mean weight becomes exactly 1.000.
+
+**2. Slate competition.**
+
+The estimators assume a click at one position doesn't depend on the items shown at the other two. That assumption fails here.
+
+- **The test:** the same item, at the same position, on the same day, was clicked less often in BTS's slates than in random slates.
+- **The size:** the ratio of click rates was 0.957 (all), 0.965 (men) and 0.950 (women). The 95% cell-bootstrap intervals were 0.910–1.006, 0.896–1.044 and 0.905–0.998.
+- **The cause:** BTS fills the other slots with strong items, which take clicks away.
+- **The consequence:** estimates of the random policy from BTS's logs come out about 4–5% low. That matches the −4.0%, −4.0% and −4.9% of IPS with estimated propensities.
+
+**3. Timing.**
+
+- **The mechanism:** BTS learned during the week and showed items more often while they were clicking well. A fixed target or propensity, weekly or daily, misses that.
+- **Its direction:** it pushes estimates the other way from slate competition, by a similar amount.
+- **Finer time buckets don't fix it.** Hourly estimated propensities leave many hour cells empty, so part of the target mass silently drops out. Random-from-BTS IPS falls to −11.7% to −16.7% with hourly buckets.
+- **A misleading coincidence:** ignoring time entirely (one propensity per item and position for the whole week) gives near-zero error (+0.1%, +2.0% and +0.5%). That is the timing bias and the slate bias cancelling, not a better method, so it is not used.
+
+Removing the remaining few percent would need modelling both biases at once. The data can't cleanly separate them: they are of similar size, they pull in opposite directions, and the intervals for BTS-from-random are ±4–7%.
+
+## Caveats
+
+- **Reward-model intervals are too narrow.** The bootstrap does not refit the model, so its intervals exclude fitting uncertainty.
+- **Three campaigns is a small sample.** Differences of a few percent between estimators in one campaign are mostly within the noise.
+- **The target-policy definition matters as much as the estimator.** BTS's published prior differs from what BTS actually did: the item mix at each position differs by 31–52% (total variation distance). Any benchmark built on the prior inherits that gap.
 
 ## Reproduce
 
@@ -115,3 +165,5 @@ The first run parses the CSVs (a few minutes for the 6.3 GB BTS log). Later runs
 ## Citation
 
 Yuta Saito, Shunsuke Aihara, Megumi Matsutani, Yusuke Narita. "Open Bandit Dataset and Pipeline: Towards Realistic and Reproducible Off-Policy Evaluation." NeurIPS Datasets and Benchmarks Track, 2021. Data © ZOZO Technologies, CC BY 4.0.
+
+Keisuke Hirano, Guido W. Imbens, Geert Ridder. "Efficient Estimation of Average Treatment Effects Using the Estimated Propensity Score." Econometrica 71(4), 2003.

@@ -61,6 +61,24 @@ def test_cross_fit_scores_rows_out_of_fold(logs):
     assert ((q > 0) & (q < 1)).all() and ((d > 0) & (d < 1)).all()
 
 
+def test_estimated_propensities(logs):
+    rnd, bts = logs
+    p = obd.estimated_pscore(bts)
+    assert p.shape == (3000,) and ((p > 0) & (p <= 1)).all()
+    # within each day and position, estimated propensities of the items shown sum to 1
+    day = bts.hour // 24
+    for d in np.unique(day):
+        for k in range(3):
+            m = (day == d) & (bts.position == k)
+            if m.any():
+                _, first = np.unique(bts.item[m], return_index=True)
+                assert p[m][first].sum() == pytest.approx(1.0)
+    # when the target is exactly the log's own estimated behaviour, every weight is 1
+    est, diag = obd.estimate_policy(bts, obd.hourly_policy(bts), clip=None, n_boot=10,
+                                    pscore=obd.estimated_pscore(bts, bucket_hours=1))
+    assert diag["max_weight"] == pytest.approx(1.0) and est["ips"].estimate == pytest.approx(bts.click.mean())
+
+
 def test_heavy_weights_trigger_overlap_warning(logs):
     _, bts = logs
     _, diag = obd.estimate_policy(bts, obd.uniform_policy(80), clip=None, n_boot=10)

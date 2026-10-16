@@ -140,7 +140,7 @@ def cmd_obd(args: argparse.Namespace) -> int:
         for c in checks:
             results.append(c.to_dict())
             print(f"\n[{camp}] {c.name}: estimate the {c.target_policy} policy from {c.n_rows:,} rows "
-                  f"logged by the {c.logging_policy} policy")
+                  f"logged by the {c.logging_policy} policy, {c.propensities} propensities")
             print(f"  True click rate (on-policy log) {c.truth:.5f} ± {c.truth_se:.5f}")
             rows = [{
                 "estimator": "Logged click rate, no correction",

@@ -1,76 +1,5 @@
 [
  {
-  "name": "bts_hourly_from_random",
-  "campaign": "men",
-  "logging_policy": "random",
-  "target_policy": "bts (hourly behaviour)",
-  "n_rows": 452949,
-  "truth": 0.006742727014339116,
-  "truth_se": 4.6545095502264573e-05,
-  "logged_ctr": 0.005124197205424894,
-  "estimates": {
-   "naive": {
-    "estimate": 0.00677905365212226,
-    "ci_low": 0.006195420991144031,
-    "ci_high": 0.007393731214367564,
-    "ess": 82793.78921348116,
-    "n": 452949,
-    "available": true
-   },
-   "ips": {
-    "estimate": 0.006663187761706411,
-    "ci_low": 0.006063318693121745,
-    "ci_high": 0.007262524083048589,
-    "ess": 82793.78921348114,
-    "n": 452949,
-    "available": true
-   },
-   "snips": {
-    "estimate": 0.006779053652122259,
-    "ci_low": 0.00619542099114403,
-    "ci_high": 0.007393731214367567,
-    "ess": 82793.78921348114,
-    "n": 452949,
-    "available": true
-   },
-   "clipped_ips": {
-    "estimate": 0.006663187761706411,
-    "ci_low": 0.006063318693121745,
-    "ci_high": 0.007262524083048589,
-    "ess": 82793.78921348114,
-    "n": 452949,
-    "available": true
-   },
-   "reward_model": {
-    "estimate": 0.006319484947684539,
-    "ci_low": 0.006305109216788061,
-    "ci_high": 0.006334498645985293,
-    "ess": null,
-    "n": 452949,
-    "available": true
-   },
-   "doubly_robust": {
-    "estimate": 0.0067361660920526685,
-    "ci_low": 0.006172118615557629,
-    "ci_high": 0.007361034471454629,
-    "ess": 82793.78921348114,
-    "n": 452949,
-    "available": true
-   }
-  },
-  "diagnostics": {
-   "n": 452949,
-   "ess": 82793.78921348114,
-   "ess_fraction": 0.18278832542622048,
-   "max_weight": 21.622761232217826,
-   "max_weight_share": 4.8567848728117115e-05,
-   "mean_weight": 0.9829082499768127,
-   "fraction_nonzero": 0.8838390194039506,
-   "n_clipped": 0,
-   "warnings": []
-  }
- },
- {
   "name": "bts_weekly_from_random",
   "campaign": "men",
   "logging_policy": "random",
@@ -79,6 +8,7 @@
   "truth": 0.006742727014339116,
   "truth_se": 4.6545095502264573e-05,
   "logged_ctr": 0.005124197205424894,
+  "propensities": "logged",
   "estimates": {
    "naive": {
     "estimate": 0.0062769867067546245,
@@ -142,6 +72,150 @@
   }
  },
  {
+  "name": "bts_weekly_from_random",
+  "campaign": "men",
+  "logging_policy": "random",
+  "target_policy": "bts (weekly average)",
+  "n_rows": 452949,
+  "truth": 0.006742727014339116,
+  "truth_se": 4.6545095502264573e-05,
+  "logged_ctr": 0.005124197205424894,
+  "propensities": "estimated (daily)",
+  "estimates": {
+   "naive": {
+    "estimate": 0.0062769867067546245,
+    "ci_low": 0.005842089342966084,
+    "ci_high": 0.006755086446564431,
+    "ess": 126479.24908391008,
+    "n": 452949,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.006333860993184332,
+    "ci_low": 0.005862065821483971,
+    "ci_high": 0.006838312432752157,
+    "ess": 121284.47088658546,
+    "n": 452949,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.006333860993184332,
+    "ci_low": 0.005864137360401797,
+    "ci_high": 0.006839070107368773,
+    "ess": 121284.47088658546,
+    "n": 452949,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.006333860993184332,
+    "ci_low": 0.005862065821483971,
+    "ci_high": 0.006838312432752157,
+    "ess": 121284.47088658546,
+    "n": 452949,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006301603877600645,
+    "ci_low": 0.006288227890928421,
+    "ci_high": 0.006315237599474885,
+    "ess": null,
+    "n": 452949,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.006296462553874881,
+    "ci_low": 0.005801095661835314,
+    "ci_high": 0.006805387268163779,
+    "ess": 121284.47088658546,
+    "n": 452949,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 452949,
+   "ess": 121284.47088658546,
+   "ess_fraction": 0.2677662846955959,
+   "max_weight": 10.998174562068666,
+   "max_weight_share": 2.4281264694410775e-05,
+   "mean_weight": 1.0,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "bts_hourly_from_random",
+  "campaign": "men",
+  "logging_policy": "random",
+  "target_policy": "bts (hourly behaviour)",
+  "n_rows": 452949,
+  "truth": 0.006742727014339116,
+  "truth_se": 4.6545095502264573e-05,
+  "logged_ctr": 0.005124197205424894,
+  "propensities": "logged",
+  "estimates": {
+   "naive": {
+    "estimate": 0.00677905365212226,
+    "ci_low": 0.006195420991144031,
+    "ci_high": 0.007393731214367564,
+    "ess": 82793.78921348116,
+    "n": 452949,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.006663187761706411,
+    "ci_low": 0.006063318693121745,
+    "ci_high": 0.007262524083048589,
+    "ess": 82793.78921348114,
+    "n": 452949,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.006779053652122259,
+    "ci_low": 0.00619542099114403,
+    "ci_high": 0.007393731214367567,
+    "ess": 82793.78921348114,
+    "n": 452949,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.006663187761706411,
+    "ci_low": 0.006063318693121745,
+    "ci_high": 0.007262524083048589,
+    "ess": 82793.78921348114,
+    "n": 452949,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006319484947684539,
+    "ci_low": 0.006305109216788061,
+    "ci_high": 0.006334498645985293,
+    "ess": null,
+    "n": 452949,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.0067361660920526685,
+    "ci_low": 0.006172118615557629,
+    "ci_high": 0.007361034471454629,
+    "ess": 82793.78921348114,
+    "n": 452949,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 452949,
+   "ess": 82793.78921348114,
+   "ess_fraction": 0.18278832542622048,
+   "max_weight": 21.622761232217826,
+   "max_weight_share": 4.8567848728117115e-05,
+   "mean_weight": 0.9829082499768127,
+   "fraction_nonzero": 0.8838390194039506,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
   "name": "bts_prior_from_random",
   "campaign": "men",
   "logging_policy": "random",
@@ -150,6 +224,7 @@
   "truth": 0.006742727014339116,
   "truth_se": 4.6545095502264573e-05,
   "logged_ctr": 0.005124197205424894,
+  "propensities": "logged",
   "estimates": {
    "naive": {
     "estimate": 0.006123177263722837,
@@ -221,6 +296,7 @@
   "truth": 0.005124197205424894,
   "truth_se": 0.00011659854050207854,
   "logged_ctr": 0.006742727014339116,
+  "propensities": "logged",
   "estimates": {
    "naive": {
     "estimate": 0.006742727014339114,
@@ -290,72 +366,73 @@
   }
  },
  {
-  "name": "bts_hourly_from_random",
-  "campaign": "women",
-  "logging_policy": "random",
-  "target_policy": "bts (hourly behaviour)",
-  "n_rows": 864585,
-  "truth": 0.006379372756180319,
-  "truth_se": 3.0582870958024803e-05,
-  "logged_ctr": 0.004815026862598819,
+  "name": "random_from_bts",
+  "campaign": "men",
+  "logging_policy": "bts",
+  "target_policy": "random (uniform)",
+  "n_rows": 4077727,
+  "truth": 0.005124197205424894,
+  "truth_se": 0.00011659854050207854,
+  "logged_ctr": 0.006742727014339116,
+  "propensities": "estimated (daily)",
   "estimates": {
    "naive": {
-    "estimate": 0.0071319037184771365,
-    "ci_low": 0.006656946287475402,
-    "ci_high": 0.00763092581505259,
-    "ess": 144254.428173517,
-    "n": 864585,
+    "estimate": 0.006742727014339114,
+    "ci_low": 0.0066621317222223765,
+    "ci_high": 0.006826251780969961,
+    "ess": 4077727.000000318,
+    "n": 4077727,
     "available": true
    },
    "ips": {
-    "estimate": 0.007120055369033155,
-    "ci_low": 0.006650563165132513,
-    "ci_high": 0.007617843729459696,
-    "ess": 144254.42817351708,
-    "n": 864585,
+    "estimate": 0.004920645122427014,
+    "ci_low": 0.004793144066434853,
+    "ci_high": 0.005077569837256576,
+    "ess": 784983.8808727098,
+    "n": 4077727,
     "available": true
    },
    "snips": {
-    "estimate": 0.007131903718477137,
-    "ci_low": 0.006656946287475402,
-    "ci_high": 0.00763092581505259,
-    "ess": 144254.42817351708,
-    "n": 864585,
+    "estimate": 0.004920645122427014,
+    "ci_low": 0.004796143627674731,
+    "ci_high": 0.0050818778147765165,
+    "ess": 784983.8808727098,
+    "n": 4077727,
     "available": true
    },
    "clipped_ips": {
-    "estimate": 0.007120055369033155,
-    "ci_low": 0.006650563165132513,
-    "ci_high": 0.007617843729459696,
-    "ess": 144254.42817351708,
-    "n": 864585,
+    "estimate": 0.004920645122427014,
+    "ci_low": 0.004793144066434853,
+    "ci_high": 0.005077569837256576,
+    "ess": 784983.8808727098,
+    "n": 4077727,
     "available": true
    },
    "reward_model": {
-    "estimate": 0.006375921464814306,
-    "ci_low": 0.006363167303237428,
-    "ci_high": 0.006388447835942913,
+    "estimate": 0.005382616477235728,
+    "ci_low": 0.005379793122441172,
+    "ci_high": 0.005385923901646208,
     "ess": null,
-    "n": 864585,
+    "n": 4077727,
     "available": true
    },
    "doubly_robust": {
-    "estimate": 0.0070426635243070355,
-    "ci_low": 0.006597752816785363,
-    "ci_high": 0.007559919757269325,
-    "ess": 144254.42817351708,
-    "n": 864585,
+    "estimate": 0.005046060971968232,
+    "ci_low": 0.004919785549291604,
+    "ci_high": 0.005206690365075531,
+    "ess": 784983.8808727098,
+    "n": 4077727,
     "available": true
    }
   },
   "diagnostics": {
-   "n": 864585,
-   "ess": 144254.42817351708,
-   "ess_fraction": 0.1668481736018056,
-   "max_weight": 38.58426685024095,
-   "max_weight_share": 4.4701763503620635e-05,
-   "mean_weight": 0.9983386834831651,
-   "fraction_nonzero": 0.8573396485018824,
+   "n": 4077727,
+   "ess": 784983.8808727098,
+   "ess_fraction": 0.19250525620589848,
+   "max_weight": 69.36662106703146,
+   "max_weight_share": 1.701109982768132e-05,
+   "mean_weight": 1.0,
+   "fraction_nonzero": 1.0,
    "n_clipped": 0,
    "warnings": []
   }
@@ -369,6 +446,7 @@
   "truth": 0.006379372756180319,
   "truth_se": 3.0582870958024803e-05,
   "logged_ctr": 0.004815026862598819,
+  "propensities": "logged",
   "estimates": {
    "naive": {
     "estimate": 0.0064333949775466776,
@@ -432,6 +510,150 @@
   }
  },
  {
+  "name": "bts_weekly_from_random",
+  "campaign": "women",
+  "logging_policy": "random",
+  "target_policy": "bts (weekly average)",
+  "n_rows": 864585,
+  "truth": 0.006379372756180319,
+  "truth_se": 3.0582870958024803e-05,
+  "logged_ctr": 0.004815026862598819,
+  "propensities": "estimated (daily)",
+  "estimates": {
+   "naive": {
+    "estimate": 0.0064333949775466776,
+    "ci_low": 0.006149554134938358,
+    "ci_high": 0.006719429649279386,
+    "ess": 303457.0404228164,
+    "n": 864585,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.006397478112747095,
+    "ci_low": 0.006106961939522554,
+    "ci_high": 0.006677481489250822,
+    "ess": 300393.8735658284,
+    "n": 864585,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.006397478112747095,
+    "ci_low": 0.006117014612005974,
+    "ci_high": 0.006675140888706165,
+    "ess": 300393.8735658284,
+    "n": 864585,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.006397478112747095,
+    "ci_low": 0.006106961939522554,
+    "ci_high": 0.006677481489250822,
+    "ess": 300393.8735658284,
+    "n": 864585,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006372689803377229,
+    "ci_low": 0.006361818703559764,
+    "ci_high": 0.006384740679059299,
+    "ess": null,
+    "n": 864585,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.0063306131819784684,
+    "ci_low": 0.006059677733851774,
+    "ci_high": 0.006605802439478687,
+    "ess": 300393.8735658284,
+    "n": 864585,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 864585,
+   "ess": 300393.8735658284,
+   "ess_fraction": 0.3474428466441454,
+   "max_weight": 7.522171505429554,
+   "max_weight_share": 8.700326174325896e-06,
+   "mean_weight": 1.0,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "bts_hourly_from_random",
+  "campaign": "women",
+  "logging_policy": "random",
+  "target_policy": "bts (hourly behaviour)",
+  "n_rows": 864585,
+  "truth": 0.006379372756180319,
+  "truth_se": 3.0582870958024803e-05,
+  "logged_ctr": 0.004815026862598819,
+  "propensities": "logged",
+  "estimates": {
+   "naive": {
+    "estimate": 0.0071319037184771365,
+    "ci_low": 0.006656946287475402,
+    "ci_high": 0.00763092581505259,
+    "ess": 144254.428173517,
+    "n": 864585,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.007120055369033155,
+    "ci_low": 0.006650563165132513,
+    "ci_high": 0.007617843729459696,
+    "ess": 144254.42817351708,
+    "n": 864585,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.007131903718477137,
+    "ci_low": 0.006656946287475402,
+    "ci_high": 0.00763092581505259,
+    "ess": 144254.42817351708,
+    "n": 864585,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.007120055369033155,
+    "ci_low": 0.006650563165132513,
+    "ci_high": 0.007617843729459696,
+    "ess": 144254.42817351708,
+    "n": 864585,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.006375921464814306,
+    "ci_low": 0.006363167303237428,
+    "ci_high": 0.006388447835942913,
+    "ess": null,
+    "n": 864585,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.0070426635243070355,
+    "ci_low": 0.006597752816785363,
+    "ci_high": 0.007559919757269325,
+    "ess": 144254.42817351708,
+    "n": 864585,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 864585,
+   "ess": 144254.42817351708,
+   "ess_fraction": 0.1668481736018056,
+   "max_weight": 38.58426685024095,
+   "max_weight_share": 4.4701763503620635e-05,
+   "mean_weight": 0.9983386834831651,
+   "fraction_nonzero": 0.8573396485018824,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
   "name": "bts_prior_from_random",
   "campaign": "women",
   "logging_policy": "random",
@@ -440,6 +662,7 @@
   "truth": 0.006379372756180319,
   "truth_se": 3.0582870958024803e-05,
   "logged_ctr": 0.004815026862598819,
+  "propensities": "logged",
   "estimates": {
    "naive": {
     "estimate": 0.006403677075857636,
@@ -511,6 +734,7 @@
   "truth": 0.004815026862598819,
   "truth_se": 7.866062382388565e-05,
   "logged_ctr": 0.006379372756180319,
+  "propensities": "logged",
   "estimates": {
    "naive": {
     "estimate": 0.006379372756180322,
@@ -580,72 +804,73 @@
   }
  },
  {
-  "name": "bts_hourly_from_random",
-  "campaign": "all",
-  "logging_policy": "random",
-  "target_policy": "bts (hourly behaviour)",
-  "n_rows": 1374327,
-  "truth": 0.004953225649823585,
-  "truth_se": 2.154694024976569e-05,
-  "logged_ctr": 0.0034693344451502445,
+  "name": "random_from_bts",
+  "campaign": "women",
+  "logging_policy": "bts",
+  "target_policy": "random (uniform)",
+  "n_rows": 7765497,
+  "truth": 0.004815026862598819,
+  "truth_se": 7.866062382388565e-05,
+  "logged_ctr": 0.006379372756180319,
+  "propensities": "estimated (daily)",
   "estimates": {
    "naive": {
-    "estimate": 0.005229711644848645,
-    "ci_low": 0.004882862885413483,
-    "ci_high": 0.005595568416465039,
-    "ess": 162647.46251958117,
-    "n": 1374327,
+    "estimate": 0.006379372756180322,
+    "ci_low": 0.006323774220841077,
+    "ci_high": 0.006434124781317153,
+    "ess": 7765496.999998612,
+    "n": 7765497,
     "available": true
    },
    "ips": {
-    "estimate": 0.005239080044225425,
-    "ci_low": 0.004897259218586621,
-    "ci_high": 0.0056087509965657215,
-    "ess": 162647.46251958117,
-    "n": 1374327,
+    "estimate": 0.004576850520588355,
+    "ci_low": 0.004489405033437905,
+    "ci_high": 0.0046698808287950816,
+    "ess": 995269.721673017,
+    "n": 7765497,
     "available": true
    },
    "snips": {
-    "estimate": 0.005229711644848646,
-    "ci_low": 0.004882862885413482,
-    "ci_high": 0.005595568416465039,
-    "ess": 162647.46251958117,
-    "n": 1374327,
+    "estimate": 0.004576850520588355,
+    "ci_low": 0.004484881501798667,
+    "ci_high": 0.004667480569430466,
+    "ess": 995269.721673017,
+    "n": 7765497,
     "available": true
    },
    "clipped_ips": {
-    "estimate": 0.005239080044225425,
-    "ci_low": 0.004897259218586621,
-    "ci_high": 0.0056087509965657215,
-    "ess": 162647.46251958117,
-    "n": 1374327,
+    "estimate": 0.004576850520588355,
+    "ci_low": 0.004489405033437905,
+    "ci_high": 0.0046698808287950816,
+    "ess": 995269.721673017,
+    "n": 7765497,
     "available": true
    },
    "reward_model": {
-    "estimate": 0.004982004222565055,
-    "ci_low": 0.004978533249870326,
-    "ci_high": 0.004985368319691017,
+    "estimate": 0.004899396331247086,
+    "ci_low": 0.004897048914786462,
+    "ci_high": 0.004900980742277867,
     "ess": null,
-    "n": 1374327,
+    "n": 7765497,
     "available": true
    },
    "doubly_robust": {
-    "estimate": 0.005218973477388079,
-    "ci_low": 0.004869118097321706,
-    "ci_high": 0.005585305482619811,
-    "ess": 162647.46251958117,
-    "n": 1374327,
+    "estimate": 0.004598456120148829,
+    "ci_low": 0.004511700921856294,
+    "ci_high": 0.004692785236769265,
+    "ess": 995269.721673017,
+    "n": 7765497,
     "available": true
    }
   },
   "diagnostics": {
-   "n": 1374327,
-   "ess": 162647.46251958117,
-   "ess_fraction": 0.1183469891223713,
-   "max_weight": 66.2568208153376,
-   "max_weight_share": 4.8124166905659624e-05,
-   "mean_weight": 1.001791379718996,
-   "fraction_nonzero": 0.8287867443483247,
+   "n": 7765497,
+   "ess": 995269.721673017,
+   "ess_fraction": 0.12816561794731451,
+   "max_weight": 151.99475262368816,
+   "max_weight_share": 1.9573087546577915e-05,
+   "mean_weight": 1.0,
+   "fraction_nonzero": 1.0,
    "n_clipped": 0,
    "warnings": []
   }
@@ -659,6 +884,7 @@
   "truth": 0.004953225649823585,
   "truth_se": 2.154694024976569e-05,
   "logged_ctr": 0.0034693344451502445,
+  "propensities": "logged",
   "estimates": {
    "naive": {
     "estimate": 0.005030268465837179,
@@ -722,6 +948,150 @@
   }
  },
  {
+  "name": "bts_weekly_from_random",
+  "campaign": "all",
+  "logging_policy": "random",
+  "target_policy": "bts (weekly average)",
+  "n_rows": 1374327,
+  "truth": 0.004953225649823585,
+  "truth_se": 2.154694024976569e-05,
+  "logged_ctr": 0.0034693344451502445,
+  "propensities": "estimated (daily)",
+  "estimates": {
+   "naive": {
+    "estimate": 0.005030268465837179,
+    "ci_low": 0.004797140081480841,
+    "ci_high": 0.005297493625277385,
+    "ess": 367932.95878946705,
+    "n": 1374327,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.005041990283233003,
+    "ci_low": 0.004792524179293012,
+    "ci_high": 0.005304132795287914,
+    "ess": 367040.1502749969,
+    "n": 1374327,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.005041990283233003,
+    "ci_low": 0.004789676266541839,
+    "ci_high": 0.005304970560059141,
+    "ess": 367040.1502749969,
+    "n": 1374327,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.005041990283233003,
+    "ci_low": 0.004792524179293012,
+    "ci_high": 0.005304132795287914,
+    "ess": 367040.1502749969,
+    "n": 1374327,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.004984646192898964,
+    "ci_low": 0.004981190871529253,
+    "ci_high": 0.004988283002493321,
+    "ess": null,
+    "n": 1374327,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.005041169783993365,
+    "ci_low": 0.004790755564233001,
+    "ci_high": 0.005302463817984261,
+    "ess": 367040.1502749969,
+    "n": 1374327,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 1374327,
+   "ess": 367040.1502749969,
+   "ess_fraction": 0.2670690092496159,
+   "max_weight": 10.443323163038297,
+   "max_weight_share": 7.598863416812954e-06,
+   "mean_weight": 1.0,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "bts_hourly_from_random",
+  "campaign": "all",
+  "logging_policy": "random",
+  "target_policy": "bts (hourly behaviour)",
+  "n_rows": 1374327,
+  "truth": 0.004953225649823585,
+  "truth_se": 2.154694024976569e-05,
+  "logged_ctr": 0.0034693344451502445,
+  "propensities": "logged",
+  "estimates": {
+   "naive": {
+    "estimate": 0.005229711644848645,
+    "ci_low": 0.004882862885413483,
+    "ci_high": 0.005595568416465039,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.005239080044225425,
+    "ci_low": 0.004897259218586621,
+    "ci_high": 0.0056087509965657215,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.005229711644848646,
+    "ci_low": 0.004882862885413482,
+    "ci_high": 0.005595568416465039,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.005239080044225425,
+    "ci_low": 0.004897259218586621,
+    "ci_high": 0.0056087509965657215,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.004982004222565055,
+    "ci_low": 0.004978533249870326,
+    "ci_high": 0.004985368319691017,
+    "ess": null,
+    "n": 1374327,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.005218973477388079,
+    "ci_low": 0.004869118097321706,
+    "ci_high": 0.005585305482619811,
+    "ess": 162647.46251958117,
+    "n": 1374327,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 1374327,
+   "ess": 162647.46251958117,
+   "ess_fraction": 0.1183469891223713,
+   "max_weight": 66.2568208153376,
+   "max_weight_share": 4.8124166905659624e-05,
+   "mean_weight": 1.001791379718996,
+   "fraction_nonzero": 0.8287867443483247,
+   "n_clipped": 0,
+   "warnings": []
+  }
+ },
+ {
   "name": "bts_prior_from_random",
   "campaign": "all",
   "logging_policy": "random",
@@ -730,6 +1100,7 @@
   "truth": 0.004953225649823585,
   "truth_se": 2.154694024976569e-05,
   "logged_ctr": 0.0034693344451502445,
+  "propensities": "logged",
   "estimates": {
    "naive": {
     "estimate": 0.004694882238608971,
@@ -801,6 +1172,7 @@
   "truth": 0.0034693344451502445,
   "truth_se": 5.291623545139145e-05,
   "logged_ctr": 0.004953225649823585,
+  "propensities": "logged",
   "estimates": {
    "naive": {
     "estimate": 0.004953225649823586,
@@ -867,6 +1239,78 @@
      "message": "Poor overlap: the weights are worth about 19910 of 12357200 logged queries. The logging policy rarely showed the lists this policy would show, so estimates are unreliable."
     }
    ]
+  }
+ },
+ {
+  "name": "random_from_bts",
+  "campaign": "all",
+  "logging_policy": "bts",
+  "target_policy": "random (uniform)",
+  "n_rows": 12357200,
+  "truth": 0.0034693344451502445,
+  "truth_se": 5.291623545139145e-05,
+  "logged_ctr": 0.004953225649823585,
+  "propensities": "estimated (daily)",
+  "estimates": {
+   "naive": {
+    "estimate": 0.004953225649823586,
+    "ci_low": 0.004908167990870289,
+    "ci_high": 0.0049900405852888715,
+    "ess": 12357200.000003817,
+    "n": 12357200,
+    "available": true
+   },
+   "ips": {
+    "estimate": 0.003330330396584214,
+    "ci_low": 0.003262655975670861,
+    "ci_high": 0.0033857780607093515,
+    "ess": 1944047.0984513264,
+    "n": 12357200,
+    "available": true
+   },
+   "snips": {
+    "estimate": 0.003330330396584214,
+    "ci_low": 0.0032650946059747756,
+    "ci_high": 0.0033852418819790603,
+    "ess": 1944047.0984513264,
+    "n": 12357200,
+    "available": true
+   },
+   "clipped_ips": {
+    "estimate": 0.003330330396584214,
+    "ci_low": 0.003262655975670861,
+    "ci_high": 0.0033857780607093515,
+    "ess": 1944047.0984513264,
+    "n": 12357200,
+    "available": true
+   },
+   "reward_model": {
+    "estimate": 0.0036449180960054224,
+    "ci_low": 0.003644070383155789,
+    "ci_high": 0.003645867438106102,
+    "ess": null,
+    "n": 12357200,
+    "available": true
+   },
+   "doubly_robust": {
+    "estimate": 0.0033879857371220475,
+    "ci_low": 0.003322398220123257,
+    "ci_high": 0.0034423582211755054,
+    "ess": 1944047.0984513264,
+    "n": 12357200,
+    "available": true
+   }
+  },
+  "diagnostics": {
+   "n": 12357200,
+   "ess": 1944047.0984513264,
+   "ess_fraction": 0.15732100301454427,
+   "max_weight": 159.21104651162793,
+   "max_weight_share": 1.2884071352056124e-05,
+   "mean_weight": 1.0,
+   "fraction_nonzero": 1.0,
+   "n_clipped": 0,
+   "warnings": []
   }
  }
 ]

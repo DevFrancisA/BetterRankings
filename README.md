@@ -175,6 +175,7 @@ How it adapts the estimators:
 
 - The dataset logs one item per position, so the weights are per position: `target(item | position) / logging(item | position)`.
 - The reward model is an additive logistic model over item, position, time and user features, cross-fitted.
+- Each experiment also runs with logging propensities re-estimated from the log (how often each item appeared at each position each day) instead of the recorded ones. The dataset's recorded BTS propensities are miscalibrated for rare items, and estimated propensities cut weight variance sharply (`obd.estimated_pscore`).
 - Bootstrap intervals resample whole recommendations, grouping rows logged within 20 ms of each other.
 
 ```bash

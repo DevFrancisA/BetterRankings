@@ -174,6 +174,24 @@ def target_rows(target: np.ndarray, log: ObdLog) -> np.ndarray:
     return target[:, log.position].T
 
 
+def estimated_pscore(log: ObdLog, bucket_hours: int = 24) -> np.ndarray:
+    """Logging propensities re-estimated from the log itself, one per row.
+
+    Within each time bucket (a day by default), the probability of an item at a position is how often
+    it appeared there. BTS's logged propensities came from Monte Carlo simulation, and the smallest are
+    far too small (items logged below 1e-4 appear about 3 times in 1,000), which inflates their weights.
+    Re-estimating removes that noise, and estimated propensities give weighted estimators no more variance
+    than the true ones (Hirano, Imbens and Ridder, 2003). Buckets must be coarse enough that every
+    item-position cell is filled, or that cell's target mass silently drops out.
+    """
+    bucket = (log.hour // bucket_hours).astype(np.int64)
+    n_buckets = int(bucket.max()) + 1
+    counts = np.zeros((n_buckets, log.n_items, 3))
+    np.add.at(counts, (bucket, log.item, log.position), 1.0)
+    freq = counts / counts.sum(axis=1, keepdims=True)
+    return freq[bucket, log.item, log.position]
+
+
 def uniform_policy(n_items: int) -> np.ndarray:
     return np.full((n_items, 3), 1.0 / n_items)
 
@@ -305,14 +323,18 @@ def estimate_policy(
     n_boot: int = 200,
     seed: int = 0,
     model: tuple[np.ndarray, np.ndarray] | None = None,
+    pscore: np.ndarray | None = None,
 ) -> tuple[dict[str, Estimate], dict]:
-    """All six estimators for ``target`` from ``log``, with impression-clustered bootstrap intervals."""
+    """All six estimators for ``target`` from ``log``, with impression-clustered bootstrap intervals.
+
+    ``pscore`` replaces the logged propensities, for example with :func:`estimated_pscore`.
+    """
     r = log.click.astype(np.float64)
     pi = np.empty(len(log))
     for s in range(0, len(log), 500_000):
         part = log.take(np.arange(s, min(len(log), s + 500_000)))
         pi[s : s + len(part)] = target_rows(target, part)[np.arange(len(part)), part.item]
-    w = pi / log.pscore
+    w = pi / (log.pscore if pscore is None else pscore)
     wc = clip_weights(w, clip)
     q, d = model if model is not None else cross_fit_terms(log, target, seed)
     ones = np.ones(len(log))
@@ -366,6 +388,7 @@ class RealCheck:
     logged_ctr: float
     estimates: dict[str, Estimate]
     diagnostics: dict
+    propensities: str = "logged"
 
     def table(self) -> pd.DataFrame:
         rows = []
@@ -392,6 +415,7 @@ class RealCheck:
             "truth": self.truth,
             "truth_se": self.truth_se,
             "logged_ctr": self.logged_ctr,
+            "propensities": self.propensities,
             "estimates": {k: e.to_dict() for k, e in self.estimates.items()},
             "diagnostics": self.diagnostics,
         }
@@ -407,22 +431,34 @@ def run_checks(
     cache_dir: str | Path | None = None,
     prior_path: str | Path | None = None,
 ) -> list[RealCheck]:
-    """Every check for one campaign: BTS from random logs (hourly and weekly targets, and the published
-    prior when ``prior_path`` is given), then the random policy from BTS logs."""
+    """Every check for one campaign. Both directions run with logged and with re-estimated (daily)
+    propensities; BTS-from-random also runs with hourly and published-prior targets as sensitivity checks."""
     rnd = read_log(root, "random", campaign, cache_dir)
     bts = read_log(root, "bts", campaign, cache_dir)
     rnd_ctr, rnd_se = clustered_mean(rnd)
     bts_ctr, bts_se = clustered_mean(bts)
     checks = []
 
-    def run(name, log, target, truth, truth_se, logged, target_name):
-        est, diag = estimate_policy(log, target, clip=clip, n_boot=n_boot, seed=seed)
-        checks.append(RealCheck(name, campaign, log.policy, target_name, len(log), truth, truth_se, logged, est, diag))
+    def run(name, log, target, truth, truth_se, logged, target_name, model, estimated=False):
+        ps = estimated_pscore(log) if estimated else None
+        est, diag = estimate_policy(log, target, clip=clip, n_boot=n_boot, seed=seed, model=model, pscore=ps)
+        checks.append(RealCheck(name, campaign, log.policy, target_name, len(log), truth, truth_se, logged,
+                                est, diag, "estimated (daily)" if estimated else "logged"))
 
-    run("bts_hourly_from_random", rnd, hourly_policy(bts), bts_ctr, bts_se, rnd_ctr, "bts (hourly behaviour)")
-    run("bts_weekly_from_random", rnd, empirical_policy(bts), bts_ctr, bts_se, rnd_ctr, "bts (weekly average)")
+    weekly = empirical_policy(bts)
+    model = cross_fit_terms(rnd, weekly, seed)
+    run("bts_weekly_from_random", rnd, weekly, bts_ctr, bts_se, rnd_ctr, "bts (weekly average)", model)
+    run("bts_weekly_from_random", rnd, weekly, bts_ctr, bts_se, rnd_ctr, "bts (weekly average)", model, True)
+    hourly = hourly_policy(bts)
+    run("bts_hourly_from_random", rnd, hourly, bts_ctr, bts_se, rnd_ctr, "bts (hourly behaviour)",
+        cross_fit_terms(rnd, hourly, seed))
     if prior_path is not None:
         a, b = read_prior(prior_path, campaign)
-        run("bts_prior_from_random", rnd, prior_policy(a, b, seed=seed), bts_ctr, bts_se, rnd_ctr, "bts (published prior)")
-    run("random_from_bts", bts, uniform_policy(bts.n_items), rnd_ctr, rnd_se, bts_ctr, "random (uniform)")
+        prior = prior_policy(a, b, seed=seed)
+        run("bts_prior_from_random", rnd, prior, bts_ctr, bts_se, rnd_ctr, "bts (published prior)",
+            cross_fit_terms(rnd, prior, seed))
+    uniform = uniform_policy(bts.n_items)
+    model = cross_fit_terms(bts, uniform, seed)
+    run("random_from_bts", bts, uniform, rnd_ctr, rnd_se, bts_ctr, "random (uniform)", model)
+    run("random_from_bts", bts, uniform, rnd_ctr, rnd_se, bts_ctr, "random (uniform)", model, True)
     return checks
