@@ -113,7 +113,7 @@ def write_log_csv(df: pd.DataFrame, path: str | Path) -> None:
 
 
 def read_log_csv(path: str | Path) -> pd.DataFrame:
-    return pd.read_csv(path, dtype={"query_id": str})
+    return pd.read_csv(path, dtype={"query_id": str}, float_precision="round_trip")
 
 
 class LogFormatError(ValueError):

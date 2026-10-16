@@ -1,0 +1,2242 @@
+{
+ "rng": {
+  "seed": 12345,
+  "uniforms": [
+   0.9797282677609473,
+   0.3067522644996643,
+   0.484205421525985,
+   0.817934412509203,
+   0.5094283693470061,
+   0.34747186047025025,
+   0.07375754183158278,
+   0.7663964673411101
+  ],
+  "derived": [
+   {
+    "seed": 7,
+    "name": "log-clicks",
+    "value": 1210071308
+   },
+   {
+    "seed": 0,
+    "name": "bootstrap",
+    "value": 1263355251
+   },
+   {
+    "seed": 4294967295,
+    "name": "catalog",
+    "value": 1886009276
+   }
+  ],
+  "normals": [
+   0.47713431721149746,
+   -1.8336011758026343,
+   0.09944532581236999,
+   1.4147927229063917,
+   0.19720481616919402,
+   0.31240788069869196
+  ]
+ },
+ "cases": [
+  {
+   "name": "four_slots",
+   "log": "four_slots.csv",
+   "simulated": true,
+   "config": {
+    "n_queries": 1200,
+    "exploration": 0.2,
+    "seed": 11,
+    "n_slots": 4,
+    "n_boot": 100,
+    "n_folds": 2,
+    "n_online": 3000
+   },
+   "truth": {
+    "current": {
+     "value": 0.8147621857930616,
+     "se": 0.005596247581883247
+    },
+    "popularity": {
+     "value": 0.7877086398078537,
+     "se": 0.005617200999874676
+    },
+    "relevance": {
+     "value": 0.8971969404019339,
+     "se": 0.005938475210887383
+    },
+    "relevance_soft": {
+     "value": 0.8814773626827889,
+     "se": 0.005933590057678533
+    },
+    "noisy_logging": {
+     "value": 0.7614299754927153,
+     "se": 0.005237233180435222
+    },
+    "reversed": {
+     "value": 0.5329895972845087,
+     "se": 0.0042324487937042896
+    }
+   },
+   "evaluations": [
+    {
+     "clip": 20.0,
+     "logged_mean": 0.8125,
+     "per_position": [
+      {
+       "position": 1,
+       "impressions": 1200,
+       "clicks": 581,
+       "click_rate": 0.4841666666666667
+      },
+      {
+       "position": 2,
+       "impressions": 1200,
+       "clicks": 214,
+       "click_rate": 0.17833333333333334
+      },
+      {
+       "position": 3,
+       "impressions": 1200,
+       "clicks": 121,
+       "click_rate": 0.10083333333333333
+      },
+      {
+       "position": 4,
+       "impressions": 1200,
+       "clicks": 59,
+       "click_rate": 0.049166666666666664
+      }
+     ],
+     "policies": {
+      "current": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.9371006098510322,
+         "ci_low": 0.8813990227841558,
+         "ci_high": 0.979497499806266,
+         "ess": 605.8715481425958,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.8125,
+         "ci_low": 0.7661458333333333,
+         "ci_high": 0.8492083333333333,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.8125,
+         "ci_low": 0.7661458333333333,
+         "ci_high": 0.8492083333333333,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.8125,
+         "ci_low": 0.7661458333333333,
+         "ci_high": 0.8492083333333333,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8111352367806347,
+         "ci_low": 0.7932328292511007,
+         "ci_high": 0.8274202936977513,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.811492841096921,
+         "ci_low": 0.7655014550704571,
+         "ci_high": 0.847648638496056,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 1200.0,
+        "ess_fraction": 1.0,
+        "max_weight": 1.0,
+        "max_weight_share": 0.0008333333333333334,
+        "mean_weight": 1.0,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 0,
+        "warning_codes": []
+       }
+      },
+      "popularity": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8454545454545455,
+         "ci_low": 0.6936444652908067,
+         "ci_high": 1.000586188639286,
+         "ess": 110.0,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.7835343170033426,
+         "ci_low": 0.49195958536556184,
+         "ci_high": 1.1163495018124914,
+         "ess": 27.527376079407944,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.8283057777415275,
+         "ci_low": 0.6719564149501371,
+         "ci_high": 0.949786024084868,
+         "ess": 27.527376079407944,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.5528481193582443,
+         "ci_low": 0.3854938043919105,
+         "ci_high": 0.6688285524024774,
+         "ess": 70.7542800966185,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8079234582748465,
+         "ci_low": 0.7876141288478435,
+         "ci_high": 0.8246079194959275,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.8260913042958083,
+         "ci_low": 0.725517586719677,
+         "ci_high": 0.907191282812055,
+         "ess": 70.7542800966185,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 27.527376079407944,
+        "ess_fraction": 0.022939480066173287,
+        "max_weight": 119.61672788786245,
+        "max_weight_share": 0.10537639585353975,
+        "mean_weight": 0.9459481486894135,
+        "fraction_nonzero": 0.09166666666666666,
+        "n_clipped": 8,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight"
+        ]
+       }
+      },
+      "relevance": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8905472636815921,
+         "ci_low": 0.7978571428571429,
+         "ci_high": 0.9722192141089109,
+         "ess": 201.0,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.725049967722615,
+         "ci_low": 0.5733310313191887,
+         "ci_high": 0.9239776990968788,
+         "ess": 62.65692469684156,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.7810913425584582,
+         "ci_low": 0.6407983629979661,
+         "ci_high": 0.9612046239322832,
+         "ess": 62.65692469684156,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.6556314439394784,
+         "ci_low": 0.5288946065472866,
+         "ci_high": 0.798255139800209,
+         "ess": 123.95513989523697,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8554704680436672,
+         "ci_low": 0.8383361375356098,
+         "ci_high": 0.8702221177733794,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.8031537269222686,
+         "ci_low": 0.711918345532393,
+         "ci_high": 0.895213147564881,
+         "ess": 123.95513989523697,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 62.65692469684156,
+        "ess_fraction": 0.05221410391403463,
+        "max_weight": 82.4385471871566,
+        "max_weight_share": 0.07400873315352391,
+        "mean_weight": 0.9282524696122221,
+        "fraction_nonzero": 0.1675,
+        "n_clipped": 4,
+        "warning_codes": [
+         "limited_overlap"
+        ]
+       }
+      },
+      "relevance_soft": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.9405711681238136,
+         "ci_low": 0.8719093640087427,
+         "ci_high": 1.0049123282846206,
+         "ess": 352.8237900347929,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.8413015983985614,
+         "ci_low": 0.6966586291917208,
+         "ci_high": 1.0137902888880586,
+         "ess": 151.656991508662,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.8464230894791865,
+         "ci_low": 0.7749721110790487,
+         "ci_high": 0.9319271714782905,
+         "ess": 151.656991508662,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.778733001095049,
+         "ci_low": 0.678228779323854,
+         "ci_high": 0.9032853985846806,
+         "ess": 300.24855749515075,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8451598910391127,
+         "ci_low": 0.827595660155884,
+         "ci_high": 0.8601426651781047,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.8327636574183074,
+         "ci_low": 0.7740415060422716,
+         "ci_high": 0.8974991577326946,
+         "ess": 300.24855749515075,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 151.656991508662,
+        "ess_fraction": 0.12638082625721833,
+        "max_weight": 67.69630307004306,
+        "max_weight_share": 0.05675700812876997,
+        "mean_weight": 0.9939492540500325,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 4,
+        "warning_codes": []
+       }
+      },
+      "noisy_logging": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.9063976236755398,
+         "ci_low": 0.8620535277838915,
+         "ci_high": 0.9452947607421759,
+         "ess": 817.8776451207884,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.7469873811342775,
+         "ci_low": 0.7006681685040486,
+         "ci_high": 0.7975567304133468,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.7474165927158348,
+         "ci_low": 0.7003776405040847,
+         "ci_high": 0.7896818406243621,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.7469873811342775,
+         "ci_low": 0.7006681685040486,
+         "ci_high": 0.7975567304133468,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.780179495990905,
+         "ci_low": 0.7621869241556567,
+         "ci_high": 0.7969910224417118,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.755364142310125,
+         "ci_low": 0.7046540508535715,
+         "ci_high": 0.8029446420027619,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 789.020527146423,
+        "ess_fraction": 0.6575171059553525,
+        "max_weight": 3.846416130558573,
+        "max_weight_share": 0.00320718853610787,
+        "mean_weight": 0.9994257398273729,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 0,
+        "warning_codes": []
+       }
+      },
+      "reversed": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.5625,
+         "ci_low": 0.22375000000000012,
+         "ci_high": 0.7819444444444443,
+         "ess": 16.0,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.6468599920046935,
+         "ci_low": 0.20162650689052258,
+         "ci_high": 1.1007139983181995,
+         "ess": 11.728927399403723,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.6612604612320919,
+         "ci_low": 0.2961760432757449,
+         "ci_high": 0.9603957210276459,
+         "ess": 11.728927399403723,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.136295137453549,
+         "ci_low": 0.04125000000000004,
+         "ci_high": 0.22682352362376898,
+         "ess": 14.910478436659417,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.6235919634612785,
+         "ci_low": 0.6056684711283571,
+         "ci_high": 0.6415075753448575,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.593979890999747,
+         "ci_low": 0.5188146781385987,
+         "ci_high": 0.6392021634138275,
+         "ess": 14.910478436659417,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 11.728927399403723,
+        "ess_fraction": 0.00977410616616977,
+        "max_weight": 119.99999956426785,
+        "max_weight_share": 0.1022262107727,
+        "mean_weight": 0.9782226973005964,
+        "fraction_nonzero": 0.013333333333333334,
+        "n_clipped": 13,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight"
+        ]
+       }
+      }
+     }
+    },
+    {
+     "clip": 5.0,
+     "logged_mean": 0.8125,
+     "per_position": [
+      {
+       "position": 1,
+       "impressions": 1200,
+       "clicks": 581,
+       "click_rate": 0.4841666666666667
+      },
+      {
+       "position": 2,
+       "impressions": 1200,
+       "clicks": 214,
+       "click_rate": 0.17833333333333334
+      },
+      {
+       "position": 3,
+       "impressions": 1200,
+       "clicks": 121,
+       "click_rate": 0.10083333333333333
+      },
+      {
+       "position": 4,
+       "impressions": 1200,
+       "clicks": 59,
+       "click_rate": 0.049166666666666664
+      }
+     ],
+     "policies": {
+      "current": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.9371006098510322,
+         "ci_low": 0.8813990227841558,
+         "ci_high": 0.979497499806266,
+         "ess": 605.8715481425958,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.8125,
+         "ci_low": 0.7661458333333333,
+         "ci_high": 0.8492083333333333,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.8125,
+         "ci_low": 0.7661458333333333,
+         "ci_high": 0.8492083333333333,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.8125,
+         "ci_low": 0.7661458333333333,
+         "ci_high": 0.8492083333333333,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8111352367806347,
+         "ci_low": 0.7932328292511007,
+         "ci_high": 0.8274202936977513,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.811492841096921,
+         "ci_low": 0.7655014550704571,
+         "ci_high": 0.847648638496056,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 1200.0,
+        "ess_fraction": 1.0,
+        "max_weight": 1.0,
+        "max_weight_share": 0.0008333333333333334,
+        "mean_weight": 1.0,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 0,
+        "warning_codes": []
+       }
+      },
+      "popularity": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8454545454545455,
+         "ci_low": 0.6936444652908067,
+         "ci_high": 1.000586188639286,
+         "ess": 110.0,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.7835343170033426,
+         "ci_low": 0.49195958536556184,
+         "ci_high": 1.1163495018124914,
+         "ess": 27.527376079407944,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.8283057777415275,
+         "ci_low": 0.6719564149501371,
+         "ci_high": 0.949786024084868,
+         "ess": 27.527376079407944,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.3119104410684193,
+         "ci_low": 0.22643557375980253,
+         "ci_high": 0.39168587879144473,
+         "ess": 102.61754882281477,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8079234582748465,
+         "ci_low": 0.7876141288478435,
+         "ci_high": 0.8246079194959275,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.805851598466387,
+         "ci_low": 0.7530991902280071,
+         "ci_high": 0.8646144027139367,
+         "ess": 102.61754882281477,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 27.527376079407944,
+        "ess_fraction": 0.022939480066173287,
+        "max_weight": 119.61672788786245,
+        "max_weight_share": 0.10537639585353975,
+        "mean_weight": 0.9459481486894135,
+        "fraction_nonzero": 0.09166666666666666,
+        "n_clipped": 57,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight"
+        ]
+       }
+      },
+      "relevance": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8905472636815921,
+         "ci_low": 0.7978571428571429,
+         "ci_high": 0.9722192141089109,
+         "ess": 201.0,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.725049967722615,
+         "ci_low": 0.5733310313191887,
+         "ci_high": 0.9239776990968788,
+         "ess": 62.65692469684156,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.7810913425584582,
+         "ci_low": 0.6407983629979661,
+         "ci_high": 0.9612046239322832,
+         "ess": 62.65692469684156,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.5047891768679142,
+         "ci_low": 0.41823859294158766,
+         "ci_high": 0.598121133401221,
+         "ess": 179.21856968164298,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8554704680436672,
+         "ci_low": 0.8383361375356098,
+         "ci_high": 0.8702221177733794,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.8291456491676878,
+         "ci_low": 0.7756978302242816,
+         "ci_high": 0.8843397081254522,
+         "ess": 179.21856968164298,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 62.65692469684156,
+        "ess_fraction": 0.05221410391403463,
+        "max_weight": 82.4385471871566,
+        "max_weight_share": 0.07400873315352391,
+        "mean_weight": 0.9282524696122221,
+        "fraction_nonzero": 0.1675,
+        "n_clipped": 63,
+        "warning_codes": [
+         "limited_overlap"
+        ]
+       }
+      },
+      "relevance_soft": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.9405711681238136,
+         "ci_low": 0.8719093640087427,
+         "ci_high": 1.0049123282846206,
+         "ess": 352.8237900347929,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.8413015983985614,
+         "ci_low": 0.6966586291917208,
+         "ci_high": 1.0137902888880586,
+         "ess": 151.656991508662,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.8464230894791865,
+         "ci_low": 0.7749721110790487,
+         "ci_high": 0.9319271714782905,
+         "ess": 151.656991508662,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.7084014986282359,
+         "ci_low": 0.6401433377764754,
+         "ci_high": 0.7761302930331769,
+         "ess": 458.0066416032425,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8451598910391127,
+         "ci_low": 0.827595660155884,
+         "ci_high": 0.8601426651781047,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.8314746334222258,
+         "ci_low": 0.7860782585463477,
+         "ci_high": 0.8864343888908371,
+         "ess": 458.0066416032425,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 151.656991508662,
+        "ess_fraction": 0.12638082625721833,
+        "max_weight": 67.69630307004306,
+        "max_weight_share": 0.05675700812876997,
+        "mean_weight": 0.9939492540500325,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 21,
+        "warning_codes": []
+       }
+      },
+      "noisy_logging": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.9063976236755398,
+         "ci_low": 0.8620535277838915,
+         "ci_high": 0.9452947607421759,
+         "ess": 817.8776451207884,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.7469873811342775,
+         "ci_low": 0.7006681685040486,
+         "ci_high": 0.7975567304133468,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.7474165927158348,
+         "ci_low": 0.7003776405040847,
+         "ci_high": 0.7896818406243621,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.7469873811342775,
+         "ci_low": 0.7006681685040486,
+         "ci_high": 0.7975567304133468,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.780179495990905,
+         "ci_low": 0.7621869241556567,
+         "ci_high": 0.7969910224417118,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.755364142310125,
+         "ci_low": 0.7046540508535715,
+         "ci_high": 0.8029446420027619,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 789.020527146423,
+        "ess_fraction": 0.6575171059553525,
+        "max_weight": 3.846416130558573,
+        "max_weight_share": 0.00320718853610787,
+        "mean_weight": 0.9994257398273729,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 0,
+        "warning_codes": []
+       }
+      },
+      "reversed": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.5625,
+         "ci_low": 0.22375000000000012,
+         "ci_high": 0.7819444444444443,
+         "ess": 16.0,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.6468599920046935,
+         "ci_low": 0.20162650689052258,
+         "ci_high": 1.1007139983181995,
+         "ess": 11.728927399403723,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.6612604612320919,
+         "ci_low": 0.2961760432757449,
+         "ci_high": 0.9603957210276459,
+         "ess": 11.728927399403723,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.036295137453548974,
+         "ci_low": 0.01031250000000001,
+         "ci_high": 0.05776102362376909,
+         "ess": 15.919107354472493,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.6235919634612785,
+         "ci_low": 0.6056684711283571,
+         "ci_high": 0.6415075753448575,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.6143358888824458,
+         "ci_low": 0.5881955145635114,
+         "ci_high": 0.6348515637574665,
+         "ess": 15.919107354472493,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 11.728927399403723,
+        "ess_fraction": 0.00977410616616977,
+        "max_weight": 119.99999956426785,
+        "max_weight_share": 0.1022262107727,
+        "mean_weight": 0.9782226973005964,
+        "fraction_nonzero": 0.013333333333333334,
+        "n_clipped": 15,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight"
+        ]
+       }
+      }
+     }
+    },
+    {
+     "clip": null,
+     "logged_mean": 0.8125,
+     "per_position": [
+      {
+       "position": 1,
+       "impressions": 1200,
+       "clicks": 581,
+       "click_rate": 0.4841666666666667
+      },
+      {
+       "position": 2,
+       "impressions": 1200,
+       "clicks": 214,
+       "click_rate": 0.17833333333333334
+      },
+      {
+       "position": 3,
+       "impressions": 1200,
+       "clicks": 121,
+       "click_rate": 0.10083333333333333
+      },
+      {
+       "position": 4,
+       "impressions": 1200,
+       "clicks": 59,
+       "click_rate": 0.049166666666666664
+      }
+     ],
+     "policies": {
+      "current": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.9371006098510322,
+         "ci_low": 0.8813990227841558,
+         "ci_high": 0.979497499806266,
+         "ess": 605.8715481425958,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.8125,
+         "ci_low": 0.7661458333333333,
+         "ci_high": 0.8492083333333333,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.8125,
+         "ci_low": 0.7661458333333333,
+         "ci_high": 0.8492083333333333,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.8125,
+         "ci_low": 0.7661458333333333,
+         "ci_high": 0.8492083333333333,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8111352367806347,
+         "ci_low": 0.7932328292511007,
+         "ci_high": 0.8274202936977513,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.811492841096921,
+         "ci_low": 0.7655014550704571,
+         "ci_high": 0.847648638496056,
+         "ess": 1200.0,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 1200.0,
+        "ess_fraction": 1.0,
+        "max_weight": 1.0,
+        "max_weight_share": 0.0008333333333333334,
+        "mean_weight": 1.0,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 0,
+        "warning_codes": []
+       }
+      },
+      "popularity": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8454545454545455,
+         "ci_low": 0.6936444652908067,
+         "ci_high": 1.000586188639286,
+         "ess": 110.0,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.7835343170033426,
+         "ci_low": 0.49195958536556184,
+         "ci_high": 1.1163495018124914,
+         "ess": 27.527376079407944,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.8283057777415275,
+         "ci_low": 0.6719564149501371,
+         "ci_high": 0.949786024084868,
+         "ess": 27.527376079407944,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.7835343170033426,
+         "ci_low": 0.49195958536556184,
+         "ci_high": 1.1163495018124914,
+         "ess": 27.527376079407944,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8079234582748465,
+         "ci_low": 0.7876141288478435,
+         "ci_high": 0.8246079194959275,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.8553736072017616,
+         "ci_low": 0.7205639105224441,
+         "ci_high": 0.9932601493076707,
+         "ess": 27.527376079407944,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 27.527376079407944,
+        "ess_fraction": 0.022939480066173287,
+        "max_weight": 119.61672788786245,
+        "max_weight_share": 0.10537639585353975,
+        "mean_weight": 0.9459481486894135,
+        "fraction_nonzero": 0.09166666666666666,
+        "n_clipped": 0,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight"
+        ]
+       }
+      },
+      "relevance": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8905472636815921,
+         "ci_low": 0.7978571428571429,
+         "ci_high": 0.9722192141089109,
+         "ess": 201.0,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.725049967722615,
+         "ci_low": 0.5733310313191887,
+         "ci_high": 0.9239776990968788,
+         "ess": 62.65692469684156,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.7810913425584582,
+         "ci_low": 0.6407983629979661,
+         "ci_high": 0.9612046239322832,
+         "ess": 62.65692469684156,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.725049967722615,
+         "ci_low": 0.5733310313191887,
+         "ci_high": 0.9239776990968788,
+         "ess": 62.65692469684156,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8554704680436672,
+         "ci_low": 0.8383361375356098,
+         "ci_high": 0.8702221177733794,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.7786991826807758,
+         "ci_low": 0.6601451495051378,
+         "ci_high": 0.8935635566097166,
+         "ess": 62.65692469684156,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 62.65692469684156,
+        "ess_fraction": 0.05221410391403463,
+        "max_weight": 82.4385471871566,
+        "max_weight_share": 0.07400873315352391,
+        "mean_weight": 0.9282524696122221,
+        "fraction_nonzero": 0.1675,
+        "n_clipped": 0,
+        "warning_codes": [
+         "limited_overlap"
+        ]
+       }
+      },
+      "relevance_soft": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.9405711681238136,
+         "ci_low": 0.8719093640087427,
+         "ci_high": 1.0049123282846206,
+         "ess": 352.8237900347929,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.8413015983985614,
+         "ci_low": 0.6966586291917208,
+         "ci_high": 1.0137902888880586,
+         "ess": 151.656991508662,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.8464230894791865,
+         "ci_low": 0.7749721110790487,
+         "ci_high": 0.9319271714782905,
+         "ess": 151.656991508662,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.8413015983985614,
+         "ci_low": 0.6966586291917208,
+         "ci_high": 1.0137902888880586,
+         "ess": 151.656991508662,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8451598910391127,
+         "ci_low": 0.827595660155884,
+         "ci_high": 0.8601426651781047,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.8250654679159243,
+         "ci_low": 0.7477894116385636,
+         "ci_high": 0.9065126787701479,
+         "ess": 151.656991508662,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 151.656991508662,
+        "ess_fraction": 0.12638082625721833,
+        "max_weight": 67.69630307004306,
+        "max_weight_share": 0.05675700812876997,
+        "mean_weight": 0.9939492540500325,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 0,
+        "warning_codes": []
+       }
+      },
+      "noisy_logging": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.9063976236755398,
+         "ci_low": 0.8620535277838915,
+         "ci_high": 0.9452947607421759,
+         "ess": 817.8776451207884,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.7469873811342775,
+         "ci_low": 0.7006681685040486,
+         "ci_high": 0.7975567304133468,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.7474165927158348,
+         "ci_low": 0.7003776405040847,
+         "ci_high": 0.7896818406243621,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.7469873811342775,
+         "ci_low": 0.7006681685040486,
+         "ci_high": 0.7975567304133468,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.780179495990905,
+         "ci_low": 0.7621869241556567,
+         "ci_high": 0.7969910224417118,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.755364142310125,
+         "ci_low": 0.7046540508535715,
+         "ci_high": 0.8029446420027619,
+         "ess": 789.020527146423,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 789.020527146423,
+        "ess_fraction": 0.6575171059553525,
+        "max_weight": 3.846416130558573,
+        "max_weight_share": 0.00320718853610787,
+        "mean_weight": 0.9994257398273729,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 0,
+        "warning_codes": []
+       }
+      },
+      "reversed": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.5625,
+         "ci_low": 0.22375000000000012,
+         "ci_high": 0.7819444444444443,
+         "ess": 16.0,
+         "n": 1200,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.6468599920046935,
+         "ci_low": 0.20162650689052258,
+         "ci_high": 1.1007139983181995,
+         "ess": 11.728927399403723,
+         "n": 1200,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.6612604612320919,
+         "ci_low": 0.2961760432757449,
+         "ci_high": 0.9603957210276459,
+         "ess": 11.728927399403723,
+         "n": 1200,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.6468599920046935,
+         "ci_low": 0.20162650689052258,
+         "ci_high": 1.1007139983181995,
+         "ess": 11.728927399403723,
+         "n": 1200,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.6235919634612785,
+         "ci_low": 0.6056684711283571,
+         "ci_high": 0.6415075753448575,
+         "ess": null,
+         "n": 1200,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.530052191460296,
+         "ci_low": 0.14831035630952166,
+         "ci_high": 0.8072594590432739,
+         "ess": 11.728927399403723,
+         "n": 1200,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 1200,
+        "ess": 11.728927399403723,
+        "ess_fraction": 0.00977410616616977,
+        "max_weight": 119.99999956426785,
+        "max_weight_share": 0.1022262107727,
+        "mean_weight": 0.9782226973005964,
+        "fraction_nonzero": 0.013333333333333334,
+        "n_clipped": 0,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight"
+        ]
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "five_slots_low_exploration",
+   "log": "five_slots_low_exploration.csv",
+   "simulated": true,
+   "config": {
+    "n_queries": 600,
+    "exploration": 0.05,
+    "seed": 5,
+    "n_slots": 5,
+    "n_boot": 60,
+    "n_folds": 2,
+    "n_online": 1500
+   },
+   "truth": {
+    "current": {
+     "value": 0.9154566279182436,
+     "se": 0.00909734270105112
+    },
+    "popularity": {
+     "value": 0.8442282319978615,
+     "se": 0.009062571718821426
+    },
+    "relevance": {
+     "value": 0.9942522729598753,
+     "se": 0.009316318426383512
+    },
+    "relevance_soft": {
+     "value": 0.9761630705396007,
+     "se": 0.009347364874688055
+    },
+    "noisy_logging": {
+     "value": 0.8345336092947074,
+     "se": 0.008249572715024115
+    },
+    "reversed": {
+     "value": 0.5116578347006465,
+     "se": 0.005375660530340834
+    }
+   },
+   "evaluations": [
+    {
+     "clip": 10.0,
+     "logged_mean": 0.9333333333333333,
+     "per_position": [
+      {
+       "position": 1,
+       "impressions": 600,
+       "clicks": 316,
+       "click_rate": 0.5266666666666666
+      },
+      {
+       "position": 2,
+       "impressions": 600,
+       "clicks": 131,
+       "click_rate": 0.21833333333333332
+      },
+      {
+       "position": 3,
+       "impressions": 600,
+       "clicks": 59,
+       "click_rate": 0.09833333333333333
+      },
+      {
+       "position": 4,
+       "impressions": 600,
+       "clicks": 36,
+       "click_rate": 0.06
+      },
+      {
+       "position": 5,
+       "impressions": 600,
+       "clicks": 18,
+       "click_rate": 0.03
+      }
+     ],
+     "policies": {
+      "current": {
+       "estimates": {
+        "naive": {
+         "estimate": 1.0919211241145321,
+         "ci_low": 1.0010153428878519,
+         "ci_high": 1.183559843323814,
+         "ess": 220.47174331613692,
+         "n": 600,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.9333333333333333,
+         "ci_low": 0.8598333333333333,
+         "ci_high": 0.9968333333333333,
+         "ess": 600.0,
+         "n": 600,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.9333333333333333,
+         "ci_low": 0.8598333333333333,
+         "ci_high": 0.9968333333333333,
+         "ess": 600.0,
+         "n": 600,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.9333333333333333,
+         "ci_low": 0.8598333333333333,
+         "ci_high": 0.9968333333333333,
+         "ess": 600.0,
+         "n": 600,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.9353684916511523,
+         "ci_low": 0.9037917021495664,
+         "ci_high": 0.9704022250279803,
+         "ess": null,
+         "n": 600,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.9333383592547261,
+         "ci_low": 0.860011114181002,
+         "ci_high": 0.9965440618618873,
+         "ess": 600.0,
+         "n": 600,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 600,
+        "ess": 600.0,
+        "ess_fraction": 1.0,
+        "max_weight": 1.0,
+        "max_weight_share": 0.0016666666666666668,
+        "mean_weight": 1.0,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 0,
+        "warning_codes": []
+       }
+      },
+      "popularity": {
+       "estimates": {
+        "naive": {
+         "estimate": 1.4285714285714286,
+         "ci_low": 0.9935439560439563,
+         "ci_high": 1.9568181818181818,
+         "ess": 14.0,
+         "n": 600,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.5398146406156444,
+         "ci_low": 0.2502975431606277,
+         "ci_high": 0.8893355692357038,
+         "ess": 7.9061337394272915,
+         "n": 600,
+         "available": true
+        },
+        "snips": {
+         "estimate": 1.0887031721275344,
+         "ci_low": 0.7488728502805885,
+         "ci_high": 1.6436826801104958,
+         "ess": 7.9061337394272915,
+         "n": 600,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.2545752097344797,
+         "ci_low": 0.11513848477798676,
+         "ci_high": 0.3882074082605343,
+         "ess": 12.598363182755454,
+         "n": 600,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.9015110186192462,
+         "ci_low": 0.8666804934494877,
+         "ci_high": 0.9395689426439716,
+         "ess": null,
+         "n": 600,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.9670264646321178,
+         "ci_low": 0.8980706244306746,
+         "ci_high": 1.0742522695773329,
+         "ess": 12.598363182755454,
+         "n": 600,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 600,
+        "ess": 7.9061337394272915,
+        "ess_fraction": 0.013176889565712153,
+        "max_weight": 65.9037783764331,
+        "max_weight_share": 0.22152558543609258,
+        "mean_weight": 0.4958327066878507,
+        "fraction_nonzero": 0.023333333333333334,
+        "n_clipped": 9,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight",
+         "weights_off"
+        ]
+       }
+      },
+      "relevance": {
+       "estimates": {
+        "naive": {
+         "estimate": 1.2222222222222223,
+         "ci_low": 1.0893028461784457,
+         "ci_high": 1.353467793367347,
+         "ess": 54.0,
+         "n": 600,
+         "available": true
+        },
+        "ips": {
+         "estimate": 1.1377600309211593,
+         "ci_low": 0.5983064260388848,
+         "ci_high": 1.616897208317122,
+         "ess": 20.60554789359096,
+         "n": 600,
+         "available": true
+        },
+        "snips": {
+         "estimate": 1.289513034937458,
+         "ci_low": 1.0961239726074683,
+         "ci_high": 1.5367716247348344,
+         "ess": 20.60554789359096,
+         "n": 600,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.715680962175492,
+         "ci_low": 0.47588724208354294,
+         "ci_high": 0.9833686207909242,
+         "ess": 43.112404615196,
+         "n": 600,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.9799902466450292,
+         "ci_low": 0.9503605386446236,
+         "ci_high": 1.015914989040038,
+         "ess": null,
+         "n": 600,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 1.0422816840682287,
+         "ci_low": 0.9503668292940388,
+         "ci_high": 1.1390469222138826,
+         "ess": 43.112404615196,
+         "n": 600,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 600,
+        "ess": 20.60554789359096,
+        "ess_fraction": 0.0343425798226516,
+        "max_weight": 73.931495743091,
+        "max_weight_share": 0.139653976325091,
+        "mean_weight": 0.8823175881865679,
+        "fraction_nonzero": 0.09,
+        "n_clipped": 16,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight"
+        ]
+       }
+      },
+      "relevance_soft": {
+       "estimates": {
+        "naive": {
+         "estimate": 1.1177993128899706,
+         "ci_low": 1.03577868579266,
+         "ci_high": 1.2107405621669007,
+         "ess": 102.18356794397934,
+         "n": 600,
+         "available": true
+        },
+        "ips": {
+         "estimate": 1.3646420272366153,
+         "ci_low": 0.8524046231509542,
+         "ci_high": 2.1398471391065574,
+         "ess": 30.562240955094655,
+         "n": 600,
+         "available": true
+        },
+        "snips": {
+         "estimate": 1.1698765785536325,
+         "ci_low": 0.9368423409511409,
+         "ci_high": 1.4088314986193307,
+         "ess": 30.562240955094655,
+         "n": 600,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.8501919372439366,
+         "ci_low": 0.6950057437167275,
+         "ci_high": 1.014813249209479,
+         "ess": 136.75648680749237,
+         "n": 600,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.968923711927106,
+         "ci_low": 0.938610118407125,
+         "ci_high": 1.0049522278589904,
+         "ess": null,
+         "n": 600,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.9964451685274711,
+         "ci_low": 0.9161726079744659,
+         "ci_high": 1.087166694372045,
+         "ess": 136.75648680749237,
+         "n": 600,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 600,
+        "ess": 30.562240955094655,
+        "ess_fraction": 0.05093706825849109,
+        "max_weight": 97.08280531056262,
+        "max_weight_share": 0.13871146894972072,
+        "mean_weight": 1.1664837575633658,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 7,
+        "warning_codes": [
+         "limited_overlap",
+         "extreme_weight"
+        ]
+       }
+      },
+      "noisy_logging": {
+       "estimates": {
+        "naive": {
+         "estimate": 1.074244905631267,
+         "ci_low": 0.9918644985435808,
+         "ci_high": 1.169599337062989,
+         "ess": 272.0406133700997,
+         "n": 600,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.8841925206181558,
+         "ci_low": 0.7574123692887285,
+         "ci_high": 1.016571022747203,
+         "ess": 231.68847076785116,
+         "n": 600,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.931069207521645,
+         "ci_low": 0.8704940446214339,
+         "ci_high": 1.0278722935087237,
+         "ess": 231.68847076785116,
+         "n": 600,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.8841925206181558,
+         "ci_low": 0.7574123692887285,
+         "ci_high": 1.016571022747203,
+         "ess": 233.745746428328,
+         "n": 600,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8929315777337808,
+         "ci_low": 0.8616733437546962,
+         "ci_high": 0.9287083675339983,
+         "ess": null,
+         "n": 600,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.9116203120808939,
+         "ci_low": 0.8500765451319402,
+         "ci_high": 0.9889021167289825,
+         "ess": 233.745746428328,
+         "n": 600,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 600,
+        "ess": 231.68847076785116,
+        "ess_fraction": 0.3861474512797519,
+        "max_weight": 10.775503269310448,
+        "max_weight_share": 0.018911302413697744,
+        "mean_weight": 0.9496528437147359,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 1,
+        "warning_codes": []
+       }
+      },
+      "reversed": {
+       "estimates": {
+        "naive": {
+         "estimate": null,
+         "ci_low": null,
+         "ci_high": null,
+         "ess": 0.0,
+         "n": 600,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.0,
+         "ci_low": 0.0,
+         "ci_high": 0.0,
+         "ess": 0.0,
+         "n": 600,
+         "available": true
+        },
+        "snips": {
+         "estimate": null,
+         "ci_low": null,
+         "ci_high": null,
+         "ess": 0.0,
+         "n": 600,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.0,
+         "ci_low": 0.0,
+         "ci_high": 0.0,
+         "ess": 0.0,
+         "n": 600,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.6855155448185919,
+         "ci_low": 0.6594014722230459,
+         "ci_high": 0.7137499644296517,
+         "ess": null,
+         "n": 600,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.6855155448185919,
+         "ci_low": 0.6594014722230459,
+         "ci_high": 0.7137499644296517,
+         "ess": 0.0,
+         "n": 600,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 600,
+        "ess": 0.0,
+        "ess_fraction": 0.0,
+        "max_weight": 0.0,
+        "max_weight_share": null,
+        "mean_weight": 0.0,
+        "fraction_nonzero": 0.0,
+        "n_clipped": 0,
+        "warning_codes": [
+         "no_support"
+        ]
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "sample_upload",
+   "log": "../web/public/sample-log.csv",
+   "simulated": false,
+   "config": {
+    "n_queries": 400,
+    "exploration": 0.3,
+    "seed": 1,
+    "n_slots": 4,
+    "n_boot": 80,
+    "n_folds": 2,
+    "eval_seed": 0
+   },
+   "evaluations": [
+    {
+     "clip": 20.0,
+     "logged_mean": 0.7625,
+     "per_position": [
+      {
+       "position": 1,
+       "impressions": 400,
+       "clicks": 172,
+       "click_rate": 0.43
+      },
+      {
+       "position": 2,
+       "impressions": 400,
+       "clicks": 65,
+       "click_rate": 0.1625
+      },
+      {
+       "position": 3,
+       "impressions": 400,
+       "clicks": 39,
+       "click_rate": 0.0975
+      },
+      {
+       "position": 4,
+       "impressions": 400,
+       "clicks": 29,
+       "click_rate": 0.0725
+      }
+     ],
+     "policies": {
+      "target_propensity": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8915972047847174,
+         "ci_low": 0.7552918369894955,
+         "ci_high": 0.9933752701162771,
+         "ess": 113.89493809559988,
+         "n": 400,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.7209154256432652,
+         "ci_low": 0.5955573043054864,
+         "ci_high": 0.8944157459719476,
+         "ess": 91.50911918916583,
+         "n": 400,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.7589776391562649,
+         "ci_low": 0.5902891416960246,
+         "ci_high": 0.9023291792573224,
+         "ess": 91.50911918916583,
+         "n": 400,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.7209154256432652,
+         "ci_low": 0.5955573043054864,
+         "ci_high": 0.8944157459719476,
+         "ess": 96.41495758560839,
+         "n": 400,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": null,
+         "ci_low": null,
+         "ci_high": null,
+         "ess": null,
+         "n": 400,
+         "available": false
+        },
+        "doubly_robust": {
+         "estimate": null,
+         "ci_low": null,
+         "ci_high": null,
+         "ess": null,
+         "n": 400,
+         "available": false
+        }
+       },
+       "diagnostics": {
+        "n": 400,
+        "ess": 91.50911918916583,
+        "ess_fraction": 0.22877279797291458,
+        "max_weight": 22.328506317151458,
+        "max_weight_share": 0.05876846439842745,
+        "mean_weight": 0.9498506786638504,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 1,
+        "warning_codes": []
+       }
+      },
+      "popularity": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.6153846153846154,
+         "ci_low": 0.3993750000000001,
+         "ci_high": 0.8148989898989898,
+         "ess": 26.0,
+         "n": 400,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.26373108882733987,
+         "ci_low": 0.08303779172963449,
+         "ci_high": 0.4355946200701045,
+         "ess": 10.059041093288288,
+         "n": 400,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.29016789930130793,
+         "ci_low": 0.11841554807672211,
+         "ci_high": 0.5672963668513128,
+         "ess": 10.059041093288288,
+         "n": 400,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.26373108882733987,
+         "ci_low": 0.08303779172963449,
+         "ci_high": 0.4355946200701045,
+         "ess": 17.141498430433582,
+         "n": 400,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.7851535024298002,
+         "ci_low": 0.7560011876510263,
+         "ci_high": 0.821781950056311,
+         "ess": null,
+         "n": 400,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.5969427662761994,
+         "ci_low": 0.40831942351858275,
+         "ci_high": 0.7848752932899883,
+         "ess": 17.141498430433582,
+         "n": 400,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 400,
+        "ess": 10.059041093288288,
+        "ess_fraction": 0.02514760273322072,
+        "max_weight": 79.81458697438642,
+        "max_weight_share": 0.21953831020583098,
+        "mean_weight": 0.9088913331294571,
+        "fraction_nonzero": 0.065,
+        "n_clipped": 5,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight"
+        ]
+       }
+      },
+      "relevance": {
+       "estimates": {
+        "naive": {
+         "estimate": 1.0166666666666666,
+         "ci_low": 0.8325000000000001,
+         "ci_high": 1.1668650793650794,
+         "ess": 60.0,
+         "n": 400,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.765934432149214,
+         "ci_low": 0.49179734386257473,
+         "ci_high": 1.1037467096916873,
+         "ess": 38.79937390041461,
+         "n": 400,
+         "available": true
+        },
+        "snips": {
+         "estimate": 1.0375777691790575,
+         "ci_low": 0.782775607118741,
+         "ci_high": 1.29543764531634,
+         "ess": 38.79937390041461,
+         "n": 400,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.7421820544753601,
+         "ci_low": 0.49179734386257473,
+         "ci_high": 1.0612714742426423,
+         "ess": 41.485591225843635,
+         "n": 400,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.8060125854581643,
+         "ci_low": 0.7781492529652384,
+         "ci_high": 0.8402980820105392,
+         "ess": null,
+         "n": 400,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.8813699684466542,
+         "ci_low": 0.719160521345999,
+         "ci_high": 1.0950889368057855,
+         "ess": 41.485591225843635,
+         "n": 400,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 400,
+        "ess": 38.79937390041461,
+        "ess_fraction": 0.09699843475103652,
+        "max_weight": 24.750475534770782,
+        "max_weight_share": 0.08382095814464378,
+        "mean_weight": 0.7381947213028951,
+        "fraction_nonzero": 0.15,
+        "n_clipped": 1,
+        "warning_codes": [
+         "limited_overlap"
+        ]
+       }
+      },
+      "relevance_soft": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8915972047847174,
+         "ci_low": 0.7552918369894955,
+         "ci_high": 0.9933752701162771,
+         "ess": 113.89493809559991,
+         "n": 400,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.7209154256432652,
+         "ci_low": 0.5955573043054864,
+         "ci_high": 0.8944157459719476,
+         "ess": 91.50911918916583,
+         "n": 400,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.7589776391562649,
+         "ci_low": 0.5902891416960246,
+         "ci_high": 0.9023291792573224,
+         "ess": 91.50911918916583,
+         "n": 400,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.7209154256432652,
+         "ci_low": 0.5955573043054864,
+         "ci_high": 0.8944157459719476,
+         "ess": 96.41495758560839,
+         "n": 400,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.7996630723895121,
+         "ci_low": 0.7721467631122129,
+         "ci_high": 0.8347428826249201,
+         "ess": null,
+         "n": 400,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.7416821587782401,
+         "ci_low": 0.5932258414166339,
+         "ci_high": 0.875239464707105,
+         "ess": 96.41495758560839,
+         "n": 400,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 400,
+        "ess": 91.50911918916583,
+        "ess_fraction": 0.22877279797291458,
+        "max_weight": 22.328506317151458,
+        "max_weight_share": 0.05876846439842745,
+        "mean_weight": 0.9498506786638504,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 1,
+        "warning_codes": []
+       }
+      },
+      "noisy_logging": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8232412178252388,
+         "ci_low": 0.7333687771839648,
+         "ci_high": 0.8892017407462934,
+         "ess": 283.4048256701172,
+         "n": 400,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.7209326198245336,
+         "ci_low": 0.6505812413631452,
+         "ci_high": 0.7920886646531536,
+         "ess": 291.0883173441532,
+         "n": 400,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.7323716735045732,
+         "ci_low": 0.6592354847940585,
+         "ci_high": 0.807480074703576,
+         "ess": 291.0883173441532,
+         "n": 400,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.7209326198245336,
+         "ci_low": 0.6505812413631452,
+         "ci_high": 0.7920886646531536,
+         "ess": 291.0883173441532,
+         "n": 400,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.7512885361716315,
+         "ci_low": 0.7241229910802114,
+         "ci_high": 0.7878426821846495,
+         "ess": null,
+         "n": 400,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.7519988534938074,
+         "ci_low": 0.6641616440853985,
+         "ci_high": 0.8202589330173766,
+         "ess": 291.0883173441532,
+         "n": 400,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 400,
+        "ess": 291.0883173441532,
+        "ess_fraction": 0.727720793360383,
+        "max_weight": 2.3977298683287764,
+        "max_weight_share": 0.006089436751756504,
+        "mean_weight": 0.9843808081417171,
+        "fraction_nonzero": 1.0,
+        "n_clipped": 0,
+        "warning_codes": []
+       }
+      },
+      "reversed": {
+       "estimates": {
+        "naive": {
+         "estimate": 0.8888888888888888,
+         "ci_low": 0.3727678571428573,
+         "ci_high": 1.4303571428571422,
+         "ess": 9.0,
+         "n": 400,
+         "available": true
+        },
+        "ips": {
+         "estimate": 0.5827587200147256,
+         "ci_low": 0.13420483867609917,
+         "ci_high": 1.2754101950829853,
+         "ess": 6.944229469048824,
+         "n": 400,
+         "available": true
+        },
+        "snips": {
+         "estimate": 0.5363481105839226,
+         "ci_low": 0.12988189001460024,
+         "ci_high": 1.0402679173385163,
+         "ess": 6.944229469048824,
+         "n": 400,
+         "available": true
+        },
+        "clipped_ips": {
+         "estimate": 0.32429778507742674,
+         "ci_low": 0.0736903404504911,
+         "ci_high": 0.6315075650150296,
+         "ess": 8.483174226097802,
+         "n": 400,
+         "available": true
+        },
+        "reward_model": {
+         "estimate": 0.6511446065227539,
+         "ci_low": 0.6265978868743596,
+         "ci_high": 0.6844950128482887,
+         "ess": null,
+         "n": 400,
+         "available": true
+        },
+        "doubly_robust": {
+         "estimate": 0.7490001741059463,
+         "ci_low": 0.5677143104914674,
+         "ci_high": 0.9690703754441685,
+         "ess": 8.483174226097802,
+         "n": 400,
+         "available": true
+        }
+       },
+       "diagnostics": {
+        "n": 400,
+        "ess": 6.944229469048824,
+        "ess_fraction": 0.01736057367262206,
+        "max_weight": 79.99917634025587,
+        "max_weight_share": 0.18407020609353586,
+        "mean_weight": 1.0865307596222828,
+        "fraction_nonzero": 0.0225,
+        "n_clipped": 7,
+        "warning_codes": [
+         "poor_overlap",
+         "extreme_weight"
+        ]
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}
