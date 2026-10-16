@@ -5,9 +5,12 @@ keeps both implementations tied to one source of truth.
 """
 
 import importlib.util
+import io
 import json
 from pathlib import Path
 
+import numpy as np
+import pandas as pd
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,18 +38,28 @@ def _close(a, b, path="$"):
         assert a == b, path
 
 
-def test_fixtures_are_up_to_date(tmp_path, monkeypatch):
+def _same_log(path: Path, committed: bytes) -> None:
+    """Ids and clicks must match exactly; floats to 1e-12 (math libraries differ by an ulp across platforms)."""
+    fresh = pd.read_csv(path, float_precision="round_trip")
+    old = pd.read_csv(io.BytesIO(committed), float_precision="round_trip")
+    assert list(fresh.columns) == list(old.columns), path.name
+    for col in fresh.columns:
+        if pd.api.types.is_float_dtype(old[col]):
+            np.testing.assert_allclose(fresh[col], old[col], rtol=1e-12, atol=1e-14, err_msg=f"{path.name}:{col}")
+        else:
+            assert fresh[col].tolist() == old[col].tolist(), f"{path.name}:{col} changed; run scripts/make_fixtures.py"
+
+
+def test_fixtures_are_up_to_date():
     mod = _load_script()
     committed = json.loads((ROOT / "fixtures" / "expected.json").read_text(encoding="utf-8"))
-    logs = {p.name: p.read_bytes() for p in (ROOT / "fixtures").glob("*.csv")}
-    sample = mod.SAMPLE.read_bytes()
+    logs = {p: p.read_bytes() for p in (ROOT / "fixtures").glob("*.csv")}
+    logs[mod.SAMPLE] = mod.SAMPLE.read_bytes()
     try:
         fresh = json.loads(json.dumps(mod.build()))
-        for name, data in logs.items():
-            assert (ROOT / "fixtures" / name).read_bytes() == data, f"{name} changed; run scripts/make_fixtures.py"
-        assert mod.SAMPLE.read_bytes() == sample, "sample-log.csv changed; run scripts/make_fixtures.py"
+        for path, data in logs.items():
+            _same_log(path, data)
     finally:  # leave the committed files exactly as they were
-        for name, data in logs.items():
-            (ROOT / "fixtures" / name).write_bytes(data)
-        mod.SAMPLE.write_bytes(sample)
+        for path, data in logs.items():
+            path.write_bytes(data)
     _close(fresh, committed)
