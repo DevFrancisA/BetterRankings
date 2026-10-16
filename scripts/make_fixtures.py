@@ -128,7 +128,7 @@ def build() -> dict:
 
 def main() -> int:
     data = build()
-    (FIXTURES / "expected.json").write_text(json.dumps(data, indent=1) + "\n", encoding="utf-8")
+    (FIXTURES / "expected.json").write_text(json.dumps(data, indent=1) + "\n", encoding="utf-8", newline="\n")
     print(f"Wrote {len(data['cases'])} fixture cases to {FIXTURES}")
     return 0
 
