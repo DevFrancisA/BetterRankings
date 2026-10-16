@@ -13,37 +13,107 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200;9..144,300;9..144,600;9..144,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&display=swap"
     />
   </head>
   <body>
     <a class="skip" href="#main">Skip to results</a>
-    <div class="page">
-      <header class="masthead">
-        <h1>Better<span class="h1-heavy">Rankings</span></h1>
-        <p class="lede">
-          Estimate how a new ranking policy would do from logged clicks alone, then check each estimate against a
-          simulated online test where the true answer is known.
-        </p>
-        <p class="sim-note">
-          <span class="sim-note-mark" aria-hidden="true"></span>
-          Everything in the playground is simulated. No real users, no real clicks.
-        </p>
-      </header>
 
+    <header class="nav">
+      <div class="nav-inner">
+        <a class="brand" href="./" aria-label="BetterRankings home">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#1673DB" />
+            <rect x="8" y="17" width="3.5" height="7" rx="1.5" fill="#fff" />
+            <rect x="14.25" y="12" width="3.5" height="12" rx="1.5" fill="#fff" />
+            <rect x="20.5" y="8" width="3.5" height="16" rx="1.5" fill="#FDD963" />
+          </svg>
+          <span>BetterRankings</span>
+        </a>
+        <nav class="nav-links" aria-label="Sections">
+          <a href="#app">Playground</a>
+          <a href="#how">How it works</a>
+          <a href="#app" data-tab="upload">Your log</a>
+        </nav>
+        <a class="btn btn-primary btn-nav" href="https://github.com/DevFrancisA/BetterRankings">
+          <span class="nav-long">View on</span> GitHub <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <p class="eyebrow-pill"><span class="dot" aria-hidden="true"></span>Off-policy evaluation, in your browser</p>
+        <h1 id="hero-title">Test a new ranking policy <span class="accent">before it meets real traffic</span></h1>
+        <p class="lede">
+          BetterRankings estimates a ranking policy's clicks from logged data alone, then checks every estimate against
+          a simulated online test where the true answer is known.
+        </p>
+
+        <div class="hero-bar" role="group" aria-label="Quick run">
+          <div class="hero-field hero-field-wide">
+            <label for="policy">Candidate policy</label>
+            <select id="policy" name="policy" form="controls" aria-describedby="policy-hint"></select>
+          </div>
+          <span class="hero-divider" aria-hidden="true"></span>
+          <div class="hero-field">
+            <label for="queries">Logged queries</label>
+            <select id="queries" name="queries" form="controls">
+              <option value="500">500</option>
+              <option value="1000">1,000</option>
+              <option value="2000">2,000</option>
+              <option value="5000" selected>5,000</option>
+              <option value="10000">10,000</option>
+              <option value="20000">20,000</option>
+            </select>
+          </div>
+          <button type="submit" form="controls" class="btn btn-primary btn-run" id="run">Run evaluation</button>
+        </div>
+        <p class="hero-hint" id="policy-hint"></p>
+        <div class="run-status hero-status" id="run-status" aria-live="polite">
+          <progress id="run-progress" max="1" value="0" hidden></progress>
+          <p id="run-message"></p>
+        </div>
+
+        <ul class="hero-features">
+          <li>
+            <span class="feature-icon fi-blue" aria-hidden="true">
+              <svg viewBox="0 0 20 20"><rect x="2.5" y="3.5" width="15" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 17h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            Runs in your browser
+          </li>
+          <li>
+            <span class="feature-icon fi-yellow" aria-hidden="true">
+              <svg viewBox="0 0 20 20"><path d="M10 2v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="10" r="2.5" fill="currentColor"/><path d="M3 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            Simulated, with a known true answer
+          </li>
+          <li>
+            <span class="feature-icon fi-green" aria-hidden="true">
+              <svg viewBox="0 0 20 20"><path d="M4.5 10.5 8 14l7.5-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            Matches the Python package
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="page" id="app">
       <div class="layout">
-        <aside class="rail" aria-label="Playground controls and explanation">
-          <form class="sheet controls" id="controls" novalidate>
-            <h2 class="rail-title">Playground</h2>
-            <p class="rail-intro">
-              Set up the old policy's log, pick a candidate, and run. Every candidate is evaluated on each run, so you
-              can switch candidates without running again.
-            </p>
+        <aside class="rail" aria-label="Log settings">
+          <form class="card controls" id="controls" novalidate>
+            <div>
+              <h2 class="card-title">Log settings</h2>
+              <p class="card-intro">
+                How the current policy collected its log. Every candidate is evaluated on each run, so you can switch
+                candidates without running again.
+              </p>
+            </div>
 
             <div class="field">
               <div class="field-head">
                 <label for="exploration">Logging exploration</label>
-                <output id="exploration-out" for="exploration" class="num">0.20</output>
+                <output id="exploration-out" for="exploration" class="value-chip">0.20</output>
               </div>
               <input id="exploration" name="exploration" type="range" min="0" max="1" step="0.05" value="0.2"
                 aria-describedby="exploration-hint" />
@@ -51,19 +121,6 @@
                 Share of lists the current policy shows at random. More exploration gives better overlap with other
                 policies.
               </p>
-            </div>
-
-            <div class="field">
-              <label for="queries">Logged queries</label>
-              <select id="queries" name="queries" aria-describedby="queries-hint">
-                <option value="500">500</option>
-                <option value="1000">1,000</option>
-                <option value="2000">2,000</option>
-                <option value="5000" selected>5,000</option>
-                <option value="10000">10,000</option>
-                <option value="20000">20,000</option>
-              </select>
-              <p class="hint" id="queries-hint">Each query shows a list of 4 items.</p>
             </div>
 
             <div class="field">
@@ -77,59 +134,19 @@
             </div>
 
             <div class="field">
-              <label for="policy">Candidate policy</label>
-              <select id="policy" name="policy" aria-describedby="policy-hint"></select>
-              <p class="hint" id="policy-hint"></p>
+              <span class="label">List length</span>
+              <p class="hint">Each query shows a list of 4 items, so there are 24 possible rankings.</p>
             </div>
 
-            <button type="submit" class="btn btn-primary" id="run">Run evaluation</button>
-            <div class="run-status" id="run-status" aria-live="polite">
-              <progress id="run-progress" max="1" value="0" hidden></progress>
-              <p id="run-message" class="hint"></p>
-            </div>
+            <button type="submit" class="btn btn-secondary">Run with these settings</button>
           </form>
 
-          <details class="sheet how" id="how">
-            <summary><span>How it works</span></summary>
-            <div class="how-body">
-              <h3>Evaluating from logs</h3>
-              <p>
-                A ranking system already shows lists and records clicks. If it shows lists with some randomness and
-                writes down how likely each list was, those old logs can answer a new question: how many clicks would a
-                different policy have earned?
-              </p>
-              <h3>Propensities</h3>
-              <p>
-                The propensity is the probability the old policy gave to the exact list it showed. When a new policy
-                would show a list more often than the old one did, the clicks on that list count for more. The ratio of
-                the two probabilities is the importance weight.
-              </p>
-              <h3>Why naive comparison misleads</h3>
-              <p>
-                Averaging clicks over the logged lists a new policy agrees with sounds fair, but the old policy chose
-                those lists for a reason. It showed its favourite lists most often and in the contexts it liked best, so
-                the matching rows are not a fair sample. Weighting by propensities undoes that choice.
-              </p>
-              <h3>The estimators</h3>
-              <dl class="how-list">
-                <dt>Inverse propensity (IPS)</dt>
-                <dd>Reweights every logged query by its importance weight. Unbiased, but noisy when weights are large.</dd>
-                <dt>Self-normalised IPS</dt>
-                <dd>Divides by the total weight instead of the row count. A little bias, much less noise.</dd>
-                <dt>Clipped IPS</dt>
-                <dd>Caps each weight at the clip level. Lower noise, but it pulls the estimate down.</dd>
-                <dt>Reward model</dt>
-                <dd>Learns a click model from the log and asks it about the new policy. Steady, but only as good as the model.</dd>
-                <dt>Doubly robust</dt>
-                <dd>Starts from the reward model and corrects it with weighted errors. Holds up if either part is right.</dd>
-              </dl>
-              <h3>The check</h3>
-              <p>
-                The simulator knows every true click probability, so it can run the online test that real teams cannot
-                run for free. The red line is that answer.
-              </p>
-            </div>
-          </details>
+          <div class="card sim-card">
+            <span class="feature-icon fi-yellow" aria-hidden="true">
+              <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 6v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="14" r="1.1" fill="currentColor"/></svg>
+            </span>
+            <p><strong>Simulated data.</strong> Everything in the playground comes from a simulator. No real users, no real clicks.</p>
+          </div>
         </aside>
 
         <main id="main" class="main" tabindex="-1">
@@ -140,10 +157,10 @@
             <button role="tab" id="tab-upload" aria-controls="panel-upload" aria-selected="false" tabindex="-1">Your log</button>
           </div>
 
-          <section class="sheet panel" role="tabpanel" id="panel-results" aria-labelledby="tab-results" tabindex="0">
+          <section class="card panel" role="tabpanel" id="panel-results" aria-labelledby="tab-results" tabindex="0">
             <div class="panel-head">
               <h2 id="results-title">Estimates against the truth</h2>
-              <p class="run-tag num" id="results-tag"></p>
+              <p class="run-tag" id="results-tag"></p>
             </div>
             <p class="summary" id="results-summary">Running the first evaluation…</p>
             <p class="stale" id="results-stale" hidden>
@@ -152,7 +169,7 @@
             <div class="clip-control" id="clip-control">
               <div class="field-head">
                 <label for="clip">Weight clip</label>
-                <output id="clip-out" for="clip" class="num">Clip at 20</output>
+                <output id="clip-out" for="clip" class="value-chip">Clip at 20</output>
               </div>
               <input id="clip" type="range" min="0" max="16" step="1" value="8" aria-describedby="clip-hint" />
               <p class="hint" id="clip-hint">
@@ -176,9 +193,9 @@
             </div>
           </section>
 
-          <section class="sheet panel" role="tabpanel" id="panel-ranking" aria-labelledby="tab-ranking" tabindex="0" hidden>
+          <section class="card panel" role="tabpanel" id="panel-ranking" aria-labelledby="tab-ranking" tabindex="0" hidden>
             <div class="panel-head">
-              <h2>Which candidates deserve live traffic</h2>
+              <h2>Which candidates deserve <span class="accent">live traffic</span></h2>
             </div>
             <p class="summary" id="ranking-summary"></p>
             <fieldset class="segmented" id="rank-estimator">
@@ -202,7 +219,7 @@
             <div class="rank-grid" id="rank-grid"></div>
           </section>
 
-          <section class="sheet panel" role="tabpanel" id="panel-diagnostics" aria-labelledby="tab-diagnostics" tabindex="0" hidden>
+          <section class="card panel" role="tabpanel" id="panel-diagnostics" aria-labelledby="tab-diagnostics" tabindex="0" hidden>
             <div class="panel-head">
               <h2 id="diag-title">Overlap diagnostics</h2>
             </div>
@@ -224,14 +241,19 @@
             <div id="diag-positions" class="positions"></div>
           </section>
 
-          <section class="sheet panel" role="tabpanel" id="panel-upload" aria-labelledby="tab-upload" tabindex="0" hidden>
+          <section class="card panel" role="tabpanel" id="panel-upload" aria-labelledby="tab-upload" tabindex="0" hidden>
             <div class="panel-head">
-              <h2>Evaluate your own log</h2>
+              <h2>Evaluate <span class="accent">your own log</span></h2>
             </div>
-            <p class="privacy">
-              <strong>Your file stays on your device.</strong> This page reads it in your browser and never uploads or
-              sends it anywhere. There is no server and no tracking.
-            </p>
+            <div class="privacy">
+              <span class="feature-icon fi-green" aria-hidden="true">
+                <svg viewBox="0 0 20 20"><rect x="4" y="9" width="12" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+              </span>
+              <p>
+                <strong>Your file stays on your device.</strong> This page reads it in your browser and never uploads
+                or sends it anywhere. There is no server and no tracking.
+              </p>
+            </div>
 
             <div class="upload-grid">
               <form class="upload-form" id="upload-form" novalidate>
@@ -239,6 +261,9 @@
                   <span class="label" id="file-label">Log file (CSV)</span>
                   <label class="drop" id="drop" for="file">
                     <input id="file" type="file" accept=".csv,text/csv" aria-labelledby="file-label" aria-describedby="file-status" />
+                    <span class="drop-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M12 15V4m0 0-4 4m4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
                     <span class="drop-text" id="file-status">Choose a CSV file or drop it here</span>
                   </label>
                 </div>
@@ -252,25 +277,27 @@
                   <progress id="upload-progress" max="1" value="0" hidden></progress>
                   <p id="upload-message" class="hint">Choose a file to start. Not sure of the format? Try the sample.</p>
                 </div>
-                <p><a class="link" id="sample-link" href="sample-log.csv" download="betterrankings-sample-log.csv">Download sample CSV</a></p>
+                <p><a class="link" id="sample-link" href="sample-log.csv" download="betterrankings-sample-log.csv">Download sample CSV <span aria-hidden="true">→</span></a></p>
               </form>
 
               <div class="format">
                 <h3 class="sub">Column format</h3>
                 <p class="hint-wide">One row per query. Positions count from 1 at the top of the list. Lists may hold 2 to 6 items.</p>
-                <table class="data format-table">
-                  <thead><tr><th scope="col">Column</th><th scope="col">Meaning</th></tr></thead>
-                  <tbody>
-                    <tr><td><code>query_id</code></td><td>Any identifier</td></tr>
-                    <tr><td><code>ctx_1</code> to <code>ctx_3</code></td><td>Query context features</td></tr>
-                    <tr><td><code>item_K</code></td><td>Item shown at position K</td></tr>
-                    <tr><td><code>click_K</code></td><td>1 if it was clicked, else 0</td></tr>
-                    <tr><td><code>item_K_pop</code></td><td>Popularity feature of that item</td></tr>
-                    <tr><td><code>item_K_f1</code> to <code>item_K_f3</code></td><td>Other item features</td></tr>
-                    <tr><td><code>propensity</code></td><td>Probability the logging policy gave the whole list it showed</td></tr>
-                    <tr><td><code>target_propensity</code></td><td>Optional. Probability your own policy gives that list</td></tr>
-                  </tbody>
-                </table>
+                <div class="table-wrap">
+                  <table class="data format-table">
+                    <thead><tr><th scope="col">Column</th><th scope="col">Meaning</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>query_id</code></td><td>Any identifier</td></tr>
+                      <tr><td><code>ctx_1</code> to <code>ctx_3</code></td><td>Query context features</td></tr>
+                      <tr><td><code>item_K</code></td><td>Item shown at position K</td></tr>
+                      <tr><td><code>click_K</code></td><td>1 if it was clicked, else 0</td></tr>
+                      <tr><td><code>item_K_pop</code></td><td>Popularity feature of that item</td></tr>
+                      <tr><td><code>item_K_f1</code> to <code>item_K_f3</code></td><td>Other item features</td></tr>
+                      <tr><td><code>propensity</code></td><td>Probability the logging policy gave the whole list it showed</td></tr>
+                      <tr><td><code>target_propensity</code></td><td>Optional. Probability your own policy gives that list</td></tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
 
@@ -281,7 +308,7 @@
               <div class="clip-control">
                 <div class="field-head">
                   <label for="upload-clip">Weight clip</label>
-                  <output id="upload-clip-out" for="upload-clip" class="num">Clip at 20</output>
+                  <output id="upload-clip-out" for="upload-clip" class="value-chip">Clip at 20</output>
                 </div>
                 <input id="upload-clip" type="range" min="0" max="16" step="1" value="8" />
               </div>
@@ -297,14 +324,79 @@
           </section>
         </main>
       </div>
-
-      <footer class="footer">
-        <p>
-          BetterRankings is open source. Built-in data is simulated, and nothing you do here is tracked.
-          <a class="link" href="https://github.com/DevFrancisA/BetterRankings">Source and Python package on GitHub</a>
-        </p>
-      </footer>
     </div>
+
+    <section class="how" id="how" aria-labelledby="how-title">
+      <div class="page">
+        <div class="section-head">
+          <p class="eyebrow-pill"><span class="dot" aria-hidden="true"></span>How it works</p>
+          <h2 id="how-title">Evaluate a policy from <span class="accent">logs you already have</span></h2>
+          <p class="lede">
+            If the current policy shows lists with some randomness and records how likely each list was, its old logs
+            can answer a new question: how many clicks would a different policy have earned?
+          </p>
+        </div>
+
+        <div class="how-grid">
+          <article class="card how-card">
+            <span class="feature-icon fi-blue" aria-hidden="true">
+              <svg viewBox="0 0 20 20"><path d="M3 15l4-5 3 3 6-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Evaluating from logs</h3>
+            <p>
+              A ranking system already shows lists and records clicks. Reweighting those logs estimates a new policy's
+              clicks without showing it to anyone.
+            </p>
+          </article>
+          <article class="card how-card">
+            <span class="feature-icon fi-yellow" aria-hidden="true">
+              <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10V5.5M10 10l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Propensities</h3>
+            <p>
+              The propensity is the probability the old policy gave the exact list it showed. When a new policy would
+              show a list more often, the clicks on it count for more. That ratio is the importance weight.
+            </p>
+          </article>
+          <article class="card how-card">
+            <span class="feature-icon fi-coral" aria-hidden="true">
+              <svg viewBox="0 0 20 20"><path d="M10 3 18 17H2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 8v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="14.5" r="1" fill="currentColor"/></svg>
+            </span>
+            <h3>Why naive comparison misleads</h3>
+            <p>
+              Averaging clicks over logged lists the new policy agrees with sounds fair, but the old policy showed its
+              favourite lists most often and where it liked them best. Weighting by propensities undoes that choice.
+            </p>
+          </article>
+        </div>
+
+        <h3 class="how-sub">The estimators</h3>
+        <div class="estimator-grid">
+          <article class="est-card"><h4>Inverse propensity (IPS)</h4><p>Reweights every logged query by its importance weight. Unbiased, but noisy when weights are large.</p></article>
+          <article class="est-card"><h4>Self-normalised IPS</h4><p>Divides by the total weight instead of the row count. A little bias, much less noise.</p></article>
+          <article class="est-card"><h4>Clipped IPS</h4><p>Caps each weight at the clip level. Lower noise, but it pulls the estimate down.</p></article>
+          <article class="est-card"><h4>Reward model</h4><p>Learns a click model from the log and asks it about the new policy. Steady, but only as good as the model.</p></article>
+          <article class="est-card"><h4>Doubly robust</h4><p>Starts from the reward model and corrects it with weighted errors. Holds up if either part is right.</p></article>
+          <article class="est-card est-card-truth"><h4>The check</h4><p>The simulator knows every true click probability, so it runs the online test real teams cannot run for free. The coral line is that answer.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="page footer-inner">
+        <a class="brand" href="./">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#1673DB" />
+            <rect x="8" y="17" width="3.5" height="7" rx="1.5" fill="#fff" />
+            <rect x="14.25" y="12" width="3.5" height="12" rx="1.5" fill="#fff" />
+            <rect x="20.5" y="8" width="3.5" height="16" rx="1.5" fill="#FDD963" />
+          </svg>
+          <span>BetterRankings</span>
+        </a>
+        <p>Open source. Built-in data is simulated, and nothing you do here is tracked.</p>
+        <a class="link" href="https://github.com/DevFrancisA/BetterRankings">Source and Python package on GitHub <span aria-hidden="true">→</span></a>
+      </div>
+    </footer>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

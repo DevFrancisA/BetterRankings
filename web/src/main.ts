@@ -107,6 +107,17 @@ const plots = {
 
 // Controls -------------------------------------------------------------------
 
+/** Range inputs paint their track up to the thumb from --fill. */
+function syncFill(input: HTMLInputElement) {
+  const min = Number(input.min || 0);
+  const max = Number(input.max || 100);
+  input.style.setProperty("--fill", `${((Number(input.value) - min) / (max - min)) * 100}%`);
+}
+for (const r of document.querySelectorAll<HTMLInputElement>('input[type="range"]')) {
+  syncFill(r);
+  r.addEventListener("input", () => syncFill(r));
+}
+
 const form = $<HTMLFormElement>("controls");
 const exploration = $<HTMLInputElement>("exploration");
 const queries = $<HTMLSelectElement>("queries");
@@ -157,10 +168,10 @@ policySelect.addEventListener("change", () => {
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  void runEvaluation();
+  void runEvaluation(true);
 });
 
-async function runEvaluation() {
+async function runEvaluation(fromUser = false) {
   if (state.running) return;
   state.running = true;
   const params = readParams();
@@ -192,6 +203,10 @@ async function runEvaluation() {
     $<HTMLButtonElement>("download-log").disabled = false;
     markDirty("results", "ranking", "diagnostics");
     updateStale();
+    const app = $("main");
+    if (fromUser && app.getBoundingClientRect().top > window.innerHeight * 0.6) {
+      app.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    }
   } catch (err) {
     $("run-message").classList.add("error");
     setText("run-message", `${(err as Error).message} Check the settings and press Run evaluation again.`);
@@ -243,6 +258,7 @@ function clipControl(
 }
 
 clip.value = String(state.clipIdx);
+syncFill(clip);
 clipControl(
   clip,
   "clip-out",
@@ -288,6 +304,13 @@ tabs.forEach((t, i) => {
     }
   });
 });
+
+for (const link of document.querySelectorAll<HTMLAnchorElement>("a[data-tab]")) {
+  link.addEventListener("click", () => {
+    const tab = $<HTMLButtonElement>(`tab-${link.dataset.tab}`);
+    if (tab) selectTab(tab);
+  });
+}
 
 function markDirty(...names: string[]) {
   for (const n of names) state.dirty.add(n);
@@ -377,14 +400,14 @@ function notices(host: HTMLElement, diag: PolicyView["diagnostics"], calm?: stri
 function warnIcon(): HTMLElement {
   const span = h("span", { class: "notice-icon", "aria-hidden": "true" });
   span.innerHTML =
-    '<svg width="18" height="16" viewBox="0 0 18 16"><path d="M9 1 L17 15 H1 Z" fill="none" stroke="#b7791f" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 6 V10" stroke="#6f4709" stroke-width="1.6"/><circle cx="9" cy="12.5" r="1" fill="#6f4709"/></svg>';
+    '<svg width="18" height="16" viewBox="0 0 18 16"><path d="M9 1 L17 15 H1 Z" fill="none" stroke="#b98900" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 6 V10" stroke="#7a5b00" stroke-width="1.6"/><circle cx="9" cy="12.5" r="1" fill="#7a5b00"/></svg>';
   return span;
 }
 
 function okIcon(): HTMLElement {
   const span = h("span", { class: "notice-icon", "aria-hidden": "true" });
   span.innerHTML =
-    '<svg width="18" height="16" viewBox="0 0 18 16"><circle cx="9" cy="8" r="6.5" fill="none" stroke="#0f766e" stroke-width="1.6"/><path d="M5.8 8.2 L8 10.3 L12.2 5.8" fill="none" stroke="#0f766e" stroke-width="1.6"/></svg>';
+    '<svg width="18" height="16" viewBox="0 0 18 16"><circle cx="9" cy="8" r="6.5" fill="none" stroke="#137a48" stroke-width="1.6"/><path d="M5.8 8.2 L8 10.3 L12.2 5.8" fill="none" stroke="#137a48" stroke-width="1.6"/></svg>';
   return span;
 }
 
@@ -835,6 +858,7 @@ $("upload-form").addEventListener("submit", async (e) => {
 });
 
 uploadClip.value = String(state.upload.clipIdx);
+syncFill(uploadClip);
 clipControl(
   uploadClip,
   "upload-clip-out",
