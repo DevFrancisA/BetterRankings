@@ -370,61 +370,6 @@ span.dot {
   gap: 8px;
 }
 
-/* Theme toggle: both icons stay in the DOM and cross-fade. */
-.btn-theme {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--ink);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition-property: background-color, scale;
-  transition-duration: 150ms;
-  transition-timing-function: ease-out;
-}
-
-.btn-theme:active {
-  scale: 0.96;
-}
-
-@media (hover: hover) {
-  .btn-theme:hover {
-    background: var(--muted);
-  }
-}
-
-.theme-icon {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  transition: opacity 300ms cubic-bezier(0.2, 0, 0, 1);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .theme-icon {
-    transition-property: opacity, scale, filter;
-  }
-}
-
-.icon-sun,
-.dark .icon-moon {
-  opacity: 0;
-  scale: 0.25;
-  filter: blur(4px);
-}
-
-.dark .icon-sun,
-.icon-moon {
-  opacity: 1;
-  scale: 1;
-  filter: blur(0px);
-}
-
 /* Buttons ------------------------------------------------------------------- */
 
 .btn {

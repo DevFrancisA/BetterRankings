@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,15 +9,7 @@
       content="Estimate how a new ranking policy would perform from logged clicks alone, and check the estimate against a simulated online test."
     />
     <link rel="icon" href="favicon.svg?v=3" type="image/svg+xml" />
-    <meta name="theme-color" content="#faf7f5" />
-    <script>
-      // Apply the saved or system theme before first paint.
-      try {
-        const t = localStorage.getItem("br-theme");
-        if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches))
-          document.documentElement.classList.add("dark");
-      } catch {}
-    </script>
+    <meta name="theme-color" content="#1c1917" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -45,10 +37,6 @@
           <a href="#playground" data-tab="upload">Your log</a>
         </nav>
         <div class="nav-actions">
-          <button type="button" class="btn-theme" id="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false">
-            <svg class="theme-icon icon-sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v1.5M10 16.5V18M2 10h1.5M16.5 10H18M4.3 4.3l1.1 1.1M14.6 14.6l1.1 1.1M4.3 15.7l1.1-1.1M14.6 5.4l1.1-1.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <svg class="theme-icon icon-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.2A6.8 6.8 0 0 1 7.8 3.5a6.8 6.8 0 1 0 8.7 8.7Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-          </button>
           <a class="btn btn-dark btn-nav" href="https://github.com/DevFrancisA/BetterRankings">
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" fill="currentColor"/></svg>
             GitHub

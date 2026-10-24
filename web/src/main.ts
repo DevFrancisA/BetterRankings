@@ -956,52 +956,8 @@ $("upload-download").addEventListener("click", () => {
   download(`${base}-betterrankings-results.csv`, rows.join("\n") + "\n");
 });
 
-// Theme ----------------------------------------------------------------------------
-
-const themeToggle = $<HTMLButtonElement>("theme-toggle");
-const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-
-function syncThemeUi() {
-  const dark = document.documentElement.classList.contains("dark");
-  themeToggle.setAttribute("aria-pressed", String(dark));
-  themeToggle.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
-  themeMeta?.setAttribute("content", dark ? "#1c1917" : "#faf7f5");
-}
-
-/** Flip the theme with every transition off, so colours swap in one frame instead of smearing. */
-function setTheme(dark: boolean) {
-  const style = document.createElement("style");
-  style.textContent = "*,*::before,*::after{transition:none !important}";
-  document.head.append(style);
-  document.documentElement.classList.toggle("dark", dark);
-  void document.body.offsetHeight;
-  requestAnimationFrame(() => requestAnimationFrame(() => style.remove()));
-  syncThemeUi();
-}
-
-themeToggle.addEventListener("click", () => {
-  const dark = !document.documentElement.classList.contains("dark");
-  setTheme(dark);
-  try {
-    localStorage.setItem("br-theme", dark ? "dark" : "light");
-  } catch {
-    /* storage unavailable: the choice lasts for this visit */
-  }
-});
-
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-  let saved: string | null = null;
-  try {
-    saved = localStorage.getItem("br-theme");
-  } catch {
-    /* fall through to the system preference */
-  }
-  if (!saved) setTheme(e.matches);
-});
-
 // Start ----------------------------------------------------------------------------
 
-syncThemeUi();
 updatePolicyHint();
 setText("clip-out", fmtClip(CLIP_LEVELS[state.clipIdx]));
 setText("upload-clip-out", fmtClip(CLIP_LEVELS[state.upload.clipIdx]));
