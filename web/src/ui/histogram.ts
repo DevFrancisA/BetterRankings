@@ -56,7 +56,7 @@ export function weightHistogram(
   grid.append(s("line", { x1: LEFT, x2: W - 12, y1: H - BOTTOM, y2: H - BOTTOM, class: "axis-rule" }));
   grid.append(
     s("text", { x: W - 12, y: H - 8, class: "axis-title", "text-anchor": "end" }, [
-      W < 520 ? "Importance weight, log scale" : "Importance weight (target probability ÷ logging probability), log scale",
+      W < 520 ? "Weight (log)" : "Importance weight = target ÷ logging probability (log scale)",
     ]),
   );
   svg.append(grid);

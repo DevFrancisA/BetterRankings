@@ -29,7 +29,7 @@ export function rankChart(items: RankItem[], estimatorLabel: string, width: numb
   const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, class: "rank-chart", "aria-hidden": "true" });
 
   svg.append(
-    s("text", { x: xl, y: 14, class: "rank-head", "text-anchor": "end" }, ["True order"]),
+    s("text", { x: xl, y: 14, class: "rank-head", "text-anchor": "end" }, ["True"]),
     s("text", { x: xr, y: 14, class: "rank-head", "text-anchor": "start" }, [estimatorLabel]),
     s("line", { x1: 0, x2: W, y1: 22, y2: 22, class: "axis-rule" }),
   );

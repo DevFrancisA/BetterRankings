@@ -4,7 +4,7 @@ import { ESTIMATOR_NAMES, ESTIMATORS, type Estimate, type EstimatorId } from "./
 import { DEFAULTS, discordantPairs, TARGET_COLUMN, type TargetId } from "./core/evaluate";
 import { POLICIES, POLICY_BY_ID, POLICY_IDS, type PolicyId } from "./core/policies";
 import { CLIP_LEVELS, type EvalView, type PolicyView, type Request, type Response, type RunParams } from "./protocol";
-import { ForestPlot, type ForestRow, type ForestSpec } from "./ui/forest";
+import { CardChart, type CardRow, type CardSpec } from "./ui/cardChart";
 import { fmt, fmtClip, fmtGap, fmtInt, fmtPct, fmtWeight } from "./ui/format";
 import { weightHistogram } from "./ui/histogram";
 import { rankChart } from "./ui/rankChart";
@@ -100,9 +100,9 @@ const state = {
 };
 
 const plots = {
-  results: new ForestPlot($("forest")),
-  ranking: new ForestPlot($("ranking-forest")),
-  upload: new ForestPlot($("upload-forest")),
+  results: new CardChart($("forest")),
+  ranking: new CardChart($("ranking-forest")),
+  upload: new CardChart($("upload-forest")),
 };
 
 // Controls -------------------------------------------------------------------
@@ -179,11 +179,11 @@ async function runEvaluation(fromUser = false) {
   const button = $<HTMLButtonElement>("run");
   const bar = $<HTMLProgressElement>("run-progress");
   button.disabled = true;
-  button.textContent = "Running…";
+  setText("run-label", "Running…");
   bar.hidden = false;
   bar.value = 0;
   $("run-message").classList.remove("error");
-  setText("run-message", "Simulating logged traffic…");
+  setText("run-message", "Simulating traffic…");
   document.body.setAttribute("aria-busy", "true");
   $("forest").classList.add("is-busy");
   const t0 = performance.now();
@@ -197,7 +197,7 @@ async function runEvaluation(fromUser = false) {
     state.enter = true;
     setText(
       "run-message",
-      `Done. ${fmtInt(params.nQueries)} logged queries and every candidate evaluated in ${((performance.now() - t0) / 1000).toFixed(1)} s.`,
+      `✓ ${fmtInt(params.nQueries)} queries · ${((performance.now() - t0) / 1000).toFixed(1)} s`,
     );
     $<HTMLButtonElement>("download-results").disabled = false;
     $<HTMLButtonElement>("download-log").disabled = false;
@@ -209,12 +209,16 @@ async function runEvaluation(fromUser = false) {
     }
   } catch (err) {
     $("run-message").classList.add("error");
-    setText("run-message", `${(err as Error).message} Check the settings and press Run evaluation again.`);
-    if (!state.sim) setText("results-summary", "The run did not finish, so there is nothing to show yet.");
+    setText("run-message", `${(err as Error).message} Check the settings and run again.`);
+    if (!state.sim) {
+      const summary = $("results-summary");
+      summary.removeAttribute("aria-busy");
+      for (const dd of summary.querySelectorAll("dd")) dd.textContent = "—";
+    }
   } finally {
     state.running = false;
     button.disabled = false;
-    button.textContent = "Run evaluation";
+    setText("run-label", "Run");
     bar.hidden = true;
     document.body.removeAttribute("aria-busy");
     $("forest").classList.remove("is-busy");
@@ -328,27 +332,22 @@ function renderVisible() {
 
 // Shared pieces -------------------------------------------------------------------
 
-function estimatorRows(view: PolicyView, truth: number | null): ForestRow[] {
+/** One column per estimator. With a known truth, bars whose range misses it recede. */
+function estimatorRows(view: PolicyView, truth: number | null): CardRow[] {
   return ESTIMATORS.map((est) => {
     const e = view.estimates[est];
     const ok = e.available && Number.isFinite(e.estimate);
-    let note = "";
-    let noteShort = "";
-    if (ok && truth !== null) {
-      noteShort = fmtGap(e.estimate - truth);
-      note = `${noteShort} vs truth`;
-    } else if (ok && Number.isFinite(e.ci_low)) note = noteShort = `${fmt(e.ci_low)} to ${fmt(e.ci_high)}`;
+    const caught = truth !== null && e.ci_low <= truth && truth <= e.ci_high;
     return {
       id: est,
-      label: ESTIMATOR_NAMES[est],
-      shortLabel: SHORT_ESTIMATOR[est],
-      value: ok ? fmt(e.estimate) : "n/a",
-      note,
-      noteShort,
-      estimate: e.estimate,
+      label: SHORT_ESTIMATOR[est],
+      name: ESTIMATOR_NAMES[est],
+      value: e.estimate,
       lo: e.ci_low,
       hi: e.ci_high,
       available: ok,
+      tone: truth === null || caught ? "main" : "muted",
+      note: truth === null ? undefined : caught ? "range caught the truth" : "range missed the truth",
       unavailableText: e.available ? "No logged list matches this policy" : "Needs a built-in policy",
     };
   });
@@ -357,7 +356,7 @@ function estimatorRows(view: PolicyView, truth: number | null): ForestRow[] {
 const SHORT_ESTIMATOR: Record<EstimatorId, string> = {
   naive: "Naive",
   ips: "IPS",
-  snips: "Self-normalised IPS",
+  snips: "SNIPS",
   clipped_ips: "Clipped IPS",
   reward_model: "Reward model",
   doubly_robust: "Doubly robust",
@@ -390,7 +389,7 @@ function notices(host: HTMLElement, diag: PolicyView["diagnostics"], calm?: stri
     host.append(
       h("div", { class: "notice", role: "note" }, [
         warnIcon(),
-        h("p", {}, [h("strong", {}, [w.level === "warn" ? "Warning. " : "Note. "]), w.message]),
+        h("p", {}, [h("strong", {}, [w.level === "warn" ? "Warning " : "Note "]), w.message]),
       ]),
     );
   }
@@ -400,15 +399,29 @@ function notices(host: HTMLElement, diag: PolicyView["diagnostics"], calm?: stri
 function warnIcon(): HTMLElement {
   const span = h("span", { class: "notice-icon", "aria-hidden": "true" });
   span.innerHTML =
-    '<svg width="18" height="16" viewBox="0 0 18 16"><path d="M9 1 L17 15 H1 Z" fill="none" stroke="#b98900" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 6 V10" stroke="#7a5b00" stroke-width="1.6"/><circle cx="9" cy="12.5" r="1" fill="#7a5b00"/></svg>';
+    '<svg width="18" height="16" viewBox="0 0 18 16"><path d="M9 1 L17 15 H1 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 6 V10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="12.5" r="1" fill="currentColor"/></svg>';
   return span;
 }
 
 function okIcon(): HTMLElement {
   const span = h("span", { class: "notice-icon", "aria-hidden": "true" });
   span.innerHTML =
-    '<svg width="18" height="16" viewBox="0 0 18 16"><circle cx="9" cy="8" r="6.5" fill="none" stroke="#137a48" stroke-width="1.6"/><path d="M5.8 8.2 L8 10.3 L12.2 5.8" fill="none" stroke="#137a48" stroke-width="1.6"/></svg>';
+    '<svg width="18" height="16" viewBox="0 0 18 16"><circle cx="9" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.8 8.2 L8 10.3 L12.2 5.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   return span;
+}
+
+function kpi(label: string, value: (Node | string)[], cls = ""): HTMLElement {
+  return h("div", cls ? { class: cls } : {}, [h("dt", {}, [label]), h("dd", {}, value)]);
+}
+
+function chipList(ids: string[], cls: string): HTMLElement {
+  return h(
+    "span",
+    { class: "chips" },
+    ids.length
+      ? ids.map((id) => h("span", { class: `chip ${cls}` }, [POLICY_BY_ID[id as PolicyId].short]))
+      : [h("span", { class: "chip chip-none" }, ["None"])],
+  );
 }
 
 function gapWords(gap: number): string {
@@ -429,27 +442,38 @@ function renderResults(slide: boolean) {
   if (!v) return;
   const p = v.policies[state.policy]!;
   const truth = v.truth![state.policy].value;
-  setText("results-title", `${p.name}: estimates against the truth`);
+  setText("results-title", p.name);
   setText("results-tag", runTag(v));
 
   const avail = ESTIMATORS.filter((e) => p.estimates[e].available && Number.isFinite(p.estimates[e].estimate));
   const gaps = avail.map((e) => ({ e, gap: p.estimates[e].estimate - truth }));
   gaps.sort((a, b) => Math.abs(a.gap) - Math.abs(b.gap));
-  const covered = avail.filter((e) => p.estimates[e].ci_low <= truth && truth <= p.estimates[e].ci_high).length;
+  const hits = avail.map((e) => p.estimates[e].ci_low <= truth && truth <= p.estimates[e].ci_high);
+  const covered = hits.filter(Boolean).length;
   const summary = $("results-summary");
+  summary.removeAttribute("aria-busy");
   summary.replaceChildren(
-    "The simulated online test gives this policy ",
-    h("strong", {}, [`${fmt(truth)} clicks per query`]),
-    `. Closest estimate: ${ESTIMATOR_NAMES[gaps[0].e]}, ${gapWords(gaps[0].gap)}. Farthest: ${ESTIMATOR_NAMES[gaps[gaps.length - 1].e]}, ${gapWords(gaps[gaps.length - 1].gap)}. ${covered} of ${avail.length} intervals contain the true value.`,
+    kpi("True answer", [h("span", { class: "num" }, [fmt(truth)]), h("small", {}, ["clicks / query"])], "kpi-truth"),
+    kpi("Closest estimate", [
+      h("span", { class: "kpi-text", title: ESTIMATOR_NAMES[gaps[0].e] }, [SHORT_ESTIMATOR[gaps[0].e]]),
+      h("small", { title: gapWords(gaps[0].gap) }, [fmtGap(gaps[0].gap)]),
+    ]),
+    kpi("Ranges that caught it", [
+      h("span", { class: "num" }, [`${covered}/${avail.length}`]),
+      h(
+        "span",
+        { class: "pips", "aria-hidden": "true" },
+        hits.map((hit) => h("span", { class: `pip${hit ? " on" : ""}` })),
+      ),
+      h("span", { class: "sr-only" }, ["95% intervals contain the true value"]),
+    ]),
   );
 
-  const spec: ForestSpec = {
+  const spec: CardSpec = {
     rows: estimatorRows(p, truth),
-    truthLine: { value: truth, label: "True online value" },
-    reference: { value: v.loggedMean, label: `Logged, current policy ${fmt(v.loggedMean)}` },
-    axisLabel: "Expected clicks per query",
-    title: `Estimates of ${p.name} against the true online value`,
-    description: `True online value ${fmt(truth)}. ${ESTIMATORS.map((e) => `${ESTIMATOR_NAMES[e]} ${fmt(p.estimates[e].estimate)}`).join(", ")}.`,
+    baseline: { value: truth, label: "Truth" },
+    legend: { main: "Range caught the truth", muted: "Missed" },
+    title: `How far each estimate of ${p.name} lands from the true value ${fmt(truth)}`,
   };
   if (slide) plots.results.update(spec);
   else {
@@ -499,17 +523,10 @@ function verdict(e: Estimate, bar: number): Verdict {
   return "skip";
 }
 
-const VERDICT_SHORT: Record<Verdict, string> = {
-  worth: "✓ test it",
-  unclear: "? unsure",
-  skip: "✕ skip",
-  na: "n/a",
-};
-
 const VERDICT_TEXT: Record<Verdict, string> = {
-  worth: "✓ worth a live test",
-  unclear: "? promising, unsure",
-  skip: "✕ not worth it",
+  worth: "worth a live test",
+  unclear: "promising, but unsure",
+  skip: "not worth it",
   na: "no estimate",
 };
 
@@ -521,7 +538,7 @@ for (const est of ESTIMATORS) {
     state.rankEst = est;
     renderRanking(true);
   });
-  segmented.append(h("label", {}, [input, h("span", {}, [ESTIMATOR_NAMES[est]])]));
+  segmented.append(h("label", { title: ESTIMATOR_NAMES[est] }, [input, h("span", {}, [SHORT_ESTIMATOR[est]])]));
 }
 
 function renderRanking(slide = false) {
@@ -533,47 +550,43 @@ function renderRanking(slide = false) {
   const order = [...POLICY_IDS].sort((a, b) => truth[b].value - truth[a].value);
   const est = state.rankEst;
 
-  const rows: ForestRow[] = order.map((id) => {
+  const rows: CardRow[] = order.map((id) => {
     const e = v.policies[id]!.estimates[est];
     const vd = id === "current" ? "na" : verdict(e, bar);
     return {
       id,
-      label: v.policies[id]!.name,
-      shortLabel: POLICY_BY_ID[id].short,
-      value: e.available ? fmt(e.estimate) : "n/a",
-      note: id === "current" ? "the current policy" : VERDICT_TEXT[vd],
-      noteShort: id === "current" ? "current" : VERDICT_SHORT[vd],
-      noteKind: vd === "worth" ? "good" : "plain",
-      estimate: e.estimate,
+      label: POLICY_BY_ID[id].short,
+      name: v.policies[id]!.name,
+      value: e.estimate,
       lo: e.ci_low,
       hi: e.ci_high,
       truth: truth[id].value,
       available: e.available && Number.isFinite(e.estimate),
-      emphasis: vd === "worth",
+      tone: vd === "worth" ? "main" : "muted",
+      note: id === "current" ? "the current ranking" : VERDICT_TEXT[vd],
     };
   });
-  const hint = POLICY_IDS.map((id) => truth[id].value);
-  const spec: ForestSpec = {
+  const spec: CardSpec = {
     rows,
-    reference: { value: bar, label: `Bar to beat ${fmt(bar)}` },
-    axisLabel: "Expected clicks per query",
-    domainHint: hint,
-    title: `Candidates ranked by true online value, with ${ESTIMATOR_NAMES[est]} estimates`,
-    description: rows.map((r) => `${r.label}: true ${fmt(r.truth)}, estimate ${r.value}, ${r.note}`).join(". "),
+    baseline: { value: bar, label: "Bar to beat" },
+    legend: { main: "Worth a live test", muted: "Not", marker: "True value" },
+    domainHint: POLICY_IDS.map((id) => truth[id].value),
+    title: `Each ranking's ${ESTIMATOR_NAMES[est]} estimate against the bar to beat, ${fmt(bar)}, best first`,
   };
   if (slide) plots.ranking.update(spec);
   else plots.ranking.render(spec, false);
 
   const worth = candidates.filter((id) => verdict(v.policies[id]!.estimates[est], bar) === "worth");
   const trulyBetter = candidates.filter((id) => truth[id].value > truth.current.value);
-  const names = (ids: string[]) => (ids.length ? ids.map((id) => POLICY_BY_ID[id as PolicyId].name).join(", ") : "none");
   const sameSet = worth.length === trulyBetter.length && worth.every((id) => trulyBetter.includes(id));
   $("ranking-summary").replaceChildren(
-    `By ${ESTIMATOR_NAMES[est].toLowerCase()}, candidates whose whole interval clears the current policy's logged ${fmt(bar)} clicks per query: `,
-    h("strong", {}, [names(worth)]),
-    `. In the simulated online test, these truly beat the current policy: `,
-    h("strong", {}, [names(trulyBetter)]),
-    sameSet ? ". The two lists agree." : ". The lists differ, so this estimator would send the wrong set to live traffic.",
+    h("span", { class: "verdict-label", title: `Whole 95% interval clears the logged ${fmt(bar)} clicks per query` }, [
+      `${SHORT_ESTIMATOR[est]} would ship`,
+    ]),
+    chipList(worth, "chip-pick"),
+    h("span", { class: sameSet ? "badge badge-good" : "badge badge-bad" }, [sameSet ? "✓ Match" : "✕ Mismatch"]),
+    h("span", { class: "verdict-label", title: "Beat the current policy in the simulated online test" }, ["Actually better"]),
+    chipList(trulyBetter, "chip-true"),
   );
 
   // Table
@@ -624,12 +637,19 @@ function renderRanking(slide = false) {
       .sort((a, b) => (Number.isFinite(b.estimate) ? b.estimate : -Infinity) - (Number.isFinite(a.estimate) ? a.estimate : -Infinity))
       .map((i) => i.label);
     const card = h("figure", { class: "rank-card" }, [
-      h("h4", {}, [ESTIMATOR_NAMES[k]]),
-      h("p", {}, [bad === 0 ? "Same order as the truth." : `${bad} of 15 pairs in the wrong order.`]),
-      h("figcaption", { class: "sr-only" }, [`Estimated order: ${estOrder.join(", ")}.`]),
+      h("div", { class: "rank-card-head" }, [
+        h("h4", { title: ESTIMATOR_NAMES[k] }, [SHORT_ESTIMATOR[k]]),
+        h("span", { class: bad === 0 ? "badge badge-good" : bad > 3 ? "badge badge-bad" : "badge badge-warn" }, [
+          bad === 0 ? "✓ Exact" : `${bad}/15 swapped`,
+        ]),
+      ]),
+      h("figcaption", { class: "sr-only" }, [
+        `${bad === 0 ? "Same order as the truth" : `${bad} of 15 pairs in the wrong order`}. Estimated order: ${estOrder.join(", ")}.`,
+      ]),
     ]);
     grid.append(card);
-    card.append(rankChart(items, "Estimated order", Math.min(card.clientWidth, 420)));
+    const pad = parseFloat(getComputedStyle(card).paddingLeft) + parseFloat(getComputedStyle(card).paddingRight);
+    card.append(rankChart(items, "Estimated", Math.min(card.clientWidth - pad, 420)));
   }
   observeWidth(grid, () => renderRanking());
 }
@@ -665,24 +685,37 @@ interface DiagIds {
 
 function renderDiagnosticsInto(v: EvalView, p: PolicyView, ids: DiagIds) {
   const d = p.diagnostics;
-  setText(ids.title, `Overlap diagnostics: ${p.name}`);
+  setText(ids.title, `Overlap · ${p.name}`);
   setText(
     ids.summary,
     "Each logged query gets a weight: how likely this policy is to show the logged list, divided by how likely the current policy was. Weighting estimators are only as good as these weights.",
   );
-  notices(
-    $(ids.warnings),
-    d,
-    `Overlap looks healthy. The weights are worth about ${fmtInt(d.ess)} of ${fmtInt(d.n)} logged queries.`,
-  );
-  const stat = (label: string, value: string, note: string) =>
-    h("div", {}, [h("dt", {}, [label]), h("dd", {}, [value, h("small", {}, [note])])]);
-  const clipText = v.clip === null ? "no clip set" : `queries above clip ${v.clip}`;
+  notices($(ids.warnings), d, `Healthy overlap · worth ${fmtInt(d.ess)} of ${fmtInt(d.n)} queries`);
+  const stat = (label: string, value: string, note: string, title: string, extra?: Node) =>
+    h("div", { title }, [
+      h("dt", {}, [label]),
+      h("dd", {}, [value, h("small", {}, [note]), ...(extra ? [extra] : [])]),
+    ]);
+  const share = Number.isFinite(d.ess_fraction) ? Math.max(0, Math.min(1, d.ess_fraction)) : 0;
+  const meter = h("span", { class: share < 0.1 ? "meter is-low" : "meter", "aria-hidden": "true" }, [
+    h("span", { style: `width:${share * 100}%` }),
+  ]);
   $(ids.stats).replaceChildren(
-    stat("Effective sample size", fmtInt(d.ess), `of ${fmtInt(d.n)} queries (${fmtPct(d.ess_fraction, d.ess_fraction < 0.1 ? 1 : 0)})`),
-    stat("Largest weight", fmtWeight(d.max_weight), `${fmtPct(d.max_weight_share, 1)} of all weight`),
-    stat("Mean weight", Number.isFinite(d.mean_weight) ? d.mean_weight.toFixed(2) : "n/a", "close to 1 when the log covers this policy"),
-    stat("Clipped", fmtInt(d.n_clipped), clipText),
+    stat(
+      "Effective size",
+      fmtInt(d.ess),
+      `of ${fmtInt(d.n)} · ${fmtPct(d.ess_fraction, d.ess_fraction < 0.1 ? 1 : 0)}`,
+      "Effective sample size: how many equally weighted queries the weights are worth",
+      meter,
+    ),
+    stat("Max weight", fmtWeight(d.max_weight), `${fmtPct(d.max_weight_share, 1)} of total`, "Largest single importance weight"),
+    stat(
+      "Mean weight",
+      Number.isFinite(d.mean_weight) ? d.mean_weight.toFixed(2) : "n/a",
+      "≈ 1 is good",
+      "Close to 1 when the log covers this policy",
+    ),
+    stat("Clipped", fmtInt(d.n_clipped), v.clip === null ? "no clip" : `above ${v.clip}`, "Queries whose weight exceeds the clip"),
   );
 
   const host = $(ids.hist);
@@ -712,8 +745,8 @@ function renderDiagnosticsInto(v: EvalView, p: PolicyView, ids: DiagIds) {
   setText(
     ids.zero,
     hist.zero
-      ? `${fmtInt(hist.zero)} of ${fmtInt(hist.total)} logged queries have weight 0: this policy would never show those lists, so they add nothing to the weighting estimators. The chart shows the rest.`
-      : "Every logged query has a positive weight: this policy could have shown each logged list.",
+      ? `+ ${fmtInt(hist.zero)} of ${fmtInt(hist.total)} queries at weight 0 (lists this policy never shows), not drawn.`
+      : "Every logged query has a positive weight.",
   );
 
   const maxRate = Math.max(...v.perPosition.map((r) => r.click_rate), 1e-9);
@@ -722,7 +755,7 @@ function renderDiagnosticsInto(v: EvalView, p: PolicyView, ids: DiagIds) {
       const barEl = h("span", { class: "pos-bar" });
       barEl.style.width = `${(r.click_rate / maxRate) * 100}%`;
       return h("div", { class: "pos-row" }, [
-        h("span", {}, [`Position ${r.position}`]),
+        h("span", {}, [h("span", { class: "sr-only" }, ["Position "]), `#${r.position}`]),
         h("span", { class: "pos-track", "aria-hidden": "true" }, [barEl]),
         h("span", { class: "pos-value num" }, [fmtPct(r.click_rate, 1)]),
       ]);
@@ -757,8 +790,7 @@ const uploadRun = $<HTMLButtonElement>("upload-run");
 const uploadClip = $<HTMLInputElement>("upload-clip");
 
 const UPLOAD_HINTS: Record<string, string> = {
-  [TARGET_COLUMN]:
-    "Uses your target_propensity column. The reward model and doubly robust estimators need the full target policy, so they are not available for it.",
+  [TARGET_COLUMN]: "From your target_propensity column. Reward model and doubly robust need a built-in policy.",
 };
 
 function fillUploadTargets() {
@@ -773,11 +805,7 @@ function fillUploadTargets() {
 
 function updateUploadHint() {
   const id = uploadTarget.value;
-  setText(
-    "upload-target-hint",
-    UPLOAD_HINTS[id] ??
-      `${POLICY_BY_ID[id as PolicyId]?.description ?? ""} Built-in policies score items with the simulator's fixed weights.`,
-  );
+  setText("upload-target-hint", UPLOAD_HINTS[id] ?? POLICY_BY_ID[id as PolicyId]?.description ?? "");
 }
 
 uploadTarget.addEventListener("change", updateUploadHint);
@@ -796,12 +824,12 @@ async function acceptFile(file: File | undefined) {
     fillUploadTargets();
     if (state.upload.hasTarget) uploadTarget.value = TARGET_COLUMN;
     updateUploadHint();
-    setText("file-status", `${file.name} · ${(file.size / 1024).toFixed(0)} KB, read in your browser`);
-    setText("upload-message", "File ready. Pick a target policy and press Evaluate my log.");
+    setText("file-status", `${file.name} · ${(file.size / 1024).toFixed(0)} KB`);
+    setText("upload-message", "Ready.");
     uploadRun.disabled = false;
   } catch {
     msg.classList.add("error");
-    setText("upload-message", "That file could not be read. Check that it is a plain-text CSV and choose it again.");
+    setText("upload-message", "Could not read that file. Is it a plain-text CSV?");
   }
 }
 
@@ -846,11 +874,11 @@ $("upload-form").addEventListener("submit", async (e) => {
     if (res.type !== "result") throw new Error("Unexpected reply from the worker.");
     state.upload.view = res.view;
     state.upload.enter = true;
-    setText("upload-message", `Done. Evaluated ${fmtInt(res.view.n)} queries from ${state.upload.fileName}.`);
+    setText("upload-message", `✓ ${fmtInt(res.view.n)} queries evaluated`);
     renderUpload(false);
   } catch (err) {
     msg.classList.add("error");
-    setText("upload-message", `${(err as Error).message} Fix the file and choose it again, or start from the sample CSV.`);
+    setText("upload-message", `${(err as Error).message} Fix the file, or start from the sample CSV.`);
   } finally {
     uploadRun.disabled = false;
     bar.hidden = true;
@@ -880,19 +908,27 @@ function renderUpload(slide: boolean) {
   $("upload-results").hidden = false;
   const [id] = Object.keys(v.policies) as TargetId[];
   const p = v.policies[id]!;
-  setText("upload-results-title", `Estimates for ${p.name}`);
+  setText("upload-results-title", p.name);
   $("upload-summary").replaceChildren(
-    `${v.fileName}: ${fmtInt(v.n)} queries with lists of ${v.nSlots}, `,
-    h("strong", {}, [`${fmt(v.loggedMean)} clicks per query`]),
-    " under the logging policy. Your own log has no known true value, so there is no truth line: compare the estimates with each other and with the logged rate.",
+    h("span", { class: "chip chip-mono" }, [v.fileName ?? "log"]),
+    h("span", { class: "chip" }, [`${fmtInt(v.n)} queries`]),
+    h("span", { class: "chip" }, [`${v.nSlots} slots`]),
+    h("span", { class: "chip chip-pick" }, [`Logged ${fmt(v.loggedMean)} clicks / query`]),
+    h(
+      "span",
+      {
+        class: "chip chip-none",
+        title: "Your own log has no known true value: compare the estimates with each other and with the logged rate.",
+      },
+      ["No truth line for real logs"],
+    ),
   );
   notices($("upload-warnings"), p.diagnostics);
-  const spec: ForestSpec = {
+  const spec: CardSpec = {
     rows: estimatorRows(p, null),
-    reference: { value: v.loggedMean, label: `Logged ${fmt(v.loggedMean)}` },
-    axisLabel: "Expected clicks per query",
-    title: `Estimates of ${p.name} from your log`,
-    description: ESTIMATORS.map((e) => `${ESTIMATOR_NAMES[e]} ${fmt(p.estimates[e].estimate)}`).join(", "),
+    baseline: { value: v.loggedMean, label: "Logged" },
+    legend: { main: "Estimate vs. your logged clicks" },
+    title: `Estimates of ${p.name} from your log, against the logged rate ${fmt(v.loggedMean)}`,
   };
   if (slide) plots.upload.update(spec);
   else {
@@ -920,8 +956,52 @@ $("upload-download").addEventListener("click", () => {
   download(`${base}-betterrankings-results.csv`, rows.join("\n") + "\n");
 });
 
+// Theme ----------------------------------------------------------------------------
+
+const themeToggle = $<HTMLButtonElement>("theme-toggle");
+const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+
+function syncThemeUi() {
+  const dark = document.documentElement.classList.contains("dark");
+  themeToggle.setAttribute("aria-pressed", String(dark));
+  themeToggle.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+  themeMeta?.setAttribute("content", dark ? "#1c1917" : "#faf7f5");
+}
+
+/** Flip the theme with every transition off, so colours swap in one frame instead of smearing. */
+function setTheme(dark: boolean) {
+  const style = document.createElement("style");
+  style.textContent = "*,*::before,*::after{transition:none !important}";
+  document.head.append(style);
+  document.documentElement.classList.toggle("dark", dark);
+  void document.body.offsetHeight;
+  requestAnimationFrame(() => requestAnimationFrame(() => style.remove()));
+  syncThemeUi();
+}
+
+themeToggle.addEventListener("click", () => {
+  const dark = !document.documentElement.classList.contains("dark");
+  setTheme(dark);
+  try {
+    localStorage.setItem("br-theme", dark ? "dark" : "light");
+  } catch {
+    /* storage unavailable: the choice lasts for this visit */
+  }
+});
+
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+  let saved: string | null = null;
+  try {
+    saved = localStorage.getItem("br-theme");
+  } catch {
+    /* fall through to the system preference */
+  }
+  if (!saved) setTheme(e.matches);
+});
+
 // Start ----------------------------------------------------------------------------
 
+syncThemeUi();
 updatePolicyHint();
 setText("clip-out", fmtClip(CLIP_LEVELS[state.clipIdx]));
 setText("upload-clip-out", fmtClip(CLIP_LEVELS[state.upload.clipIdx]));

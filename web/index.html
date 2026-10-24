@@ -8,394 +8,527 @@
       name="description"
       content="Estimate how a new ranking policy would perform from logged clicks alone, and check the estimate against a simulated online test."
     />
-    <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml" />
-    <meta name="theme-color" content="#1673DB" />
+    <link rel="icon" href="favicon.svg?v=3" type="image/svg+xml" />
+    <meta name="theme-color" content="#faf7f5" />
+    <script>
+      // Apply the saved or system theme before first paint.
+      try {
+        const t = localStorage.getItem("br-theme");
+        if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches))
+          document.documentElement.classList.add("dark");
+      } catch {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital@1&family=Poppins:wght@400;500;600&display=swap"
     />
   </head>
   <body>
-    <a class="skip" href="#main">Skip to results</a>
+    <a class="skip" href="#main">Skip to the playground</a>
 
     <header class="nav">
       <div class="nav-inner">
         <a class="brand" href="./" aria-label="BetterRankings home">
           <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-            <circle cx="16" cy="16" r="16" fill="#1673DB" />
-            <rect x="8" y="17" width="3.5" height="7" rx="1.5" fill="#fff" />
-            <rect x="14.25" y="12" width="3.5" height="12" rx="1.5" fill="#fff" />
-            <rect x="20.5" y="8" width="3.5" height="16" rx="1.5" fill="#FDD963" />
+            <circle cx="16" cy="16" r="16" class="bm-bg" />
+            <rect x="8" y="17" width="3.5" height="7" rx="1.5" class="bm-bar" />
+            <rect x="14.25" y="12" width="3.5" height="12" rx="1.5" class="bm-bar" />
+            <rect x="20.5" y="8" width="3.5" height="16" rx="1.5" class="bm-top" />
           </svg>
           <span>BetterRankings</span>
         </a>
         <nav class="nav-links" aria-label="Sections">
-          <a href="#app">Playground</a>
+          <a href="#playground">Playground</a>
           <a href="#how">How it works</a>
-          <a href="#app" data-tab="upload">Your log</a>
+          <a href="#playground" data-tab="upload">Your log</a>
         </nav>
-        <a class="btn btn-primary btn-nav" href="https://github.com/DevFrancisA/BetterRankings">
-          <span class="nav-long">View on</span> GitHub <span aria-hidden="true">→</span>
-        </a>
+        <div class="nav-actions">
+          <button type="button" class="btn-theme" id="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false">
+            <svg class="theme-icon icon-sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v1.5M10 16.5V18M2 10h1.5M16.5 10H18M4.3 4.3l1.1 1.1M14.6 14.6l1.1 1.1M4.3 15.7l1.1-1.1M14.6 5.4l1.1-1.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <svg class="theme-icon icon-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.2A6.8 6.8 0 0 1 7.8 3.5a6.8 6.8 0 1 0 8.7 8.7Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </button>
+          <a class="btn btn-dark btn-nav" href="https://github.com/DevFrancisA/BetterRankings">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" fill="currentColor"/></svg>
+            GitHub
+          </a>
+        </div>
       </div>
     </header>
 
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-inner">
-        <p class="eyebrow-pill"><span class="dot" aria-hidden="true"></span>Off-policy evaluation, in your browser</p>
-        <h1 id="hero-title">Test a new ranking policy <span class="accent">before it meets real traffic</span></h1>
-        <p class="lede">
-          BetterRankings estimates a ranking policy's clicks from logged data alone, then checks every estimate against
-          a simulated online test where the true answer is known.
-        </p>
-
-        <div class="hero-bar" role="group" aria-label="Quick run">
-          <div class="hero-field hero-field-wide">
-            <label for="policy">Candidate policy</label>
-            <select id="policy" name="policy" form="controls" aria-describedby="policy-hint"></select>
+    <!-- Hero ------------------------------------------------------------------>
+    <section class="hero page" aria-labelledby="hero-title">
+      <div class="hero-card">
+        <div class="hero-copy">
+          <svg class="hero-mark enter" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7Z" fill="currentColor"/></svg>
+          <h1 id="hero-title" class="enter">Test a new ranking <em>before</em> it goes live</h1>
+          <p class="lede enter">
+            See how many clicks a new search or feed ranking would earn, using only the clicks you have already logged.
+          </p>
+          <div class="hero-cta enter">
+            <a class="btn btn-dark" href="#playground">Try it now</a>
+            <a class="btn btn-soft" href="#playground" data-tab="upload">Use my own log</a>
           </div>
-          <span class="hero-divider" aria-hidden="true"></span>
-          <div class="hero-field">
-            <label for="queries">Logged queries</label>
-            <select id="queries" name="queries" form="controls">
-              <option value="500">500</option>
-              <option value="1000">1,000</option>
-              <option value="2000">2,000</option>
-              <option value="5000" selected>5,000</option>
-              <option value="10000">10,000</option>
-              <option value="20000">20,000</option>
-            </select>
-          </div>
-          <button type="submit" form="controls" class="btn btn-primary btn-run" id="run">Run evaluation</button>
-        </div>
-        <p class="hero-hint" id="policy-hint"></p>
-        <div class="run-status hero-status" id="run-status" aria-live="polite">
-          <progress id="run-progress" max="1" value="0" hidden></progress>
-          <p id="run-message"></p>
         </div>
 
-        <ul class="hero-features">
-          <li>
-            <span class="feature-icon fi-blue" aria-hidden="true">
-              <svg viewBox="0 0 20 20"><rect x="2.5" y="3.5" width="15" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 17h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            </span>
-            Runs in your browser
-          </li>
-          <li>
-            <span class="feature-icon fi-yellow" aria-hidden="true">
-              <svg viewBox="0 0 20 20"><path d="M10 2v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="10" r="2.5" fill="currentColor"/><path d="M3 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            </span>
-            Simulated, with a known true answer
-          </li>
-          <li>
-            <span class="feature-icon fi-green" aria-hidden="true">
-              <svg viewBox="0 0 20 20"><path d="M4.5 10.5 8 14l7.5-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            Matches the Python package
-          </li>
-        </ul>
+        <!-- Decorative: a ranking's logged clicks, reweighted into estimates that land on the true answer. -->
+        <svg class="hero-art enter" viewBox="0 0 1000 320" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+          <defs>
+            <linearGradient id="ha-fade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="currentColor" stop-opacity="0" />
+              <stop offset="1" stop-color="currentColor" stop-opacity="0.06" />
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="1000" height="320" fill="url(#ha-fade)" />
+          <!-- Logged ranked list -->
+          <g class="ha-list" transform="translate(70 70)">
+            <rect class="ha-card" width="250" height="210" rx="20" />
+            <text class="ha-cap" x="22" y="34">Logged ranking</text>
+            <g transform="translate(22 54)">
+              <rect class="ha-row" width="206" height="32" rx="9" />
+              <text class="ha-rank" x="14" y="21">1</text><rect class="ha-line" x="38" y="13" width="96" height="6" rx="3" />
+              <circle class="ha-click" cx="188" cy="16" r="6" />
+            </g>
+            <g transform="translate(22 92)">
+              <rect class="ha-row" width="206" height="32" rx="9" />
+              <text class="ha-rank" x="14" y="21">2</text><rect class="ha-line" x="38" y="13" width="120" height="6" rx="3" />
+            </g>
+            <g transform="translate(22 130)">
+              <rect class="ha-row" width="206" height="32" rx="9" />
+              <text class="ha-rank" x="14" y="21">3</text><rect class="ha-line" x="38" y="13" width="80" height="6" rx="3" />
+              <circle class="ha-click" cx="188" cy="16" r="6" />
+            </g>
+            <g transform="translate(22 168)">
+              <rect class="ha-row ha-row-faint" width="206" height="24" rx="9" />
+            </g>
+          </g>
+          <!-- Arrow -->
+          <g class="ha-arrow" transform="translate(350 175)">
+            <path d="M0 0h92" />
+            <path d="M82-9l10 9-10 9" />
+            <text class="ha-cap" x="46" y="-16" text-anchor="middle">reweight</text>
+          </g>
+          <!-- The playground's chart in miniature: bars from the truth line, one column picked out -->
+          <g transform="translate(480 52)">
+            <rect class="ha-card" width="450" height="238" rx="20" />
+            <text class="ha-cap" x="24" y="36">New ranking, estimated</text>
+            <rect class="ha-col" x="176" y="58" width="46" height="164" rx="10" />
+            <g class="ha-bars">
+              <path class="ha-bar-muted" d="M70 150V118Q70 114 74 114H84Q88 114 88 118V150Z" />
+              <path d="M130 150V124Q130 120 134 120H144Q148 120 148 124V150Z" />
+              <path d="M190 150V153Q190 157 194 157H204Q208 157 208 153V150Z" />
+              <path class="ha-bar-muted" d="M250 150V210Q250 214 254 214H264Q268 214 268 210V150Z" />
+              <path class="ha-bar-muted" d="M310 150V180Q310 184 314 184H324Q328 184 328 180V150Z" />
+              <path d="M370 150V164Q370 168 374 168H384Q388 168 388 164V150Z" />
+            </g>
+            <line class="ha-base" x1="36" x2="414" y1="150" y2="150" />
+            <g transform="translate(362 126)">
+              <rect class="ha-base-pill" width="52" height="18" rx="9" />
+              <text class="ha-base-label" x="26" y="13" text-anchor="middle">Truth</text>
+            </g>
+            <g class="ha-chip" transform="translate(236 52)">
+              <rect width="160" height="42" rx="10" />
+              <rect class="ha-sw" x="12" y="11" width="8" height="8" rx="2" />
+              <text class="ha-chip-name" x="28" y="19">SNIPS</text>
+              <text class="ha-chip-val" x="12" y="34">−0.006 vs truth</text>
+            </g>
+          </g>
+        </svg>
       </div>
     </section>
 
-    <div class="page" id="app">
-      <div class="layout">
-        <aside class="rail" aria-label="Log settings">
-          <form class="card controls" id="controls" novalidate>
-            <div>
-              <h2 class="card-title">Log settings</h2>
-              <p class="card-intro">
-                How the current policy collected its log. Every candidate is evaluated on each run, so you can switch
-                candidates without running again.
-              </p>
-            </div>
+    <!-- What is it ------------------------------------------------------------->
+    <section class="intro page" aria-labelledby="intro-title">
+      <div class="intro-head">
+        <div>
+          <h2 id="intro-title">What is BetterRankings?</h2>
+          <a class="btn btn-dark" href="#playground">Explore the playground</a>
+        </div>
+        <p class="intro-text">
+          Changing how results are ranked usually means a slow, risky A/B test. BetterRankings answers
+          <em>“would this ranking do better?”</em> in seconds, from clicks you already have.
+        </p>
+      </div>
 
-            <div class="field">
-              <div class="field-head">
-                <label for="exploration">Logging exploration</label>
-                <output id="exploration-out" for="exploration" class="value-chip">0.20</output>
-              </div>
-              <input id="exploration" name="exploration" type="range" min="0" max="1" step="0.05" value="0.2"
-                aria-describedby="exploration-hint" />
-              <p class="hint" id="exploration-hint">
-                Share of lists the current policy shows at random. More exploration gives better overlap with other
-                policies.
-              </p>
-            </div>
-
-            <div class="field">
-              <label for="seed">Seed</label>
-              <div class="seed-row">
-                <input id="seed" name="seed" type="number" min="0" max="4294967295" step="1" value="7"
-                  inputmode="numeric" aria-describedby="seed-hint" />
-                <button type="button" class="btn btn-quiet" id="new-seed">New seed</button>
-              </div>
-              <p class="hint" id="seed-hint">The same seed always gives the same log and the same answers.</p>
-            </div>
-
-            <div class="field">
-              <span class="label">List length</span>
-              <p class="hint">Each query shows a list of 4 items, so there are 24 possible rankings.</p>
-            </div>
-
-            <button type="submit" class="btn btn-secondary">Run with these settings</button>
-          </form>
-
-          <div class="card sim-card">
-            <span class="feature-icon fi-yellow" aria-hidden="true">
-              <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 6v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="14" r="1.1" fill="currentColor"/></svg>
-            </span>
-            <p><strong>Simulated data.</strong> Everything in the playground comes from a simulator. No real users, no real clicks.</p>
+      <div class="bento">
+        <article class="bento-card bento-light">
+          <div>
+            <h3>Reuse old clicks</h3>
+            <p>Your current ranking's log is reweighted to show what a different ranking would have earned.</p>
           </div>
-        </aside>
+          <!-- Logged results, each carrying its weight; a stronger pill counts for more. -->
+          <svg class="bento-art" viewBox="0 0 230 140" aria-hidden="true">
+            <g transform="translate(26 6)">
+              <rect class="ba-row" width="200" height="36" rx="11" />
+              <text class="ba-rank" x="15" y="23">1</text>
+              <rect class="ba-line" x="34" y="15" width="72" height="6" rx="3" />
+              <rect class="ba-pill ba-pill-hi" x="140" y="8" width="50" height="20" rx="10" />
+              <text class="ba-w ba-w-hi" x="165" y="22" text-anchor="middle">×2.4</text>
+            </g>
+            <g transform="translate(13 52)">
+              <rect class="ba-row" width="200" height="36" rx="11" />
+              <text class="ba-rank" x="15" y="23">2</text>
+              <rect class="ba-line" x="34" y="15" width="92" height="6" rx="3" />
+              <rect class="ba-pill ba-pill-lo" x="140" y="8" width="50" height="20" rx="10" />
+              <text class="ba-w" x="165" y="22" text-anchor="middle">×0.6</text>
+            </g>
+            <g transform="translate(0 98)">
+              <rect class="ba-row" width="200" height="36" rx="11" />
+              <text class="ba-rank" x="15" y="23">3</text>
+              <rect class="ba-line" x="34" y="15" width="58" height="6" rx="3" />
+              <rect class="ba-pill ba-pill-mid" x="140" y="8" width="50" height="20" rx="10" />
+              <text class="ba-w" x="165" y="22" text-anchor="middle">×1.3</text>
+            </g>
+          </svg>
+        </article>
+        <article class="bento-card bento-dark">
+          <h3>Checked against the truth</h3>
+          <p>A simulator knows the real answer, so you can see which estimators to trust.</p>
+        </article>
+        <article class="bento-card bento-dark">
+          <h3>Private by default</h3>
+          <p>Runs in your browser. No server, no upload, no tracking.</p>
+        </article>
+      </div>
+    </section>
 
-        <main id="main" class="main" tabindex="-1">
-          <div class="tabs" role="tablist" aria-label="Views">
-            <button role="tab" id="tab-results" aria-controls="panel-results" aria-selected="true">Results</button>
-            <button role="tab" id="tab-ranking" aria-controls="panel-ranking" aria-selected="false" tabindex="-1">Ranking</button>
-            <button role="tab" id="tab-diagnostics" aria-controls="panel-diagnostics" aria-selected="false" tabindex="-1">Diagnostics</button>
-            <button role="tab" id="tab-upload" aria-controls="panel-upload" aria-selected="false" tabindex="-1">Your log</button>
+    <!-- Playground ------------------------------------------------------------->
+    <section class="playground" id="playground" aria-labelledby="pg-title">
+      <div class="page">
+        <div class="pg-head">
+          <div>
+            <p class="eyebrow">Playground</p>
+            <h2 id="pg-title">Try it in three steps</h2>
           </div>
+          <ol class="steps">
+            <li><span class="step-n">1</span>Pick a ranking to test</li>
+            <li><span class="step-n">2</span>Press Run</li>
+            <li><span class="step-n">3</span>See how close each estimate lands</li>
+          </ol>
+        </div>
 
-          <section class="card panel" role="tabpanel" id="panel-results" aria-labelledby="tab-results" tabindex="0">
-            <div class="panel-head">
-              <h2 id="results-title">Estimates against the truth</h2>
-              <p class="run-tag" id="results-tag"></p>
-            </div>
-            <p class="summary" id="results-summary">Running the first evaluation…</p>
-            <p class="stale" id="results-stale" hidden>
-              Settings changed. Press <strong>Run evaluation</strong> to update these results.
-            </p>
-            <div class="clip-control" id="clip-control">
-              <div class="field-head">
-                <label for="clip">Weight clip</label>
-                <output id="clip-out" for="clip" class="value-chip">Clip at 20</output>
+        <div class="layout">
+          <aside class="rail" aria-label="Settings">
+            <form class="card controls" id="controls" novalidate>
+              <div class="field">
+                <label for="policy" class="step-label"><span class="step-n">1</span>Ranking to test</label>
+                <select id="policy" name="policy" aria-describedby="policy-hint"></select>
+                <p class="hint" id="policy-hint"></p>
               </div>
-              <input id="clip" type="range" min="0" max="16" step="1" value="8" aria-describedby="clip-hint" />
-              <p class="hint" id="clip-hint">
-                Applies to clipped IPS and doubly robust. Lower clips cut noise from rare, heavily weighted queries
-                but pull the estimate down.
+
+              <details class="advanced">
+                <summary>Log settings</summary>
+                <div class="advanced-body">
+                  <div class="field">
+                    <label for="queries">Logged queries</label>
+                    <select id="queries" name="queries">
+                      <option value="500">500</option>
+                      <option value="1000">1,000</option>
+                      <option value="2000">2,000</option>
+                      <option value="5000" selected>5,000</option>
+                      <option value="10000">10,000</option>
+                      <option value="20000">20,000</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <div class="field-head">
+                      <label for="exploration">Exploration</label>
+                      <output id="exploration-out" for="exploration" class="value-chip">0.20</output>
+                    </div>
+                    <input id="exploration" name="exploration" type="range" min="0" max="1" step="0.05" value="0.2"
+                      aria-describedby="exploration-hint" />
+                    <p class="hint" id="exploration-hint">How often the current ranking shuffles. More shuffling, better estimates.</p>
+                  </div>
+                  <div class="field">
+                    <label for="seed">Seed</label>
+                    <div class="seed-row">
+                      <input id="seed" name="seed" type="number" min="0" max="4294967295" step="1" value="7"
+                        inputmode="numeric" aria-describedby="seed-hint" />
+                      <button type="button" class="btn btn-soft btn-icon" id="new-seed" aria-label="New seed" title="New seed">
+                        <svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="1.3" fill="currentColor"/><circle cx="13" cy="13" r="1.3" fill="currentColor"/><circle cx="10" cy="10" r="1.3" fill="currentColor"/></svg>
+                      </button>
+                    </div>
+                    <p class="sr-only" id="seed-hint">The same seed always gives the same log and the same answers.</p>
+                  </div>
+                </div>
+              </details>
+
+              <button type="submit" class="btn btn-primary btn-run" id="run">
+                <span class="step-n step-n-inv" aria-hidden="true">2</span><span id="run-label">Run</span>
+              </button>
+              <div class="run-status" id="run-status" aria-live="polite">
+                <progress id="run-progress" max="1" value="0" hidden></progress>
+                <p id="run-message"></p>
+              </div>
+              <p class="sim-note"><span class="dot" aria-hidden="true"></span>Simulated data, 4 items per list</p>
+            </form>
+          </aside>
+
+          <main id="main" class="main" tabindex="-1">
+            <div class="tabs" role="tablist" aria-label="Views">
+              <button role="tab" id="tab-results" aria-controls="panel-results" aria-selected="true">Accuracy</button>
+              <button role="tab" id="tab-ranking" aria-controls="panel-ranking" aria-selected="false" tabindex="-1">Which to ship</button>
+              <button role="tab" id="tab-diagnostics" aria-controls="panel-diagnostics" aria-selected="false" tabindex="-1">Data health</button>
+              <button role="tab" id="tab-upload" aria-controls="panel-upload" aria-selected="false" tabindex="-1">Your log</button>
+            </div>
+
+            <!-- Accuracy -->
+            <section class="card panel" role="tabpanel" id="panel-results" aria-labelledby="tab-results" tabindex="0">
+              <div class="panel-head">
+                <div>
+                  <p class="step-label step-label-sm"><span class="step-n">3</span>Result</p>
+                  <h2 id="results-title">Estimates vs. truth</h2>
+                </div>
+                <p class="run-tag" id="results-tag"></p>
+              </div>
+              <dl class="kpis" id="results-summary" aria-busy="true">
+                <div><dt>True answer</dt><dd><span class="skeleton"></span></dd></div>
+                <div><dt>Closest estimate</dt><dd><span class="skeleton"></span></dd></div>
+                <div><dt>Ranges that caught it</dt><dd><span class="skeleton"></span></dd></div>
+              </dl>
+              <p class="stale" id="results-stale" hidden>
+                <span class="dot" aria-hidden="true"></span>Settings changed. Press Run to update.
               </p>
-            </div>
-            <div class="key" aria-hidden="true">
-              <span class="key-item"><span class="key-truth"></span>True online value</span>
-              <span class="key-item"><span class="key-est"></span>Estimate with 95% interval</span>
-              <span class="key-item"><span class="key-ref"></span>Logged clicks, current policy</span>
-            </div>
-            <div class="chart forest-host" id="forest" style="min-height: 470px"></div>
-            <details class="table-toggle">
-              <summary>Show these numbers as a table</summary>
-              <div class="table-wrap"><table class="data" id="results-table"></table></div>
-            </details>
-            <div class="actions">
-              <button type="button" class="btn btn-quiet" id="download-results" disabled>Download results</button>
-              <button type="button" class="btn btn-quiet" id="download-log" disabled>Download this log</button>
-            </div>
-          </section>
-
-          <section class="card panel" role="tabpanel" id="panel-ranking" aria-labelledby="tab-ranking" tabindex="0" hidden>
-            <div class="panel-head">
-              <h2>Which candidates deserve <span class="accent">live traffic</span></h2>
-            </div>
-            <p class="summary" id="ranking-summary"></p>
-            <fieldset class="segmented" id="rank-estimator">
-              <legend>Rank candidates by</legend>
-            </fieldset>
-            <div class="key" aria-hidden="true">
-              <span class="key-item"><span class="key-diamond"></span>True online value</span>
-              <span class="key-item"><span class="key-est"></span>Estimate with 95% interval</span>
-              <span class="key-item"><span class="key-ref"></span>Bar to beat: current policy, logged</span>
-            </div>
-            <div class="chart" id="ranking-forest" style="min-height: 470px"></div>
-            <details class="table-toggle">
-              <summary>Show these numbers as a table</summary>
-              <div class="table-wrap"><table class="data" id="ranking-table"></table></div>
-            </details>
-            <h3 class="sub">Rank order by estimator</h3>
-            <p class="hint-wide">
-              Each panel joins a policy's true rank (left) to the rank the estimator gives it (right). Flat lines are
-              correct; crossing lines are policies put in the wrong order.
-            </p>
-            <div class="rank-grid" id="rank-grid"></div>
-          </section>
-
-          <section class="card panel" role="tabpanel" id="panel-diagnostics" aria-labelledby="tab-diagnostics" tabindex="0" hidden>
-            <div class="panel-head">
-              <h2 id="diag-title">Overlap diagnostics</h2>
-            </div>
-            <p class="summary" id="diag-summary"></p>
-            <div id="diag-warnings"></div>
-            <dl class="stats" id="diag-stats"></dl>
-            <h3 class="sub">Weight distribution</h3>
-            <div class="chart" id="diag-hist" style="min-height: 230px"></div>
-            <p class="hint-wide" id="diag-zero"></p>
-            <details class="table-toggle">
-              <summary>Show the weight distribution as a table</summary>
-              <div class="table-wrap"><table class="data" id="diag-hist-table"></table></div>
-            </details>
-            <h3 class="sub">Clicks by position in the log</h3>
-            <p class="hint-wide">
-              Click rates fall down the list. Part of that is position bias: lower slots get less attention whatever
-              they show.
-            </p>
-            <div id="diag-positions" class="positions"></div>
-          </section>
-
-          <section class="card panel" role="tabpanel" id="panel-upload" aria-labelledby="tab-upload" tabindex="0" hidden>
-            <div class="panel-head">
-              <h2>Evaluate <span class="accent">your own log</span></h2>
-            </div>
-            <div class="privacy">
-              <span class="feature-icon fi-green" aria-hidden="true">
-                <svg viewBox="0 0 20 20"><rect x="4" y="9" width="12" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
-              </span>
-              <p>
-                <strong>Your file stays on your device.</strong> This page reads it in your browser and never uploads
-                or sends it anywhere. There is no server and no tracking.
+              <p class="read-me">
+                <svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="6.5" r="0.9" fill="currentColor"/></svg>
+                Each bar shows how far an estimate lands from the truth. Hover or tap a bar for details.
               </p>
-            </div>
+              <div class="chart-bar">
+                <div class="clip-control" id="clip-control">
+                  <label for="clip" title="Applies to clipped IPS and doubly robust">Clip</label>
+                  <input id="clip" type="range" min="0" max="16" step="1" value="8" aria-describedby="clip-hint" />
+                  <output id="clip-out" for="clip" class="value-chip">Clip at 20</output>
+                  <p class="sr-only" id="clip-hint">
+                    Applies to clipped IPS and doubly robust. Lower clips cut noise from rare, heavily weighted queries
+                    but pull the estimate down.
+                  </p>
+                </div>
+              </div>
+              <div class="chart chart-card" id="forest"></div>
+              <div class="panel-foot">
+                <details class="table-toggle">
+                  <summary>Table</summary>
+                  <div class="table-wrap"><table class="data" id="results-table"></table></div>
+                </details>
+                <div class="actions">
+                  <button type="button" class="btn btn-soft btn-sm" id="download-results" disabled>
+                    <svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Results
+                  </button>
+                  <button type="button" class="btn btn-soft btn-sm" id="download-log" disabled>
+                    <svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Log
+                  </button>
+                </div>
+              </div>
+            </section>
 
-            <div class="upload-grid">
+            <!-- Which to ship -->
+            <section class="card panel" role="tabpanel" id="panel-ranking" aria-labelledby="tab-ranking" tabindex="0" hidden>
+              <div class="panel-head">
+                <h2>Which rankings deserve <em>live traffic?</em></h2>
+              </div>
+              <p class="read-me">
+                <svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="6.5" r="0.9" fill="currentColor"/></svg>
+                Bars show each ranking's estimated gain over the current one. Solid bars are worth a live test.
+              </p>
+              <fieldset class="segmented" id="rank-estimator">
+                <legend class="sr-only">Rank candidates by</legend>
+              </fieldset>
+              <div class="verdict" id="ranking-summary"></div>
+              <div class="chart chart-card" id="ranking-forest"></div>
+              <details class="table-toggle">
+                <summary>Table</summary>
+                <div class="table-wrap"><table class="data" id="ranking-table"></table></div>
+              </details>
+              <div class="sub-head">
+                <h3 class="sub">Rank order</h3>
+                <span class="tag" aria-hidden="true">true → estimated · crossed lines are mistakes</span>
+              </div>
+              <p class="sr-only">
+                Each panel joins a policy's true rank (left) to the rank the estimator gives it (right). Flat lines are
+                correct; crossing lines are policies put in the wrong order.
+              </p>
+              <div class="rank-grid" id="rank-grid"></div>
+            </section>
+
+            <!-- Data health -->
+            <section class="card panel" role="tabpanel" id="panel-diagnostics" aria-labelledby="tab-diagnostics" tabindex="0" hidden>
+              <div class="panel-head">
+                <h2 id="diag-title">Overlap</h2>
+              </div>
+              <p class="read-me">
+                <svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="6.5" r="0.9" fill="currentColor"/></svg>
+                Estimates are only as good as the log's coverage. Weights near 1 and a large effective size are healthy.
+              </p>
+              <p class="sr-only" id="diag-summary"></p>
+              <div id="diag-warnings"></div>
+              <dl class="stats" id="diag-stats"></dl>
+              <h3 class="sub">Weights</h3>
+              <div class="chart" id="diag-hist" style="min-height: 230px"></div>
+              <p class="caption" id="diag-zero"></p>
+              <details class="table-toggle">
+                <summary>Table</summary>
+                <div class="table-wrap"><table class="data" id="diag-hist-table"></table></div>
+              </details>
+              <h3 class="sub">Clicks by position</h3>
+              <p class="sr-only">
+                Click rates fall down the list. Part of that is position bias: lower slots get less attention whatever
+                they show.
+              </p>
+              <div id="diag-positions" class="positions"></div>
+            </section>
+
+            <!-- Your log -->
+            <section class="card panel" role="tabpanel" id="panel-upload" aria-labelledby="tab-upload" tabindex="0" hidden>
+              <div class="panel-head">
+                <h2>Evaluate <em>your own log</em></h2>
+                <p class="privacy" title="This page reads your file in your browser and never uploads or sends it anywhere. There is no server and no tracking.">
+                  <svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+                  Stays on your device
+                </p>
+              </div>
+
+              <ol class="upload-steps">
+                <li><span class="step-n">1</span>Add a CSV <a class="link" id="sample-link" href="sample-log.csv" download="betterrankings-sample-log.csv">(or grab the sample)</a></li>
+                <li><span class="step-n">2</span>Choose the ranking to evaluate</li>
+                <li><span class="step-n">3</span>Press Evaluate</li>
+              </ol>
+
               <form class="upload-form" id="upload-form" novalidate>
-                <div class="field">
-                  <span class="label" id="file-label">Log file (CSV)</span>
-                  <label class="drop" id="drop" for="file">
-                    <input id="file" type="file" accept=".csv,text/csv" aria-labelledby="file-label" aria-describedby="file-status" />
-                    <span class="drop-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24"><path d="M12 15V4m0 0-4 4m4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                    </span>
-                    <span class="drop-text" id="file-status">Choose a CSV file or drop it here</span>
-                  </label>
+                <span class="sr-only" id="file-label">Log file (CSV)</span>
+                <label class="drop" id="drop" for="file">
+                  <input id="file" type="file" accept=".csv,text/csv" aria-labelledby="file-label" aria-describedby="file-status" />
+                  <span class="drop-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M12 15V4m0 0-4 4m4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                  </span>
+                  <span class="drop-text" id="file-status">Drop a CSV here, or click to choose</span>
+                </label>
+                <div class="upload-side">
+                  <div class="field">
+                    <label for="upload-target">Ranking to evaluate</label>
+                    <select id="upload-target"></select>
+                    <p class="hint" id="upload-target-hint"></p>
+                  </div>
+                  <button type="submit" class="btn btn-primary" id="upload-run" disabled>Evaluate</button>
+                  <div class="run-status" aria-live="polite">
+                    <progress id="upload-progress" max="1" value="0" hidden></progress>
+                    <p id="upload-message" class="hint"></p>
+                  </div>
                 </div>
-                <div class="field">
-                  <label for="upload-target">Target policy to evaluate</label>
-                  <select id="upload-target"></select>
-                  <p class="hint" id="upload-target-hint"></p>
-                </div>
-                <button type="submit" class="btn btn-primary" id="upload-run" disabled>Evaluate my log</button>
-                <div class="run-status" aria-live="polite">
-                  <progress id="upload-progress" max="1" value="0" hidden></progress>
-                  <p id="upload-message" class="hint">Choose a file to start. Not sure of the format? Try the sample.</p>
-                </div>
-                <p><a class="link" id="sample-link" href="sample-log.csv" download="betterrankings-sample-log.csv">Download sample CSV <span aria-hidden="true">→</span></a></p>
               </form>
 
-              <div class="format">
-                <h3 class="sub">Column format</h3>
-                <p class="hint-wide">One row per query. Positions count from 1 at the top of the list. Lists may hold 2 to 6 items.</p>
+              <details class="format">
+                <summary>What the CSV needs</summary>
                 <div class="table-wrap">
                   <table class="data format-table">
                     <thead><tr><th scope="col">Column</th><th scope="col">Meaning</th></tr></thead>
                     <tbody>
                       <tr><td><code>query_id</code></td><td>Any identifier</td></tr>
                       <tr><td><code>ctx_1</code> to <code>ctx_3</code></td><td>Query context features</td></tr>
-                      <tr><td><code>item_K</code></td><td>Item shown at position K</td></tr>
-                      <tr><td><code>click_K</code></td><td>1 if it was clicked, else 0</td></tr>
-                      <tr><td><code>item_K_pop</code></td><td>Popularity feature of that item</td></tr>
+                      <tr><td><code>item_K</code></td><td>Item at position K (from 1; 2 to 6 slots)</td></tr>
+                      <tr><td><code>click_K</code></td><td>1 if clicked, else 0</td></tr>
+                      <tr><td><code>item_K_pop</code></td><td>Item popularity</td></tr>
                       <tr><td><code>item_K_f1</code> to <code>item_K_f3</code></td><td>Other item features</td></tr>
-                      <tr><td><code>propensity</code></td><td>Probability the logging policy gave the whole list it showed</td></tr>
-                      <tr><td><code>target_propensity</code></td><td>Optional. Probability your own policy gives that list</td></tr>
+                      <tr><td><code>propensity</code></td><td>Logging policy's probability of the whole list</td></tr>
+                      <tr><td><code>target_propensity</code></td><td>Optional. Your policy's probability of that list</td></tr>
                     </tbody>
                   </table>
                 </div>
-              </div>
-            </div>
-
-            <div id="upload-results" hidden>
-              <h3 class="sub" id="upload-results-title">Estimates for your log</h3>
-              <p class="summary" id="upload-summary"></p>
-              <div id="upload-warnings"></div>
-              <div class="clip-control">
-                <div class="field-head">
-                  <label for="upload-clip">Weight clip</label>
-                  <output id="upload-clip-out" for="upload-clip" class="value-chip">Clip at 20</output>
-                </div>
-                <input id="upload-clip" type="range" min="0" max="16" step="1" value="8" />
-              </div>
-              <div class="chart" id="upload-forest"></div>
-              <details class="table-toggle">
-                <summary>Show these numbers as a table</summary>
-                <div class="table-wrap"><table class="data" id="upload-table"></table></div>
               </details>
-              <div class="actions">
-                <button type="button" class="btn btn-quiet" id="upload-download">Download results</button>
-              </div>
-            </div>
-          </section>
-        </main>
-      </div>
-    </div>
 
-    <section class="how" id="how" aria-labelledby="how-title">
-      <div class="page">
-        <div class="section-head">
-          <p class="eyebrow-pill"><span class="dot" aria-hidden="true"></span>How it works</p>
-          <h2 id="how-title">Evaluate a policy from <span class="accent">logs you already have</span></h2>
-          <p class="lede">
-            If the current policy shows lists with some randomness and records how likely each list was, its old logs
-            can answer a new question: how many clicks would a different policy have earned?
+              <div id="upload-results" hidden>
+                <h3 class="sub" id="upload-results-title">Estimates for your log</h3>
+                <div class="upload-summary" id="upload-summary"></div>
+                <div id="upload-warnings"></div>
+                <div class="chart-bar">
+                  <div class="clip-control">
+                    <label for="upload-clip">Clip</label>
+                    <input id="upload-clip" type="range" min="0" max="16" step="1" value="8" />
+                    <output id="upload-clip-out" for="upload-clip" class="value-chip">Clip at 20</output>
+                  </div>
+                </div>
+                <div class="chart chart-card" id="upload-forest"></div>
+                <div class="panel-foot">
+                  <details class="table-toggle">
+                    <summary>Table</summary>
+                    <div class="table-wrap"><table class="data" id="upload-table"></table></div>
+                  </details>
+                  <div class="actions">
+                    <button type="button" class="btn btn-soft btn-sm" id="upload-download">
+                      <svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      Results
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </main>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works ----------------------------------------------------------->
+    <section class="how page" id="how" aria-labelledby="how-title">
+      <div class="how-layout">
+        <div class="how-intro">
+          <p class="eyebrow">Under the hood</p>
+          <h2 id="how-title">How it works</h2>
+          <p>
+            If the current ranking shuffles a little and records how likely each list was, its old logs can answer a
+            new question.
           </p>
         </div>
-
-        <div class="how-grid">
-          <article class="card how-card">
-            <span class="feature-icon fi-blue" aria-hidden="true">
-              <svg viewBox="0 0 20 20"><path d="M3 15l4-5 3 3 6-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            <h3>Evaluating from logs</h3>
-            <p>
-              A ranking system already shows lists and records clicks. Reweighting those logs estimates a new policy's
-              clicks without showing it to anyone.
-            </p>
-          </article>
-          <article class="card how-card">
-            <span class="feature-icon fi-yellow" aria-hidden="true">
-              <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10V5.5M10 10l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            </span>
-            <h3>Propensities</h3>
-            <p>
-              The propensity is the probability the old policy gave the exact list it showed. When a new policy would
-              show a list more often, the clicks on it count for more. That ratio is the importance weight.
-            </p>
-          </article>
-          <article class="card how-card">
-            <span class="feature-icon fi-coral" aria-hidden="true">
-              <svg viewBox="0 0 20 20"><path d="M10 3 18 17H2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 8v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="14.5" r="1" fill="currentColor"/></svg>
-            </span>
-            <h3>Why naive comparison misleads</h3>
-            <p>
-              Averaging clicks over logged lists the new policy agrees with sounds fair, but the old policy showed its
-              favourite lists most often and where it liked them best. Weighting by propensities undoes that choice.
-            </p>
-          </article>
-        </div>
-
-        <h3 class="how-sub">The estimators</h3>
-        <div class="estimator-grid">
-          <article class="est-card"><h4>Inverse propensity (IPS)</h4><p>Reweights every logged query by its importance weight. Unbiased, but noisy when weights are large.</p></article>
-          <article class="est-card"><h4>Self-normalised IPS</h4><p>Divides by the total weight instead of the row count. A little bias, much less noise.</p></article>
-          <article class="est-card"><h4>Clipped IPS</h4><p>Caps each weight at the clip level. Lower noise, but it pulls the estimate down.</p></article>
-          <article class="est-card"><h4>Reward model</h4><p>Learns a click model from the log and asks it about the new policy. Steady, but only as good as the model.</p></article>
-          <article class="est-card"><h4>Doubly robust</h4><p>Starts from the reward model and corrects it with weighted errors. Holds up if either part is right.</p></article>
-          <article class="est-card est-card-truth"><h4>The check</h4><p>The simulator knows every true click probability, so it runs the online test real teams cannot run for free. The coral line is that answer.</p></article>
-        </div>
+        <ol class="flow">
+          <li class="flow-step">
+            <span class="flow-n">01</span>
+            <div>
+              <h3>Log</h3>
+              <p>The current ranking shows lists and records clicks, plus how likely each list was.</p>
+            </div>
+          </li>
+          <li class="flow-step">
+            <span class="flow-n">02</span>
+            <div>
+              <h3>Reweight</h3>
+              <p class="formula"><span>weight</span> = <span class="frac"><span>P<sub>new</sub>(list)</span><span>P<sub>old</sub>(list)</span></span></p>
+            </div>
+          </li>
+          <li class="flow-step">
+            <span class="flow-n">03</span>
+            <div>
+              <h3>Estimate</h3>
+              <p>Weighted clicks predict the new ranking's clicks, without showing it to anyone.</p>
+            </div>
+          </li>
+        </ol>
       </div>
+
+      <h3 class="how-sub">The estimators</h3>
+      <ul class="estimator-grid">
+        <li class="est-card"><h4>IPS</h4><p>Reweights every query</p><span class="traits"><span class="trait trait-good">Unbiased</span><span class="trait trait-bad">Noisy</span></span></li>
+        <li class="est-card"><h4>SNIPS</h4><p>Self-normalised: divides by total weight</p><span class="traits"><span class="trait trait-good">Low noise</span><span class="trait trait-bad">Slight bias</span></span></li>
+        <li class="est-card"><h4>Clipped IPS</h4><p>Caps each weight</p><span class="traits"><span class="trait trait-good">Low noise</span><span class="trait trait-bad">Biased low</span></span></li>
+        <li class="est-card"><h4>Reward model</h4><p>Learns a click model</p><span class="traits"><span class="trait trait-good">Steady</span><span class="trait trait-bad">Model-bound</span></span></li>
+        <li class="est-card"><h4>Doubly robust</h4><p>Model plus weighted correction</p><span class="traits"><span class="trait trait-good">Either part can be right</span></span></li>
+        <li class="est-card est-card-truth"><h4>The truth</h4><p>The simulator's online test</p><span class="traits"><span class="trait trait-truth">The baseline</span></span></li>
+      </ul>
     </section>
 
     <footer class="footer">
       <div class="page footer-inner">
         <a class="brand" href="./">
           <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-            <circle cx="16" cy="16" r="16" fill="#1673DB" />
-            <rect x="8" y="17" width="3.5" height="7" rx="1.5" fill="#fff" />
-            <rect x="14.25" y="12" width="3.5" height="12" rx="1.5" fill="#fff" />
-            <rect x="20.5" y="8" width="3.5" height="16" rx="1.5" fill="#FDD963" />
+            <circle cx="16" cy="16" r="16" class="bm-bg" />
+            <rect x="8" y="17" width="3.5" height="7" rx="1.5" class="bm-bar" />
+            <rect x="14.25" y="12" width="3.5" height="12" rx="1.5" class="bm-bar" />
+            <rect x="20.5" y="8" width="3.5" height="16" rx="1.5" class="bm-top" />
           </svg>
           <span>BetterRankings</span>
         </a>
-        <p>Open source. Built-in data is simulated, and nothing you do here is tracked.</p>
-        <a class="link" href="https://github.com/DevFrancisA/BetterRankings">Source and Python package on GitHub <span aria-hidden="true">→</span></a>
+        <p>Open source · simulated data · no tracking</p>
+        <a class="link" href="https://github.com/DevFrancisA/BetterRankings">GitHub <span aria-hidden="true">→</span></a>
       </div>
     </footer>
     <script type="module" src="/src/main.ts"></script>
